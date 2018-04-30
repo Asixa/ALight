@@ -1,0 +1,7 @@
+﻿/.vs
+/AcDx/bin
+/AcDx/obj
+/ALight/bin
+/ALight/obj
+*.exe
+*.pdb
