@@ -48,5 +48,14 @@ namespace AcDx
 
         }
 
+        private void SetPixel(int x, int y, Color color)
+        {
+            var i = Width * 4 * y + x * 4;
+            Buff[i] += color.R;
+            Buff[i + 1] += color.G;
+            Buff[i + 2] += color.B;
+            Buff[i + 3] += color.A;
+        }
+
     }
 }
