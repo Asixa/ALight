@@ -15,6 +15,8 @@ namespace ALight
 
         private void button1_Click(object sender, EventArgs e)
         {
+            //renderer.width = renderer.height = int.Parse(Resolution_Input.Text);
+            //renderer.Samples = int.Parse(SPP_Input.Text);
             button1.Enabled = false;
             renderer.Init();
         }
@@ -25,9 +27,16 @@ namespace ALight
             progressBar1.Value = now;
         }
 
-        public void SetSPP(int s)
+        private int samples;
+        public void SetSPP()
         {
-            SPP.Text = "第" + s + "次采样";
+            SPP.Text = "已采样" + (++samples) + "次";
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            renderer.Save();
+            
         }
     }
 }
