@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ALight", "ALight\ALight.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AcDx", "AcDx\AcDx.csproj", "{63ADD039-3AAB-42D1-912F-ABCFB47BB473}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Byte2Float", "Byte2Float\Byte2Float.csproj", "{EDDB7627-7E4A-4DCA-BEEF-EF88F6E3EB70}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,14 +31,6 @@ Global
 		{63ADD039-3AAB-42D1-912F-ABCFB47BB473}.Release|Any CPU.Build.0 = Release|Any CPU
 		{63ADD039-3AAB-42D1-912F-ABCFB47BB473}.Release|x64.ActiveCfg = Release|Any CPU
 		{63ADD039-3AAB-42D1-912F-ABCFB47BB473}.Release|x64.Build.0 = Release|Any CPU
-		{EDDB7627-7E4A-4DCA-BEEF-EF88F6E3EB70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EDDB7627-7E4A-4DCA-BEEF-EF88F6E3EB70}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EDDB7627-7E4A-4DCA-BEEF-EF88F6E3EB70}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{EDDB7627-7E4A-4DCA-BEEF-EF88F6E3EB70}.Debug|x64.Build.0 = Debug|Any CPU
-		{EDDB7627-7E4A-4DCA-BEEF-EF88F6E3EB70}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EDDB7627-7E4A-4DCA-BEEF-EF88F6E3EB70}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EDDB7627-7E4A-4DCA-BEEF-EF88F6E3EB70}.Release|x64.ActiveCfg = Release|Any CPU
-		{EDDB7627-7E4A-4DCA-BEEF-EF88F6E3EB70}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
