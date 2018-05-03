@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 
-namespace ALight.Render.Math
+namespace ALight.Render.Mathematics
 {
     public class Color32
     {
@@ -63,6 +58,11 @@ namespace ALight.Render.Math
         public static Color32 Lerp(Color32 a, Color32 b, float t) => new Color32(a.r + (b.r - a.r) * t,
             a.g + (b.g - a.g) * t, a.b + (b.b - a.b) * t, a.a + (b.a - a.a) * t);
 
-        public static Color32 black = new Color32(0, 0, 0), white = new Color32(1, 1, 1);
+        public static Color32 
+            black = new Color32(0, 0, 0),
+            red = new Color32(1, 0, 0),
+            green = new Color32(0, 1, 0),
+            blue = new Color32(0, 0, 1),
+            white = new Color32(1, 1, 1);
     }
 }

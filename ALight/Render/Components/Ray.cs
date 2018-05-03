@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ALight.Render.Math;
+using ALight.Render.Mathematics;
 
 namespace ALight.Render.Components
 {
@@ -13,8 +13,10 @@ namespace ALight.Render.Components
         public readonly Vector3 direction;
         public readonly Vector3 normalDirection;
 
-        public Ray(Vector3 o, Vector3 d)
+        public float time;
+        public Ray(Vector3 o, Vector3 d,float t=0)
         {
+            time = t;
             original = o;
             direction = d;
             normalDirection = d.Normalized();

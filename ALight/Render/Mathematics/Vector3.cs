@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ALight.Render.Math
+﻿namespace ALight.Render.Mathematics
 {
     public class Vector3
     {
@@ -21,7 +15,9 @@ namespace ALight.Render.Math
         {
         }
 
-        public override string ToString()
+        public float length()=>Mathf.Sqrt(x * x + y * y + z * z);
+        
+    public override string ToString()
         {
             return "<" + x + "," + y + "," + z + ">";
         }

@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Drawing;
+using System.Runtime.Remoting.Messaging;
 using System.Threading;
 using System.Threading.Tasks;
 using AcDx;
 using ALight.Render.Components;
 using ALight.Render.Materials;
-using ALight.Render.Math;
+using ALight.Render.Mathematics;
 using ALight.Render.Primitives;
-using Random = ALight.Render.Math.Random;
+using Random = ALight.Render.Mathematics.Random;
 
 namespace ALight.Render
 {
@@ -16,7 +17,7 @@ namespace ALight.Render
         public override void Update()
         {
             for (var i = 0; i < Buff.Length; i++)
-            Buff[i] = (byte) (Renderer.main.buff[i] * 255 + 0.5);
+                Buff[i] = (byte) Mathf.Range(Renderer.main.buff[i] * 255 / Renderer.main.Changes[i / 4] + 0.5f, 0,255f);
         }
     }
     public class Renderer
@@ -24,11 +25,12 @@ namespace ALight.Render
         public static Renderer main;
         private readonly Mode mode = Mode.Diffusing;
 
-        private readonly HitableList hitableList = new HitableList();
-        private readonly int Samples = 10000,MAX_SCATTER_TIME = 8;
+        private readonly HitableList world = new HitableList();
+        public int Samples = 10000,MAX_SCATTER_TIME = 16;
         private int width = 512, height = 512;
         private readonly Preview preview = new Preview();
         public float[] buff;
+        public int[] Changes;
 
         private Camera camera;
         private float recip_width, recip_height;
@@ -38,6 +40,7 @@ namespace ALight.Render
         {
             main = this;
             buff = new float[width * height * 4];
+            Changes = new int[width * height];
             InitScene();
             Start();
             preview.Run(new DxConfiguration("Preview", width, height));
@@ -48,15 +51,35 @@ namespace ALight.Render
             camera = new Camera(new Vector3(0, 1, 1), new Vector3(0, 0, -1), new Vector3(0, 1, 0), 75, 1);
             recip_width = 1f / width;
             recip_height = 1f / height;
-            hitableList.list.Add(new Sphere(new Vector3(0, -100.5f, -1), 100f,
-                new Metal(new Color32(0.3f, 0.3f, 0.6f), 0.2f)));
-            hitableList.list.Add(new Sphere(new Vector3(0, 0f, -1), 0.5f, new Dielectirc(5f)));
-            hitableList.list.Add(new Sphere(new Vector3(0, 0, -2), 0.5f, new Metal(new Color32(1f, 0f, 0f), 0.3f)));
-            hitableList.list.Add(new Sphere(new Vector3(1, 0, -1), 0.5f, new Metal(new Color32(1f, 1f, 0f), 0.3f)));
-            hitableList.list.Add(new Sphere(new Vector3(-1, 0, -1), 0.5f, new Lambertian(new Color32(0, 1, 0))));
-            //hitableList.list.Add(new Sphere(new Vector3(0, 0, -2), 0.5f, new Dielectirc(5f)));
-            //hitableList.list.Add(new Sphere(new Vector3(1, 0, -1), 0.5f, new Dielectirc(5f)));
-            //hitableList.list.Add(new Sphere(new Vector3(-1, 0, -1), 0.5f, new Dielectirc(5f)));
+            //world.list.Add(new Sphere(new Vector3(0, -100.5f, -1), 100f, new Metal(new CheckerTexture(new ConstantTexture(new Color32(0, 0, 0)), new ConstantTexture(Color32.white)), 0.2f)));//地面
+            world.list.Add(new Sphere(new Vector3(0, -100.5f, -1), 100f, new Lambertian(new CheckerTexture(new ConstantTexture(new Color32(0, 0, 0)), new ConstantTexture(Color32.white)))));//地面
+            world.list.Add(new Sphere(new Vector3(-10, 20, -1), 4f, new DiffuseLight(new ConstantTexture(new Color32(1, 1, 1, 1)), 20)));
+
+            
+            var cube=new Cube(new Vector3(-0.5f, -0.5f, -1.5f), new Vector3(0.5f, 0.5f, -0.5f),new Lambertian(new ConstantTexture(new Color32(1,1,1))));
+            world.list.Add(new ConstantMedium(cube, 2f,new ConstantTexture(Color32.white)));
+            world.list.Add(new Sphere(new Vector3(0, 0f, -1), 0.25f, new Lambertian(new ConstantTexture(Color32.red))));
+
+
+
+
+            /// world.list.Add(CornellBox());
+            //world.list.Add(new Sphere(new Vector3(278, 100, 278), 100f, new Dielectirc(5)));
+            //world.list.Add(new PlaneXZ(0, 555, 0, 555, 0, new Lambertian(
+            //new CheckerTexture(new ConstantTexture(new Color32(0, 0, 0)), new ConstantTexture(Color32.white)))));
+        }
+
+        Hitable CornellBox()
+        {
+            camera = new Camera(new Vector3(278, 278, -800), new Vector3(278, 278, 0), new Vector3(0, 1, 0), 40, 1);
+            HitableList list=new HitableList();
+            list.list.Add(new PlaneYZ(0, 555, 0, 555, 555, new Lambertian(new ConstantTexture(Color32.red))));
+            list.list.Add(new PlaneYZ(0, 555, 0, 555, 0, new Lambertian(new ConstantTexture(Color32.green))));
+            list.list.Add(new PlaneXZ(213, 343, 227, 332, 554,new DiffuseLight(new ConstantTexture(new Color32(1, 1, 1, 1)),40)));
+            list.list.Add(new FilpNormals(new PlaneXZ(0, 555, 0, 555, 555, new Lambertian(new ConstantTexture(Color32.white)))));
+            list.list.Add(new PlaneXZ(0, 555, 0, 555, 0, new Lambertian(new ConstantTexture(Color32.white))));
+            list.list.Add(new FilpNormals(new PlaneXY(0, 555, 0, 555, 555, new Lambertian(new ConstantTexture(Color32.white)))));
+            return list;
         }
 
         private class ScannerConfig
@@ -81,31 +104,29 @@ namespace ALight.Render
         private void LinearScanner(object o)
         {
             var config = (ScannerConfig)o;
-            int n;
-            lock (buff) n = ++NowSample;
             for (var j = config.h - 1; j >= 0; j--)
                 for (var i = 0; i < config.w; i++)
                 {
                     var color = mode == Mode.Diffusing
                         ? Diffusing(camera.CreateRay(
-                            (i + Random.Range(0, 1f)) * recip_width,
-                            (j + Random.Range(0, 1f)) * recip_height), hitableList, 0)
+                            (i + Random.Get()) * recip_width,
+                            (j + Random.Get()) * recip_height), world, 0)
                         : NormalMap(camera.CreateRay(
-                            (i + Random.Range(0, 1f)) * recip_width,
-                            (j + Random.Range(0, 1f)) * recip_height), hitableList);
-                    SetPixel(i, config.h - j-1,color,n);
+                            (i + Random.Get()) * recip_width,
+                            (j + Random.Get()) * recip_height), world);
+                    SetPixel(i, config.h - j-1,color);
                 }
             Form1.main.BeginInvoke(new Action(() => { Form1.main.SetSPP();}));
         }
 
-        private void SetPixel(int x, int y, Color32 c32,int n)
+        private void SetPixel(int x, int y, Color32 c32)
         { 
             var i = width * 4 * y + x * 4;
-            var color = (new Color32(buff[i], buff[i + 1] , buff[i + 2] , buff[i + 3]) *(n - 1) + c32) /n;
-            buff[i] = color.r;
-            buff[i + 1] = color.g;
-            buff[i + 2] = color.b;
-            buff[i + 3] = color.a;
+            Changes[width * y + x]++;
+            buff[i] += c32.r;
+            buff[i + 1] += c32.g;
+            buff[i + 2] += c32.b;
+            buff[i + 3] += c32.a;
         }
 
         private Color32 NormalMap(Ray ray, HitableList hitableList)
@@ -124,13 +145,15 @@ namespace ALight.Render
             {
                 var r = new Ray(Vector3.zero, Vector3.zero);
                 var attenuation = Color32.black;
+                var emitted = record.material.emitted(record.u, record.v, record.p);
                 if (depth >= MAX_SCATTER_TIME || !record.material.scatter(ray, record, ref attenuation, ref r))
-                    return Color32.black;
+                    return emitted;
                 var c = Diffusing(r, hitableList, depth + 1);
-                return new Color32(c.r * attenuation.r, c.g * attenuation.g, c.b * attenuation.b);
+                return new Color32(c.r * attenuation.r, c.g * attenuation.g, c.b * attenuation.b)+emitted;
             }
             var t = 0.5f * ray.normalDirection.y + 1f;
             return (1 - t) * new Color32(1, 1, 1) + t * new Color32(0.5f, 0.7f, 1);
+            //return Color32.black;
         }
 
         private enum Mode
