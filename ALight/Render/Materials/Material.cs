@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -56,7 +57,7 @@ namespace ALight.Render.Materials
         public override bool scatter(Ray rayIn, HitRecord record, ref Color32 attenuation, ref Ray scattered)
         {
             var reflected = Reflect(rayIn.normalDirection, record.normal);
-            scattered = new Ray(record.p, reflected + fuzz * GetRandomPointInUnitSphere());
+            scattered = new Ray(record.p, reflected + fuzz * GetRandomPointInUnitSphere(),rayIn.time);
             attenuation = texture.value(0, 0, record.p);
             return Vector3.Dot(scattered.direction, record.normal) > 0;
         }
@@ -91,8 +92,8 @@ namespace ALight.Render.Materials
 
             reflect_prob = Refract(rayIn.direction, outNormal, ni_no, ref refracted) ? Schlick(cos, ref_idx) : 1;
             scattered = Random.Get() <= reflect_prob
-                ? new Ray(record.p, reflected)
-                : new Ray(record.p, refracted);
+                ? new Ray(record.p, reflected,rayIn.time)
+                : new Ray(record.p, refracted,rayIn.time);
             return true;
         }
     }
@@ -104,13 +105,14 @@ namespace ALight.Render.Materials
         public override bool scatter(Ray rayIn, HitRecord record, ref Color32 attenuation, ref Ray scattered)
         {
             var target = record.p + record.normal + GetRandomPointInUnitSphere();
-            scattered = new Ray(record.p, target - record.p);
+            scattered = new Ray(record.p, target - record.p,rayIn.time);
 
-            float phi = Mathf.Atan2(record.p.z, record.p.x);
-            float theta = Mathf.Asin(record.p.y);
-            var u = 1 - (phi + Mathf.PI) / (2 * Mathf.PI);
-            var v = (theta + Mathf.PI / 2) / Mathf.PI;
-            attenuation = texture.value(u, v, record.p);
+            //float phi = Mathf.Atan2(record.p.z, record.p.x);
+            //float theta = Mathf.Asin(record.p.y);
+            //var u = 1 - (phi + Mathf.PI) / (2 * Mathf.PI);
+            //var v = (theta + Mathf.PI / 2) / Mathf.PI;
+            //attenuation = texture.value(u, v, record.p);
+            attenuation = texture.value(record.u, record.v, record.p);
             return true;
         }
 
@@ -143,7 +145,7 @@ namespace ALight.Render.Materials
 
         public override bool scatter(Ray rayIn, HitRecord record, ref Color32 attenuation, ref Ray scattered)
         {
-           scattered=new Ray(record.p,GetRandomPointInUnitSphere());
+           scattered=new Ray(record.p,GetRandomPointInUnitSphere(),rayIn.time);
             attenuation = texture.value(record.u, record.v, record.p);
             return true;
         }

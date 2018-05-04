@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ALight", "ALight\ALight.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AcDx", "AcDx\AcDx.csproj", "{63ADD039-3AAB-42D1-912F-ABCFB47BB473}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetterRandom", "BetterRandom\BetterRandom.csproj", "{A28A4C62-3244-4262-A6EF-74B81F5F3B93}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,14 +31,6 @@ Global
 		{63ADD039-3AAB-42D1-912F-ABCFB47BB473}.Release|Any CPU.Build.0 = Release|Any CPU
 		{63ADD039-3AAB-42D1-912F-ABCFB47BB473}.Release|x64.ActiveCfg = Release|Any CPU
 		{63ADD039-3AAB-42D1-912F-ABCFB47BB473}.Release|x64.Build.0 = Release|Any CPU
-		{A28A4C62-3244-4262-A6EF-74B81F5F3B93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A28A4C62-3244-4262-A6EF-74B81F5F3B93}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A28A4C62-3244-4262-A6EF-74B81F5F3B93}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{A28A4C62-3244-4262-A6EF-74B81F5F3B93}.Debug|x64.Build.0 = Debug|Any CPU
-		{A28A4C62-3244-4262-A6EF-74B81F5F3B93}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A28A4C62-3244-4262-A6EF-74B81F5F3B93}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A28A4C62-3244-4262-A6EF-74B81F5F3B93}.Release|x64.ActiveCfg = Release|Any CPU
-		{A28A4C62-3244-4262-A6EF-74B81F5F3B93}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

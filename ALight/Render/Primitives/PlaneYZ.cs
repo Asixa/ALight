@@ -13,6 +13,11 @@ namespace ALight.Render.Primitives
     {
         private float x0, x1, y0, y1, k;
         private Material material;
+        public override bool BoundingBox(float t0, float t1, ref AABB box)
+        {
+            box=new AABB(new Vector3(x0,y0,k-0.0001f),new Vector3(x1,y1,k+0.0001f) );
+            return true;
+        }
 
         public PlaneXY(float _x0, float _x1, float _y0, float _y1, float _k, Material mat)
         {
@@ -56,7 +61,11 @@ namespace ALight.Render.Primitives
             z1 = _z1;
             k = _k;
         }
-
+        public override bool BoundingBox(float t0, float t1, ref AABB box)
+        {
+            box = new AABB(new Vector3(x0, k - 0.0001f,z0), new Vector3(x1, k + 0.0001f,z1 ));
+            return true;
+        }
         public override bool Hit(Ray ray, float t_min, float t_max, ref HitRecord rec)
         {
             var t = (k - ray.original.y) / ray.direction.y;
@@ -90,7 +99,11 @@ namespace ALight.Render.Primitives
             y1 = _y1;
             k = _k;
         }
-
+        public override bool BoundingBox(float t0, float t1, ref AABB box)
+        {
+            box = new AABB(new Vector3(k - 0.0001f, y0, z0), new Vector3(k + 0.0001f, y1, z1));
+            return true;
+        }
         public override bool Hit(Ray ray, float t_min, float t_max, ref HitRecord rec)
         {
             var t = (k - ray.original.x) / ray.direction.x;

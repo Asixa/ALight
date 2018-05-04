@@ -2,8 +2,12 @@
 {
     public class Vector3
     {
-        public float x, y, z;
+        public float[] data=new float[3];
+        public float x {get => data[0];set => data[0] = value;}
+        public float y {get => data[1];set => data[1] = value;}
+        public float z {get => data[2];set => data[2] = value;}
         public static Vector3 one = new Vector3(1, 1, 1);
+
         public Vector3(float x, float y, float z)
         {
             this.x = x;
@@ -15,9 +19,9 @@
         {
         }
 
-        public float length()=>Mathf.Sqrt(x * x + y * y + z * z);
-        
-    public override string ToString()
+        public float length() => Mathf.Sqrt(x * x + y * y + z * z);
+
+        public override string ToString()
         {
             return "<" + x + "," + y + "," + z + ">";
         }
@@ -29,12 +33,17 @@
             var magnitude = Magnitude();
             return new Vector3(x / magnitude, y / magnitude, z / magnitude);
         }
+
         public static Vector3 Normalize(Vector3 v)
         {
             var magnitude = v.Magnitude();
             return new Vector3(v.x / magnitude, v.y / magnitude, v.z / magnitude);
         }
-
+        public float this[int index]
+        {
+            get =>data[index];
+            set => data[index] = value;
+        }
         public static Vector3 operator +(Vector3 lhs, Vector3 rhs) => new Vector3
         {
             x = lhs.x + rhs.x,
@@ -76,7 +85,8 @@
 
         public static bool operator !=(Vector3 lhs, Vector3 rhs) => !(lhs == rhs);
 
-        public static float SqrMagnitude(Vector3 vector) => vector.x * vector.x + vector.y * vector.y + vector.z * vector.z;
+        public static float SqrMagnitude(Vector3 vector) =>
+            vector.x * vector.x + vector.y * vector.y + vector.z * vector.z;
 
         public static float Dot(Vector3 lhs, Vector3 rhs) => lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z;
 

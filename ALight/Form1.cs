@@ -42,10 +42,6 @@ namespace ALight
         public void SetSPP()
         {
             SPP.Text = "已采样" + (++samples) + "次";
-            if (samples == renderer.Samples)
-            {
-                timer.Stop();
-            }
         }
 
         private void button2_Click(object sender, EventArgs e)

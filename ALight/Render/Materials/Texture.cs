@@ -38,9 +38,10 @@ namespace ALight.Render.Materials
     {
         private byte[] data;
         private int w, h;
-        private float scale = 10;
-        public ImageTexture(string file)
+        private float scale = 1;
+        public ImageTexture(string file,float s=1)
         {
+            scale = s;
             var bitmap = new Bitmap(Image.FromFile(file));
             data=new byte[bitmap.Width*bitmap.Height*3];
             w = bitmap.Width;
@@ -75,6 +76,17 @@ namespace ALight.Render.Materials
                 data[3 * i + 3 * w * j] / 255f, 
                 data[3 * i + 3 * w * j+1] / 255f, 
                 data[3 * i + 3 * w * j+2] / 255f);
+        }
+
+        public class NoiseTexture:Texture
+        {
+            public NoiseTexture() { }
+            public NoiseTexture(float s)=>scale=s;
+            public float scale;
+
+            public override Color32 value(float u, float v, Vector3 p) =>
+                //Color32.white * 0.5f * (1 + Perlin.Noise(scale * p));
+                Color32.white * 0.5f * (1 + (Mathf.Sin(scale * p.z) + 10 * Perlin.Turb(p)));
         }
     }
 }
