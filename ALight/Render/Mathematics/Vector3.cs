@@ -6,8 +6,12 @@
         public float x {get => data[0];set => data[0] = value;}
         public float y {get => data[1];set => data[1] = value;}
         public float z {get => data[2];set => data[2] = value;}
-        public static Vector3 one = new Vector3(1, 1, 1);
-
+       
+        public float this[int index]
+        {
+            get => data[index];
+            set => data[index] = value;
+        }
         public Vector3(float x, float y, float z)
         {
             this.x = x;
@@ -18,7 +22,12 @@
         public Vector3()
         {
         }
-
+        public Vector3(Vector3 copy)
+        {
+            x = copy.x;
+            y = copy.y;
+            z = copy.z;
+        }
         public float length() => Mathf.Sqrt(x * x + y * y + z * z);
 
         public override string ToString()
@@ -39,11 +48,7 @@
             var magnitude = v.Magnitude();
             return new Vector3(v.x / magnitude, v.y / magnitude, v.z / magnitude);
         }
-        public float this[int index]
-        {
-            get =>data[index];
-            set => data[index] = value;
-        }
+     
         public static Vector3 operator +(Vector3 lhs, Vector3 rhs) => new Vector3
         {
             x = lhs.x + rhs.x,
@@ -94,5 +99,6 @@
             lhs.z * rhs.x - lhs.x * rhs.z, lhs.x * rhs.y - lhs.y * rhs.x);
 
         public static Vector3 zero = new Vector3(0, 0, 0);
+        public static Vector3 one = new Vector3(1, 1, 1);
     }
 }

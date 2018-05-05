@@ -58,7 +58,7 @@ namespace ALight.Render.Materials
         {
             var reflected = Reflect(rayIn.normalDirection, record.normal);
             scattered = new Ray(record.p, reflected + fuzz * GetRandomPointInUnitSphere(),rayIn.time);
-            attenuation = texture.value(0, 0, record.p);
+            attenuation = texture.value(record.u, record.v, record.p);
             return Vector3.Dot(scattered.direction, record.normal) > 0;
         }
         

@@ -44,10 +44,6 @@ namespace ALight.Render.Primitives
             var discriminant = b * b - 4 * a * c;
             if (!(discriminant > 0)) return false;
             var temp = (-b - Mathf.Sqrt(discriminant)) / a * 0.5f;
-
-           
-            //
-
             if (temp < t_max && temp > t_min)
             {
                 rec.material = material;
@@ -57,7 +53,6 @@ namespace ALight.Render.Primitives
                 GetSphereUV(ref rec);
                 return true;
             }
-
             temp = (-b + Mathf.Sqrt(discriminant)) / a * 0.5f;
             if (!(temp < t_max) || !(temp > t_min)) return false;
             rec.material = material;

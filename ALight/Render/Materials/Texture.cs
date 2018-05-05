@@ -78,15 +78,16 @@ namespace ALight.Render.Materials
                 data[3 * i + 3 * w * j+2] / 255f);
         }
 
-        public class NoiseTexture:Texture
-        {
-            public NoiseTexture() { }
-            public NoiseTexture(float s)=>scale=s;
-            public float scale;
 
-            public override Color32 value(float u, float v, Vector3 p) =>
-                //Color32.white * 0.5f * (1 + Perlin.Noise(scale * p));
-                Color32.white * 0.5f * (1 + (Mathf.Sin(scale * p.z) + 10 * Perlin.Turb(p)));
-        }
+    }
+    public class NoiseTexture : Texture
+    {
+        public NoiseTexture() { }
+        public NoiseTexture(float s) => scale = s;
+        public float scale;
+
+        public override Color32 value(float u, float v, Vector3 p) =>
+            //Color32.white * 0.5f * (1 + Perlin.Noise(scale * p));
+            Color32.white * 0.5f * (1 + (Mathf.Sin(scale * p.z) + 10 * Perlin.Turb(p)));
     }
 }
