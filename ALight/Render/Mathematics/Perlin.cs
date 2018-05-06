@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ALight.Render.Mathematics
+﻿namespace ALight.Render.Mathematics
 {
     public class Perlin
     {
@@ -21,8 +15,9 @@ namespace ALight.Render.Mathematics
                 accum += (i * uu + (1 - i) * (1 - uu)) *
                          (j * vv + (1 - j) * (1 - vv)) *
                          (k * ww + (1 - k) * (1 - ww)) *
-                         Vector3.Dot(c[i,j,k], new Vector3(u - i, v - j, w - k));
+                         Vector3.Dot(c[i, j, k], new Vector3(u - i, v - j, w - k));
             }
+
             return accum;
         }
 
@@ -41,6 +36,7 @@ namespace ALight.Render.Mathematics
                 c[di, dj, dk] = ranvec[perm_x[(i + di) & 255] ^ perm_y[(j + dj) & 255] ^ perm_z[(k + dk) & 255]];
             return TrillinearInterp(c, u, v, w);
         }
+
         static readonly int[] perm_x = perlin_generate_perm();
         static readonly int[] perm_y = perlin_generate_perm();
         static readonly int[] perm_z = perlin_generate_perm();
@@ -50,20 +46,23 @@ namespace ALight.Render.Mathematics
             float accum = 0;
             var temp_p = p;
             var weight = 1.0f;
-            for (var i = 0; i<depth; i++) {
-                accum += weight* Noise(temp_p);
+            for (var i = 0; i < depth; i++)
+            {
+                accum += weight * Noise(temp_p);
                 weight *= 0.5f;
                 temp_p *= 2;
             }
+
             return Mathf.Abs(accum);
         }
 
-static readonly Vector3[] ranvec=perlin_generate();
-        //private static float[] ranfloats= perlin_generate();
+        static readonly Vector3[] ranvec = perlin_generate();
+
         private static Vector3[] perlin_generate()
         {
             var p = new Vector3[256];
-            for (var i = 0; i < 256; ++i)p[i] = new Vector3(-1 + 2 * Random.Get(), -1 + 2 * Random.Get(), -1 + 2 * Random.Get()).Normalized();
+            for (var i = 0; i < 256; ++i)
+                p[i] = new Vector3(-1 + 2 * Random.Get(), -1 + 2 * Random.Get(), -1 + 2 * Random.Get()).Normalized();
             return p;
         }
 
@@ -71,7 +70,7 @@ static readonly Vector3[] ranvec=perlin_generate();
         {
             for (var i = n - 1; i > 0; i--)
             {
-                var target = (int)(Random.Get() * (i + 1));
+                var target = (int) (Random.Get() * (i + 1));
                 var tmp = p[i];
                 p[i] = p[target];
                 p[target] = tmp;
@@ -81,7 +80,7 @@ static readonly Vector3[] ranvec=perlin_generate();
         private static int[] perlin_generate_perm()
         {
             var p = new int[256];
-            for (var i = 0; i < 256; i++)p[i] = i;
+            for (var i = 0; i < 256; i++) p[i] = i;
             permute(p, 256);
             return p;
         }

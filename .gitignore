@@ -3,5 +3,7 @@
 /AcDx/obj
 /ALight/bin
 /ALight/obj
+/ALightCreator/bin
+/ALightCreator/obj
 *.exe
 *.pdb

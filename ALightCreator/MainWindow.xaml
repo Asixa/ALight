@@ -1,0 +1,79 @@
+﻿<Window x:Class="WpfOfficeTheme.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfOfficeTheme"
+        xmlns:avalon="http://schemas.xceed.com/wpf/xaml/avalondock"
+        mc:Ignorable="d"
+        Title="ALight-Creator" Height="700" Width="950">
+    <Grid>
+        <avalon:DockingManager x:Name="DockManager"  Foreground="White" BorderBrush="White" AllowMixedOrientation="True" ForceCursor="True">
+            <avalon:DockingManager.Theme>
+                <avalon:MetroTheme/>
+            </avalon:DockingManager.Theme>
+
+            <avalon:LayoutRoot x:Name="Root">
+                <avalon:LayoutRoot.LeftSide>
+                    <avalon:LayoutAnchorSide>
+                        <avalon:LayoutAnchorGroup x:Name="LeftGroup"/>
+                    </avalon:LayoutAnchorSide>
+                </avalon:LayoutRoot.LeftSide>
+
+                <avalon:LayoutRoot.RightSide>
+                    <avalon:LayoutAnchorSide>
+                        <avalon:LayoutAnchorGroup x:Name="RightGroup"/>
+                    </avalon:LayoutAnchorSide>
+                </avalon:LayoutRoot.RightSide>
+
+                <avalon:LayoutRoot.TopSide>
+                    <avalon:LayoutAnchorSide>
+                        <avalon:LayoutAnchorGroup x:Name="TopGroup">
+            
+                        </avalon:LayoutAnchorGroup>
+                    </avalon:LayoutAnchorSide>
+                </avalon:LayoutRoot.TopSide>
+
+                <avalon:LayoutRoot.BottomSide>
+                    <avalon:LayoutAnchorSide>
+                        <avalon:LayoutAnchorGroup x:Name="BottomGroup"/>
+                    </avalon:LayoutAnchorSide>
+                </avalon:LayoutRoot.BottomSide>
+
+                <avalon:LayoutPanel x:Name="Panel">
+                    <avalon:LayoutAnchorablePaneGroup  x:Name="LeftAnchorableGroup"  DockWidth="200" >
+                        <avalon:LayoutAnchorablePane x:Name="LeftPane">
+                            <avalon:LayoutAnchorable x:Name="Solution" Title="材质" ContentId="Solution">
+                                <Grid x:Name="Project_grid">
+                                    <!--<Components:ResourceManager/>-->
+                                </Grid>
+                            </avalon:LayoutAnchorable>
+
+                            <avalon:LayoutAnchorable x:Name="Solution2" Title="渲染" ContentId="Solution">
+                                <Grid x:Name="Project_grid2">
+                                    <Button Content="开始渲染"/>
+                                </Grid>
+                            </avalon:LayoutAnchorable>
+
+                        </avalon:LayoutAnchorablePane>
+                    </avalon:LayoutAnchorablePaneGroup>
+                    <avalon:LayoutDocumentPaneGroup x:Name="DocumentGroup">
+                        <avalon:LayoutDocumentPane x:Name="DocumentPane"/>
+                    </avalon:LayoutDocumentPaneGroup>
+
+                    <avalon:LayoutAnchorablePaneGroup x:Name="RightAnchorableGroup" Orientation="Vertical" DockWidth="200">
+                        <avalon:LayoutAnchorablePane x:Name="RightPane" >
+                            <avalon:LayoutAnchorable Title="属性" ContentId="Property" >
+                                <Grid x:Name="shuxing"/>
+                            </avalon:LayoutAnchorable>
+                        </avalon:LayoutAnchorablePane>
+                    </avalon:LayoutAnchorablePaneGroup>
+
+
+                </avalon:LayoutPanel>
+            </avalon:LayoutRoot>
+        </avalon:DockingManager>
+
+    </Grid>
+</Window>
+

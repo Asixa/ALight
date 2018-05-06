@@ -36,7 +36,6 @@ namespace ALight.Render.Mathematics
         public Color ToSystemColor()
         {
             if (float.IsNaN(r) || float.IsNaN(g) || float.IsNaN(b) || float.IsNaN(a)) return Color.DeepPink;
-            //return Color.FromArgb((int) (a * 255), (int) (r * 255), (int) (g * 255), (int) (b * 255));
             return Color.FromArgb((int) (a * 255+0.5f), (int) (r * 255 + 0.5f), (int) (g * 255 + 0.5f), (int) (b * 255 +0.5f));
         }
 

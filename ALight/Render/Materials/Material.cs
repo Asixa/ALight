@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ALight.Render.Components;
+﻿using ALight.Render.Components;
 using ALight.Render.Mathematics;
 using Random = ALight.Render.Mathematics.Random;
 
@@ -24,15 +19,11 @@ namespace ALight.Render.Materials
         public static bool Refract(Vector3 vin, Vector3 normal, float ni_no, ref Vector3 refracted)
         {
             Vector3 uvin = vin.Normalized();
-            float dt = Vector3.Dot(uvin, normal);
-            float discrimination = 1 - ni_no * ni_no * (1 - dt * dt);
-            if (discrimination > 0)
-            {
-                refracted = ni_no * (uvin - normal * dt) - normal * Mathf.Sqrt(discrimination);
-                return true;
-            }
-
-            return false;
+            var dt = Vector3.Dot(uvin, normal);
+            var discrimination = 1 - ni_no * ni_no * (1 - dt * dt);
+            if (!(discrimination > 0)) return false;
+            refracted = ni_no * (uvin - normal * dt) - normal * Mathf.Sqrt(discrimination);
+            return true;
         }
 
         public static float Schlick(float cos, float ref_idx)
@@ -118,7 +109,6 @@ namespace ALight.Render.Materials
 
 
     }
-
     public class DiffuseLight : Material
     {
         private readonly Texture texture;
@@ -131,21 +121,16 @@ namespace ALight.Render.Materials
         
         public override bool scatter(Ray rayIn, HitRecord record, ref Color32 attenuation, ref Ray scattered)=>false;
         
-        public override Color32 emitted(float u, float v, Vector3 p)=>texture.value(u, v, p)*intensity;
-        
+        public override Color32 emitted(float u, float v, Vector3 p)=>texture.value(u, v, p)*intensity; 
     }
-
     public class Isotropic : Material
     {
         public Texture texture;
-        public Isotropic(Texture t)
-        {
-            texture = t;
-        }
-
+        public Isotropic(Texture t)=>texture = t;
+        
         public override bool scatter(Ray rayIn, HitRecord record, ref Color32 attenuation, ref Ray scattered)
         {
-           scattered=new Ray(record.p,GetRandomPointInUnitSphere(),rayIn.time);
+            scattered=new Ray(record.p,GetRandomPointInUnitSphere(),rayIn.time);
             attenuation = texture.value(record.u, record.v, record.p);
             return true;
         }
