@@ -16,6 +16,17 @@ namespace ALight.Render.Mathematics
         public static float Min(float a, float b) { return a < b ? a : b; }
         public static float Max(float a, float b) { return a > b ? a : b; }
 
+        public static Vector3 RandomCosineDirection()
+        {
+            float r1 = Random.Get();
+            float r2 = Random.Get();
+            float z = Sqrt(1 - r2);
+            float phi = 2 * PI * r1;
+            float x = Cos(phi) * 2 * Sqrt(r2);
+            float y = Sin(phi) * 2 * Sqrt(r2);
+            return new Vector3(x,y,z);
+        }
+
         public static void Swap(ref float a, ref float b)
         {
             var c = a;

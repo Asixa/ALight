@@ -1,6 +1,12 @@
-﻿using ALight.Render.Components;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using ALight.Render.Components;
 using ALight.Render.Materials;
 using ALight.Render.Mathematics;
+using Random = ALight.Render.Mathematics.Random;
 
 namespace ALight.Render.Primitives
 {
@@ -15,6 +21,37 @@ namespace ALight.Render.Primitives
             center = cen;
             radius = rad;
             material = m;
+        }
+
+        public override float PdfValue(Vector3 o, Vector3 v)
+        {
+            HitRecord rec=new HitRecord();
+            if (Hit(new Ray(o, v), 0.001f, float.MaxValue, ref rec))
+            {
+                float cos_theta_max = Mathf.Sqrt(1 - radius * radius / (center - o).SqrtMagnitude);
+                float solid_angle = 2 * Mathf.PI * (1 - cos_theta_max);
+                return 1 / solid_angle;
+            }
+            else return 0;
+        }
+
+        public override Vector3 random(Vector3 o)
+        {
+            Vector3 direction = center - o;
+            float ds = direction.SqrtMagnitude;
+            Onb uvw=new Onb(direction);
+            return uvw.Local(RandomToSphere(radius,ds));
+        }
+
+        public Vector3 RandomToSphere(float radius, float ds)
+        {
+            float r1 = Random.Get();
+            float r2 = Random.Get();
+            float z = 1 + r2 * (Mathf.Sqrt(1 - radius * radius / ds) - 1);
+            float phi = 2 * Mathf.PI * r1;
+            float x = Mathf.Cos(phi) * Mathf.Sqrt(1 - z * z);
+            float y = Mathf.Sin(phi) * Mathf.Sqrt(1 - z * z);
+            return new Vector3(x,y,z);
         }
 
         public override bool BoundingBox(float t0, float t1, ref AABB box)

@@ -39,6 +39,7 @@ namespace ALight.Render.Components
             if (radius == 0f)return new Ray(position, lowLeftCorner + x * horizontal + y * vertical - position,time0 + Random.Get() * (time1 - time0));
             var rd = radius * GetRandomPointInUnitDisk();
             var offset = rd.x * u + rd.y * v;
+           
             return new Ray(position + offset, lowLeftCorner + x * horizontal + y * vertical - position - offset, time0 + Random.Get() * (time1 - time0));
         }
     }

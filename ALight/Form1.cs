@@ -1,53 +1,45 @@
 ﻿using System;
 using System.Windows.Forms;
-using Random = ALight.Render.Mathematics.Random;
+using ALight.Render;
+using Timer = System.Timers.Timer;
 
 namespace ALight
 {
     public partial class Form1 : Form
     {
         public static Form1 main;
-        private readonly Render.Renderer renderer=new Render.Renderer();
-        public System.Timers.Timer timer;
+        private readonly Renderer renderer=new Renderer();
+        public Timer timer=new Timer();
         private int seconds;
         public Form1()
         {
             main = this;
             InitializeComponent();
+            timer.Enabled = true;
+            timer.Interval =1000;
+            progressBar1.Maximum = renderer.Samples;
+            timer.Elapsed +=(s,e)=> BeginInvoke(new Action(() => { SPP.Text = "已采样"+renderer.NowSample+"次";
+                progressBar1.Value = renderer.NowSample;
+            }));
+            timer.Start();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //renderer.width = renderer.height = int.Parse(Resolution_Input.Text);
-            //renderer.Samples = int.Parse(SPP_Input.Text);
-            //timer = new System.Timers.Timer(1000)
-            //{
-            //    AutoReset = true,
-            //    Enabled = true
-            //};
-            //timer.Elapsed += (s, n) => Text = (++seconds) + "s";
-            //timer.Start();
             button1.Enabled = false;
             renderer.Init();
-
-        }
-        
-        public void SetProgress(int now,int all)
-        {
-            progressBar1.Maximum = all;
-            progressBar1.Value = now;
-        }
-
-        private int samples;
-        public void SetSPP()
-        {
-            SPP.Text = "已采样" + (++samples) + "次";
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             renderer.Save();
             
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            
+            renderer.InitPreview();
         }
     }
 }

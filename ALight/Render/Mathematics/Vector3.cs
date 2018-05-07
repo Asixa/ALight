@@ -84,6 +84,8 @@
             z = lhs.z - rhs.z
         };
 
+        public float SqrtMagnitude => x * x + y * y + z * z;
+
         public static Vector3 operator -(Vector3 a) => new Vector3(-a.x, -a.y, -a.z);
 
         public static bool operator ==(Vector3 lhs, Vector3 rhs) => Vector3.SqrMagnitude(lhs - rhs) < 9.99999944E-11f;

@@ -1,4 +1,9 @@
-﻿using ALight.Render.Mathematics;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using ALight.Render.Mathematics;
 
 namespace ALight.Render.Components
 {
@@ -30,6 +35,14 @@ namespace ALight.Render.Components
                 {
                     return false;
                 }
+
+                //float invD = 1.0f / r.direction[a];
+                //float t0 = (min[a] - r.original[a] * invD);
+                //float t1 = (max[a] - r.original[a] * invD);
+                //if(invD<0.0f)Mathf.Swap(ref t0,ref t1);
+                //tmin = t0 > tmin ? t0 : tmin;
+                //tmax = t1 < tmax ? t1 : tmax;
+                //if (tmax < tmin) return false;
             }
             return true;
         }

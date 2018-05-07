@@ -43,17 +43,19 @@
                 <avalon:LayoutPanel x:Name="Panel">
                     <avalon:LayoutAnchorablePaneGroup  x:Name="LeftAnchorableGroup"  DockWidth="200" >
                         <avalon:LayoutAnchorablePane x:Name="LeftPane">
+                            <avalon:LayoutAnchorable x:Name="Solution2" Title="渲染" ContentId="Solution">
+                                <Grid x:Name="Project_grid2">
+                                    <Button Click="ButtonBase_OnClick" Content="开始渲染"/>
+                                </Grid>
+                            </avalon:LayoutAnchorable>
+
                             <avalon:LayoutAnchorable x:Name="Solution" Title="材质" ContentId="Solution">
                                 <Grid x:Name="Project_grid">
                                     <!--<Components:ResourceManager/>-->
                                 </Grid>
                             </avalon:LayoutAnchorable>
 
-                            <avalon:LayoutAnchorable x:Name="Solution2" Title="渲染" ContentId="Solution">
-                                <Grid x:Name="Project_grid2">
-                                    <Button Content="开始渲染"/>
-                                </Grid>
-                            </avalon:LayoutAnchorable>
+                         
 
                         </avalon:LayoutAnchorablePane>
                     </avalon:LayoutAnchorablePaneGroup>

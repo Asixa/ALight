@@ -1,6 +1,12 @@
-﻿using ALight.Render.Components;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using ALight.Render.Components;
 using ALight.Render.Materials;
 using ALight.Render.Mathematics;
+using Random = ALight.Render.Mathematics.Random;
 
 namespace ALight.Render.Primitives
 {
@@ -24,6 +30,8 @@ namespace ALight.Render.Primitives
         public override bool Hit(Ray ray, float t_min, float t_max, ref HitRecord rec)
         {
             Vector3 oc = ray.original - Center(ray.time);
+
+            //Console.WriteLine(Renderer.main.camera.time0 + Random.Get() * (Renderer.main.camera.time1 - Renderer.main.camera.time0) + "<<<" + Renderer.main.camera.time0 + " " + Renderer.main.camera.time1);
             var a = Vector3.Dot(ray.direction, ray.direction);
             var b = Vector3.Dot(oc, ray.direction);
             var c = Vector3.Dot(oc, oc) - radius * radius;
@@ -61,5 +69,7 @@ namespace ALight.Render.Primitives
                     Center(t1) + new Vector3(radius, radius, radius)));
             return true;
         }
+
+
     }
 }

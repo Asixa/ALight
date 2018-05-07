@@ -1,5 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using ALight.Render.Components;
 using ALight.Render.Mathematics;
 
 namespace ALight.Render.Materials
@@ -31,15 +37,15 @@ namespace ALight.Render.Materials
     public class ImageTexture : Texture
     {
         private readonly byte[] data;
-        private readonly int w,h;
+        private readonly int w, h;
         private readonly float scale = 1;
         public int dir;
-        public ImageTexture(string file,float s=1,int d=0)
+        public ImageTexture(string file, float s = 1, int d = 0)
         {
             dir = d;
             scale = s;
             var bitmap = new Bitmap(Image.FromFile(file));
-            data=new byte[bitmap.Width*bitmap.Height*3];
+            data = new byte[bitmap.Width * bitmap.Height * 3];
             w = bitmap.Width;
             h = bitmap.Height;
             for (var i = 0; i < bitmap.Height; i++)
@@ -48,8 +54,8 @@ namespace ALight.Render.Materials
                 {
                     var c = bitmap.GetPixel(j, i);
                     data[3 * j + 3 * w * i] = c.R;
-                    data[3 * j + 3 * w * i+1] = c.G;
-                    data[3 * j + 3 * w * i+2] = c.B;
+                    data[3 * j + 3 * w * i + 1] = c.G;
+                    data[3 * j + 3 * w * i + 2] = c.B;
                 }
             }
         }
@@ -64,17 +70,17 @@ namespace ALight.Render.Materials
             if (dir == 1)
             {
                 var t = u;
-                u =  1-v;
+                u = 1 - v;
                 v = t;
             }
             u = u * scale % 1;
             v = v * scale % 1;
-            var i = Mathf.Range((int) (u * w), 0, w - 1);
-            var j= Mathf.Range((int) ((1 - v) * h - 0.001f), 0, h - 1);
+            var i = Mathf.Range((int)(u * w), 0, w - 1);
+            var j = Mathf.Range((int)((1 - v) * h - 0.001f), 0, h - 1);
             return new Color32(
-                data[3 * i + 3 * w * j] / 255f, 
-                data[3 * i + 3 * w * j+1] / 255f, 
-                data[3 * i + 3 * w * j+2] / 255f);
+                data[3 * i + 3 * w * j] / 255f,
+                data[3 * i + 3 * w * j + 1] / 255f,
+                data[3 * i + 3 * w * j + 2] / 255f);
         }
     }
     public class NoiseTexture : Texture
@@ -82,6 +88,7 @@ namespace ALight.Render.Materials
         public NoiseTexture() { }
         public NoiseTexture(float s) => scale = s;
         public float scale;
+
         public override Color32 value(float u, float v, Vector3 p) =>
             //Color32.white * 0.5f * (1 + Perlin.Noise(scale * p));
             Color32.white * 0.5f * (1 + (Mathf.Sin(scale * p.z) + 10 * Perlin.Turb(p)));

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ALight.Render.Components;
 using ALight.Render.Materials;
 using ALight.Render.Mathematics;
+using Random = ALight.Render.Mathematics.Random;
 
 namespace ALight.Render.Primitives
 {
@@ -61,6 +62,26 @@ namespace ALight.Render.Primitives
             z1 = _z1;
             k = _k;
         }
+
+        public override float PdfValue(Vector3 o, Vector3 v)
+        {
+            var rec = new HitRecord();
+            if (Hit(new Ray(o, v), 0.0001f, float.MaxValue, ref rec))
+            {
+                float area = (x1 - x0) * (z1 - z0);
+                float ds = rec.t * rec.t * v.SqrtMagnitude;
+                float cos = Mathf.Abs(Vector3.Dot(v, rec.normal) / v.length());
+                return ds / (cos * area);
+            }
+            else return 0;
+        }
+
+        public override Vector3 random(Vector3 o)
+        {
+            var randompoint=new Vector3(x0+Random.Get()*(x1-x0),k,z0+Random.Get()*(z1-z0));
+            return randompoint - o;
+        }
+
         public override bool BoundingBox(float t0, float t1, ref AABB box)
         {
             box = new AABB(new Vector3(x0, k - 0.0001f,z0), new Vector3(x1, k + 0.0001f,z1 ));
@@ -112,12 +133,11 @@ namespace ALight.Render.Primitives
             if (z < z0 || z > z1) return false;
             var y = ray.original.y + t * ray.direction.y;
             if (y < y0 || y > y1) return false;
-
-            rec.v = (z - z0) / (z1 - z0);
             rec.u = (y - y0) / (y1 - y0);
+            rec.v = (z - z0) / (z1 - z0);
             rec.t = t;
             rec.material = material;
-            rec.normal = new Vector3(0, 0, 1);
+            rec.normal = new Vector3(1, 0, 0);
             rec.p = ray.GetPoint(t);
             return true;
         }

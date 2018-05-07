@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using AcDx;
 using ALight.Render.Components;
 using ALight.Render.Denoise;
-using ALight.Render.Instances;
 using ALight.Render.Materials;
 using ALight.Render.Mathematics;
 using ALight.Render.Primitives;
@@ -24,10 +23,10 @@ namespace ALight.Render
     {
         public static Renderer main;
         public readonly Mode mode = Mode.Diffusing;
-
-        public readonly HitableList world = new HitableList();
-        public int Samples = 10240,MAX_SCATTER_TIME = 16;
-        public int width =1920, height =1080;
+        private bool SkyColor=true;
+        public readonly HitableList world = new HitableList(), Important = new HitableList();
+        public int Samples = 50000,MAX_SCATTER_TIME = 4;
+        public int width =512, height =512;
         public  Preview preview = new Preview();
         public float[] buff;
         public int[] Changes;
@@ -36,6 +35,12 @@ namespace ALight.Render
         private float recip_width, recip_height;
         public int NowSample = 0;
 
+        public void InitPreview()
+        {
+            preview = new Preview();
+            preview.Run(new DxConfiguration("Preview", width, height));
+        }
+
         public void Init()
         {
             main = this;
@@ -43,14 +48,18 @@ namespace ALight.Render
             Changes = new int[width * height];
             InitScene();
             Start();
-            preview.Run(new DxConfiguration("Preview", width, height));
+            InitPreview();
         }
 
         private void MC()
         {
             var lens_radius = 0;
             var forcus_dis = 1;
-            world.list.Add(new Sphere(new Vector3(-10, 10, 10), 4f, new DiffuseLight(new ConstantTexture(new Color32(1, 0.9f, 0.7f, 1)), 500)));//sun
+
+            var sun = new Sphere(new Vector3(-10, 10, 10), 4f,
+                new DiffuseLight(new ConstantTexture(new Color32(1, 0.9f, 0.7f, 1)), 500));
+            world.list.Add(sun);//sun
+            Important.list.Add(sun);
             camera = new Camera(new Vector3(-3, 1, -1), new Vector3(-5, 2,8), new Vector3(0, 1, 0), 60, width / (float)height, lens_radius, forcus_dis, 0, 1);
             var lava = new Cube(new Vector3(-0.5f, -0.5f, -0.5f), new Vector3(0.5f, 0.5f, 0.5f),
                 new DiffuseLight(new ImageTexture("MC/lava.png"), 4));
@@ -134,7 +143,9 @@ namespace ALight.Render
             list.Add(new Translate(hay, new Vector3(-1, 0, 8)));
 
             list.Add(new Translate(stonebrick, new Vector3(-5, -0.5f, 8)));
-            list.Add(new Translate(lava, new Vector3(-6, -0.2f, 8)));
+            var yj = new Translate(lava, new Vector3(-6, -0.2f, 8));
+            //Important.list.Add(yj);
+            list.Add(yj);
             list.Add(new Translate(stonebrick, new Vector3(-6, -0.5f, 7)));
             list.Add(new Translate(crafttable, new Vector3(-6, 0f, 6)));
             list.Add(new Translate(command, new Vector3(-6, 0f, 5)));
@@ -242,7 +253,10 @@ namespace ALight.Render
             list.Add(new Translate(new RotateY(cobblestone, 90), new Vector3(-7, 3, 7)));
             list.Add(new Translate(new RotateY(cobblestone, 90), new Vector3(-7, 3, 8)));
             list.Add(new Translate(new RotateY(cobblestone, 90), new Vector3(-7, 3, 9)));
-            list.Add(new Translate(lamestone, new Vector3(-1, 3, 8)));
+
+            var ys = new Translate(lamestone, new Vector3(-1, 3, 8));
+            list.Add(ys);
+            //Important.list.Add(ys);
             //list.Add(new Translate(lamestone, new Vector3(-1, 3, 4)));
             //list.Add(new Translate(lamestone, new Vector3(-5, 4, 5)));
 
@@ -327,93 +341,72 @@ namespace ALight.Render
 
             world.list.Add(new BVHNode(list.ToArray(), list.Count, 0, 1));
         }
+
         private void InitScene()
         {
             var lens_radius = 0;
             var forcus_dis = 1;
-            camera = new Camera(new Vector3(0, 3, 2), new Vector3(0, 0, 0), new Vector3(0, 1, 0),90, width/(float)height, lens_radius, forcus_dis, 0,1);
             recip_width = 1f / width;
             recip_height = 1f / height;
-            //world.list.Add(new Sphere(new Vector3(0, -100.5f, -1), 100f, new Metal(new CheckerTexture(new ConstantTexture(new Color32(0, 0, 0)), new ConstantTexture(Color32.white)), 0.2f)));//地面
-            //world.list.Add(new Sphere(new Vector3(0, -100.5f, -1), 100f, new Metal(new CheckerTexture(new ConstantTexture(new Color32(0, 0, 0)), new ConstantTexture(Color32.white)), 0.2f)));//地面
-            //world.list.Add(new Sphere(new Vector3(0, -100.5f, -1), 100f, new Lambertian(new CheckerTexture(new ConstantTexture(new Color32(0, 0, 0)), new ConstantTexture(Color32.white)))));//地面
-            //world.list.Add(new Sphere(new Vector3(0, -100.5f, -1), 100f, new Metal(new ImageTexture("top.png",20), 0.2f)));//地面
-            //world.list.Add(new PlaneXZ(-5,5,-5,5,-0.5f,new Lambertian(new ImageTexture("top.png", 10))));
 
-            //world.list.Add(new PlaneXZ(-5,5,-5,5,-0.5f,new Metal(new CheckerTexture(new ConstantTexture(new Color32(0.5f, 0.5f, 0.5f)), new ConstantTexture(Color32.white)), 0.2f)));
-
-            //world.list.Add(new Sphere(new Vector3(-2, 10, 2), 4f, new DiffuseLight(new ConstantTexture(new Color32(1, 1, 1, 1)), 10)));//sun
-
-            //world.list.Add(new ConstantMedium(CreateCube(new Vector3(-0.5f, -0.5f, -0.5f), new Vector3(0.5f, 0.5f, 0.5f),
-            //           new Metal(new ConstantTexture(Color32.white), 1f)),5f,new ConstantTexture(new Color32(1,1,1))));
-
-
-
+            //Demo();
+            //CornellBox();
             MC();
-
-
-            //var list=new List<Hitable>();
-            //world.list.Add(new Translate(new RotateY(
-            //    new Cube(new Vector3(-0.5f, -0.5f, -0.5f), new Vector3(0.5f, 0.5f, 0.5f),
-            //        new Lambertian(new ImageTexture("MC/command_block_back.png")),
-            //        new Lambertian(new ImageTexture("MC/hay_block_side.png")),
-            //        new Lambertian(new ImageTexture("MC/hay_block_side.png", 1, 1))), 15), new Vector3(1, 0, -2)));
-
-            //world.list.Add(new Translate(new RotateY(
-            //    new Cube(new Vector3(-0.5f, -0.5f, -0.5f), new Vector3(0.5f, 0.5f, 0.5f),
-            //        new Lambertian(new ImageTexture("command_block_back.png")), new Lambertian(new ImageTexture("command_block_side.png"))), 15), new Vector3(1.5f, 0, -2)));
-
-            //world.list.Add(new Translate(new RotateY(
-            //    new Cube(new Vector3(-0.5f, -0.5f, -0.5f), new Vector3(0.5f, 0.5f, 0.5f),
-            //        new Lambertian(new ImageTexture("command_block_back.png")), new Lambertian(new ImageTexture("command_block_side.png"))), 15), new Vector3(2, 0, -2)));
-            // world.list.Add(new BVHNode(list.ToArray(),list.Count,0,1));
-
-
-            //world.list.Add(new BVHNode(l.ToArray(),l.Count,0,1));
-
-            //world.list.Add(CornellBox());
-            //world.list.Add(new Translate(new RotateY(
-            //    new Cube(
-            //        new Vector3(0, 0, 0),
-            //        new Vector3(165, 330, 165),
-            //        new Lambertian(new ConstantTexture(Color32.white))), 15)
-            //    , new Vector3(265, 0, 295)));
-            //world.list.Add(new Translate(new RotateY(
-            //    new Cube(
-            //        new Vector3(0, 0, 0),
-            //        new Vector3(165, 165, 165),
-            //        new Lambertian(new ConstantTexture(Color32.white))), -18),
-            //    new Vector3(130, 0, 65)));
-
-
-            //world.list.Add(new Sphere(new Vector3(0, 0f, 0), 0.5f, new Metal(new ImageTexture("texture.jpg", 10),0.9f)));
-            //var cube=new Cube(new Vector3(-0.5f, -0.5f, -1.5f), new Vector3(0.5f, 0.5f, -0.5f),new Lambertian(new ConstantTexture(new Color32(1,1,1))));
-            // world.list.Add(new ConstantMedium(cube, 2f,new ConstantTexture(Color32.white)));
-            //world.list.Add(new Sphere(new Vector3(0, 0f, -1), 0.25f, new Lambertian(new ConstantTexture(Color32.red))));
-            //world.list.Add(new Sphere(new Vector3(0f, 0f, -1),0.5f,new Lambertian(new ImageTexture.NoiseTexture())));
-
-
-
-
-            /// world.list.Add(CornellBox());
-            //world.list.Add(new Sphere(new Vector3(278, 100, 278), 100f, new Dielectirc(5)));
-            //world.list.Add(new PlaneXZ(0, 555, 0, 555, 0, new Lambertian(
-            //new CheckerTexture(new ConstantTexture(new Color32(0, 0, 0)), new ConstantTexture(Color32.white)))));
         }
 
-        Hitable CornellBox()
+        void Demo()
         {
-            camera = new Camera(new Vector3(278, 278, -800), new Vector3(278, 278, 0), new Vector3(0, 1, 0), 40, 1);
-            var list = new List<Hitable>
-            {
-                new PlaneYZ(0, 555, 0, 555, 555, new Lambertian(new ConstantTexture(Color32.green))),
-                new PlaneYZ(0, 555, 0, 555, 0, new Lambertian(new ConstantTexture(Color32.red))),
-                new PlaneXZ(213, 343, 227, 332, 554,new DiffuseLight(new ConstantTexture(new Color32(1, 1, 1, 1)), 15)),
-                new FilpNormals(new PlaneXZ(0, 555, 0, 555, 555, new Lambertian(new ConstantTexture(Color32.white)))),
-                new PlaneXZ(0, 555, 0, 555, 0, new Lambertian(new ConstantTexture(Color32.white))),
-                new FilpNormals(new PlaneXY(0, 555, 0, 555, 555, new Lambertian(new ConstantTexture(Color32.white))))
-            };
-            return new BVHNode(list.ToArray(),list.Count,0,1);
+            var lens_radius = 0;
+            var forcus_dis = 1;
+            camera = new Camera(new Vector3(0f, 1f, 3f), new Vector3(0, 0, 0), new Vector3(0, 1, 0), 90, (float)width / (float)height, lens_radius, forcus_dis, 0, 1);
+            var sun = new Sphere(new Vector3(-2, 10, 2), 4f,
+                new DiffuseLight(new ConstantTexture(new Color32(1, 1, 1, 1)), 2));
+            world.list.Add(sun);//sun
+            Important.list.Add(sun);
+            world.list.Add(new PlaneXZ(-5, 5, -5, 5, -0.5f, new Metal(new CheckerTexture(new ConstantTexture(new Color32(0.5f, 0.5f, 0.5f)), new ConstantTexture(Color32.white)), 0.2f)));
+            world.list.Add(new Sphere(new Vector3(-2, 0, 0), 0.5f, new Metal(new CheckerTexture(new ConstantTexture(new Color32(0.5f, 0.5f, 0.5f)), new ConstantTexture(Color32.white)), 0f)));
+            world.list.Add(new Sphere(new Vector3(-1, 0, 0), 0.5f, new Metal(new CheckerTexture(new ConstantTexture(new Color32(0.5f, 0.5f, 0.5f)), new ConstantTexture(Color32.white)), 0.25f)));
+            world.list.Add(new Sphere(new Vector3(0, 0, 0), 0.5f, new Metal(new CheckerTexture(new ConstantTexture(new Color32(0.5f, 0.5f, 0.5f)), new ConstantTexture(Color32.white)), 0.5f)));
+            world.list.Add(new Sphere(new Vector3(1, 0, 0), 0.5f, new Metal(new CheckerTexture(new ConstantTexture(new Color32(0.5f, 0.5f, 0.5f)), new ConstantTexture(Color32.white)), 0.75f)));
+            world.list.Add(new Sphere(new Vector3(2, 0, 0), 0.5f, new Metal(new CheckerTexture(new ConstantTexture(new Color32(0.5f, 0.5f, 0.5f)), new ConstantTexture(Color32.white)), 1)));
+
+        }
+        void CornellBox()
+        {
+            SkyColor = false;
+            camera = new Camera(new Vector3(278, 278, -800), new Vector3(278, 278, 0), new Vector3(0, 1, 0), 40, (float)width / (float)height);
+            var list = new List<Hitable>();
+            list.Add(new FilpNormals(new PlaneYZ(0, 555, 0, 555, 555, new Lambertian(new ConstantTexture(Color32.green)))));
+            list.Add(new PlaneYZ(0, 555, 0, 555, 0, new Lambertian(new ConstantTexture(Color32.red))));
+            //var lt = new FilpNormals(new PlaneXZ(213, 343, 227, 332, 354,new DiffuseLight(new ConstantTexture(new Color32(1, 1, 1, 1)), 15)));
+            var lt = new PlaneXZ(213, 343, 227, 332, 554,new DiffuseLight(new ConstantTexture(new Color32(1, 1, 1, 1)), 15));
+            list.Add(lt);
+            Important.list.Add(lt);
+            list.Add(new FilpNormals(new PlaneXZ(0, 555, 0, 555, 555, new Lambertian(new ConstantTexture(Color32.white)))));
+            list.Add(new PlaneXZ(0, 555, 0, 555, 0, new Lambertian(new ConstantTexture(Color32.white))));
+            list.Add(new FilpNormals(new PlaneXY(0, 555, 0, 555, 555, new Lambertian(new ConstantTexture(Color32.white)))));
+
+            var material = new Lambertian(new ConstantTexture(Color32.white));
+
+            world.list.Add(new BVHNode(list.ToArray(), list.Count, 0, 1));
+            var cube1 = new Translate(new RotateY(
+                    new Cube(
+                        new Vector3(0, 0, 0),
+                        new Vector3(165, 330, 165),
+                        material), 15)
+                , new Vector3(265, 0, 295));
+            var cube2 = new Translate(new RotateY(
+                    new Cube(
+                        new Vector3(0, 0, 0),
+                        new Vector3(165, 165, 165),
+                        material), -18),
+                new Vector3(130, 0, 65));
+            world.list.Add(cube1);
+            world.list.Add(cube2);
+
+            //var sphere = new Sphere(new Vector3(190, 90, 190), 90, new Dielectirc(1.5f));
+            //Important.list.Add(sphere);
+            //world.list.Add(sphere);
         }
 
         private class ScannerConfig
@@ -430,8 +423,8 @@ namespace ALight.Render
         private async void Start()
         {
             ThreadPool.SetMaxThreads(16, 16);
-            await Task.Factory.StartNew(delegate { LinearScanner(new ScannerConfig(height, width)); });
-            for (var i = 1; i < Samples; i++)
+            //await Task.Factory.StartNew(delegate { LinearScanner(new ScannerConfig(height, width)); });
+            for (var i = 0; i < Samples; i++)
                 ThreadPool.QueueUserWorkItem(LinearScanner, new ScannerConfig(height, width));
         }
 
@@ -444,7 +437,7 @@ namespace ALight.Render
                     var color = mode == Mode.Diffusing
                         ? Diffusing(camera.CreateRay(
                             (i + Random.Get()) * recip_width,
-                            (j + Random.Get()) * recip_height), world, 0)
+                            (j + Random.Get()) * recip_height), world,Important,0)//.DeNaN()
                         : NormalMap(camera.CreateRay(
                             (i + Random.Get()) * recip_width,
                             (j + Random.Get()) * recip_height), world);
@@ -472,24 +465,36 @@ namespace ALight.Render
             return (1 - t) * new Color32(1, 1, 1) + t * new Color32(0.5f, 0.7f, 1);
         }
 
-        private Color32 Diffusing(Ray ray, HitableList hitableList, int depth)
+        private Color32 Diffusing(Ray r, HitableList hitableList, Hitable importance, int depth)
         {
-            var record = new HitRecord();
-            if (hitableList.Hit(ray, 0.0001f, float.MaxValue, ref record))
+            var hrec = new HitRecord();
+            if (hitableList.Hit(r, 0.0001f, float.MaxValue, ref hrec))
             {
-                var r = new Ray(Vector3.zero, Vector3.zero);
-                var attenuation = Color32.black;
-                var emitted = record.material.emitted(record.u, record.v, record.p);
-                if (depth >= MAX_SCATTER_TIME || !record.material.scatter(ray, record, ref attenuation, ref r))
-                    return emitted;
-                var c = Diffusing(r, hitableList, depth + 1);
-                return new Color32(c.r * attenuation.r, c.g * attenuation.g, c.b * attenuation.b)+emitted;
-            }
-            var t = 0.5f * ray.normalDirection.y + 1f;
-            return (1 - t) * new Color32(2, 2, 2) + t * new Color32(0.5f, 0.7f, 1);
-            return Color32.black;
-        }
+                ScatterRecord srec = new ScatterRecord();
+                var emitted = hrec.material.emitted(r,hrec,hrec.u, hrec.v, hrec.p);
+                if (depth < MAX_SCATTER_TIME && hrec.material.scatter(r, ref hrec, ref srec))
+                {
+                    if (srec.is_specular)
+                    {
+                        return srec.attenuation * Diffusing(srec.specular_ray, world, importance, depth + 1);
+                    }
+                    else
+                    {
 
+                        HitablePdf plight = new HitablePdf(importance, hrec.p);
+                        var p = new MixturePdf(plight, srec.pdf);
+                        var scattered = new Ray(hrec.p, p.generate(), r.time);
+                        var pdf = p.value(scattered.direction);
+                        return emitted + srec.attenuation * hrec.material.scattering_pdf(r, hrec, scattered) *
+                               Diffusing(scattered, world, importance, depth + 1) / pdf;
+                    }
+                }
+                else return emitted;
+
+            }
+            var t = 0.5f * r.normalDirection.y + 1f;
+            return SkyColor ? (1 - t) * new Color32(2, 2, 2) + t * new Color32(0.5f, 0.7f, 1) : Color32.black;
+        }
 
 
         public void Save(string path="a.png")
@@ -503,7 +508,6 @@ namespace ALight.Render
             }
             pic.Save(path);
         }
-
 
 
         #region Denoise
