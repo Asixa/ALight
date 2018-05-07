@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using ALight.Render.Components;
 using ALight.Render.Materials;
 using ALight.Render.Mathematics;
+using ALight.Render.Primitives;
 
-namespace ALight.Render.Primitives
+namespace ALight.Render.Instances
 {
     class Cube:Hitable
     {
-        public Vector3 pmin, pmax;
-        public Hitable list;
+        private readonly Vector3 pmin,pmax;
+        private readonly Hitable list;
         public Cube(Vector3 p0, Vector3 p1, Material mat,Material m2=null,Material m3=null)
         {
             pmax = p1;
@@ -37,9 +34,7 @@ namespace ALight.Render.Primitives
             return true;
         }
 
-        public override bool Hit(Ray ray, float t_min, float t_max, ref HitRecord rec)
-        {
-            return list.Hit(ray, t_min, t_max, ref rec);
-        }
+        public override bool Hit(Ray ray, float t_min, float t_max, ref HitRecord rec)=>list.Hit(ray, t_min, t_max, ref rec);
+        
     }
 }

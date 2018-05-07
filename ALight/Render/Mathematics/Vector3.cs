@@ -2,7 +2,7 @@
 {
     public class Vector3
     {
-        public float[] data=new float[3];
+        private readonly float[] data=new float[3];
         public float x {get => data[0];set => data[0] = value;}
         public float y {get => data[1];set => data[1] = value;}
         public float z {get => data[2];set => data[2] = value;}

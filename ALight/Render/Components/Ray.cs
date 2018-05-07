@@ -2,26 +2,24 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using ALight.Render.Mathematics;
 
 namespace ALight.Render.Components
 {
     public class Ray
     {
-        public readonly Vector3 original;
+        public readonly Vector3 origin;
         public readonly Vector3 direction;
-        public readonly Vector3 normalDirection;
-
-        public float time;
+        public readonly Vector3 normal_direction;
+        public readonly float time;
         public Ray(Vector3 o, Vector3 d,float t=0)
         {
             time = t;
-            original = o;
+            origin = o;
             direction = d;
-            normalDirection = d.Normalized();
+            normal_direction = d.Normalized();
         }
 
-        public Vector3 GetPoint(float t) => original + direction * t;
+        public Vector3 GetPoint(float t) => origin + direction * t;
     }
 }

@@ -18,8 +18,8 @@ namespace ALight
             timer.Enabled = true;
             timer.Interval =1000;
             progressBar1.Maximum = renderer.Samples;
-            timer.Elapsed +=(s,e)=> BeginInvoke(new Action(() => { SPP.Text = "已采样"+renderer.NowSample+"次";
-                progressBar1.Value = renderer.NowSample;
+            timer.Elapsed +=(s,e)=> BeginInvoke(new Action(() => { SPP.Text = "已采样"+renderer.now_sample+"次";
+                progressBar1.Value = renderer.now_sample;
             }));
             timer.Start();
         }

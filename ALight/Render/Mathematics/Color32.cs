@@ -44,7 +44,6 @@ namespace ALight.Render.Mathematics
         public Color ToSystemColor()
         {
             if (float.IsNaN(r) || float.IsNaN(g) || float.IsNaN(b) || float.IsNaN(a)) return Color.DeepPink;
-            //return Color.FromArgb((int) (a * 255), (int) (r * 255), (int) (g * 255), (int) (b * 255));
             return Color.FromArgb((int) (a * 255+0.5f), (int) (r * 255 + 0.5f), (int) (g * 255 + 0.5f), (int) (b * 255 +0.5f));
         }
 
@@ -66,11 +65,11 @@ namespace ALight.Render.Mathematics
         public static Color32 Lerp(Color32 a, Color32 b, float t) => new Color32(a.r + (b.r - a.r) * t,
             a.g + (b.g - a.g) * t, a.b + (b.b - a.b) * t, a.a + (b.a - a.a) * t);
 
-        public static Color32 
-            black = new Color32(0, 0, 0),
-            red = new Color32(1, 0, 0),
-            green = new Color32(0, 1, 0),
-            blue = new Color32(0, 0, 1),
-            white = new Color32(1, 1, 1);
+        public static readonly Color32 
+            Black = new Color32(0, 0, 0),
+            Red = new Color32(1, 0, 0),
+            Green = new Color32(0, 1, 0),
+            Blue = new Color32(0, 0, 1),
+            White = new Color32(1, 1, 1);
     }
 }

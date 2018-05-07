@@ -31,11 +31,11 @@ namespace ALight.Render.Primitives
         }
         public override bool Hit(Ray ray, float t_min, float t_max, ref HitRecord rec)
         {
-            var t = (k - ray.original.z) / ray.direction.z;
+            var t = (k - ray.origin.z) / ray.direction.z;
             if (t < t_min || t > t_max) return false;
-            var x = ray.original.x + t * ray.direction.x;
+            var x = ray.origin.x + t * ray.direction.x;
             if (x < x0 || x > x1) return false;
-            var y = ray.original.y + t * ray.direction.y;
+            var y = ray.origin.y + t * ray.direction.y;
             if (y < y0 || y > y1) return false;
 
             rec.u = (x - x0) / (x1 - x0);
@@ -76,9 +76,9 @@ namespace ALight.Render.Primitives
             else return 0;
         }
 
-        public override Vector3 random(Vector3 o)
+        public override Vector3 Random(Vector3 o)
         {
-            var randompoint=new Vector3(x0+Random.Get()*(x1-x0),k,z0+Random.Get()*(z1-z0));
+            var randompoint=new Vector3(x0+Mathematics.Random.Get()*(x1-x0),k,z0+Mathematics.Random.Get()*(z1-z0));
             return randompoint - o;
         }
 
@@ -89,11 +89,11 @@ namespace ALight.Render.Primitives
         }
         public override bool Hit(Ray ray, float t_min, float t_max, ref HitRecord rec)
         {
-            var t = (k - ray.original.y) / ray.direction.y;
+            var t = (k - ray.origin.y) / ray.direction.y;
             if (t < t_min || t > t_max) return false;
-            var x = ray.original.x + t * ray.direction.x;
+            var x = ray.origin.x + t * ray.direction.x;
             if (x < x0 || x > x1) return false;
-            var z = ray.original.z + t * ray.direction.z;
+            var z = ray.origin.z + t * ray.direction.z;
             if (z < z0 || z > z1) return false;
 
             rec.u = (x - x0) / (x1 - x0);
@@ -127,11 +127,11 @@ namespace ALight.Render.Primitives
         }
         public override bool Hit(Ray ray, float t_min, float t_max, ref HitRecord rec)
         {
-            var t = (k - ray.original.x) / ray.direction.x;
+            var t = (k - ray.origin.x) / ray.direction.x;
             if (t < t_min || t > t_max) return false;
-            var z = ray.original.z + t * ray.direction.z;
+            var z = ray.origin.z + t * ray.direction.z;
             if (z < z0 || z > z1) return false;
-            var y = ray.original.y + t * ray.direction.y;
+            var y = ray.origin.y + t * ray.direction.y;
             if (y < y0 || y > y1) return false;
             rec.u = (y - y0) / (y1 - y0);
             rec.v = (z - z0) / (z1 - z0);

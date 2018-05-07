@@ -35,7 +35,7 @@ namespace ALight.Render.Primitives
             else return 0;
         }
 
-        public override Vector3 random(Vector3 o)
+        public override Vector3 Random(Vector3 o)
         {
             Vector3 direction = center - o;
             float ds = direction.SqrtMagnitude;
@@ -45,8 +45,8 @@ namespace ALight.Render.Primitives
 
         public Vector3 RandomToSphere(float radius, float ds)
         {
-            float r1 = Random.Get();
-            float r2 = Random.Get();
+            float r1 = Mathematics.Random.Get();
+            float r2 = Mathematics.Random.Get();
             float z = 1 + r2 * (Mathf.Sqrt(1 - radius * radius / ds) - 1);
             float phi = 2 * Mathf.PI * r1;
             float x = Mathf.Cos(phi) * Mathf.Sqrt(1 - z * z);
@@ -69,7 +69,7 @@ namespace ALight.Render.Primitives
                 record.u = 1 - (phi + Mathf.PI) / (2 * Mathf.PI);
                 record.v = (theta + Mathf.PI / 2) / Mathf.PI;
             }
-            var oc = ray.original - center;
+            var oc = ray.origin - center;
             var a = Vector3.Dot(ray.direction, ray.direction);
             var b = 2f * Vector3.Dot(oc, ray.direction);
             var c = Vector3.Dot(oc, oc) - radius * radius;

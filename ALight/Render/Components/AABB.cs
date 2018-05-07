@@ -25,10 +25,10 @@ namespace ALight.Render.Components
         {
             for (var a = 0; a < 3; a++)
             {
-                var t0 = Mathf.Min((min[a] - r.original[a]) / r.direction[a],
-                    (max[a] - r.original[a]) / r.direction[a]);
-                var t1 = Mathf.Max((min[a] - r.original[a]) / r.direction[a],
-                    (max[a] - r.original[a]) / r.direction[a]);
+                var t0 = Mathf.Min((min[a] - r.origin[a]) / r.direction[a],
+                    (max[a] - r.origin[a]) / r.direction[a]);
+                var t1 = Mathf.Max((min[a] - r.origin[a]) / r.direction[a],
+                    (max[a] - r.origin[a]) / r.direction[a]);
                 tmin = Mathf.Max(t0, tmin);
                 tmax = Mathf.Min(t1, tmax);
                 if (tmax <= tmin)
@@ -37,8 +37,8 @@ namespace ALight.Render.Components
                 }
 
                 //float invD = 1.0f / r.direction[a];
-                //float t0 = (min[a] - r.original[a] * invD);
-                //float t1 = (max[a] - r.original[a] * invD);
+                //float t0 = (min[a] - r.origin[a] * invD);
+                //float t1 = (max[a] - r.origin[a] * invD);
                 //if(invD<0.0f)Mathf.Swap(ref t0,ref t1);
                 //tmin = t0 > tmin ? t0 : tmin;
                 //tmax = t1 < tmax ? t1 : tmax;

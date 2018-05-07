@@ -29,7 +29,7 @@ namespace ALight.Render.Primitives
 
         public override bool Hit(Ray ray, float t_min, float t_max, ref HitRecord rec)
         {
-            Vector3 oc = ray.original - Center(ray.time);
+            Vector3 oc = ray.origin - Center(ray.time);
 
             //Console.WriteLine(Renderer.main.camera.time0 + Random.Get() * (Renderer.main.camera.time1 - Renderer.main.camera.time0) + "<<<" + Renderer.main.camera.time0 + " " + Renderer.main.camera.time1);
             var a = Vector3.Dot(ray.direction, ray.direction);

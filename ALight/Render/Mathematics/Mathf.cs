@@ -18,13 +18,9 @@ namespace ALight.Render.Mathematics
 
         public static Vector3 RandomCosineDirection()
         {
-            float r1 = Random.Get();
-            float r2 = Random.Get();
-            float z = Sqrt(1 - r2);
-            float phi = 2 * PI * r1;
-            float x = Cos(phi) * 2 * Sqrt(r2);
-            float y = Sin(phi) * 2 * Sqrt(r2);
-            return new Vector3(x,y,z);
+            var r2 = Random.Get();
+            var phi = 2 * PI * Random.Get();
+            return new Vector3(Cos(phi) * 2 * Sqrt(r2), Sin(phi) * 2 * Sqrt(r2), Sqrt(1 - r2));
         }
 
         public static void Swap(ref float a, ref float b)
@@ -34,26 +30,15 @@ namespace ALight.Render.Mathematics
             b = c;
         }
         public static float Pow(float f, float p) => (float) Math.Pow(f, p);
-
         public static float Sin(float f)=>(float) Math.Sin(f);
-
         public static float Cos(float f)=>(float) Math.Cos(f);
-        
         public static float Asin(float f)=>(float) Math.Asin(f);
-
         public static float Floor(float f)=>(float) Math.Floor(f);
-        public static int Floor2int(float f)=>(int) Math.Floor(f);
-
-
+        public static int Floor2Int(float f)=>(int) Math.Floor(f);
         public static float Abs(float f) => (float) Math.Abs(f);
         public static float Acos(float f)=>(float) Math.Acos(f);
-        
-
         public static float Atan(float f)=>(float) Math.Atan(f);
-        
         public static float Atan2(float y, float x)=> (float) Math.Atan2(y, x);
-
         public static float Log(float f)=>(float) Math.Log(f);
-        
     }
 }
