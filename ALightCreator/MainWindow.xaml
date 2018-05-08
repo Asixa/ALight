@@ -1,81 +1,177 @@
-﻿<Window x:Class="WpfOfficeTheme.MainWindow"
+﻿<Window xmlns:Panels="clr-namespace:ALightCreator.Panels"  x:Class="WpfOfficeTheme.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WpfOfficeTheme"
-        xmlns:avalon="http://schemas.xceed.com/wpf/xaml/avalondock"
         mc:Ignorable="d"
-        Title="ALight-Creator" Height="700" Width="950">
+        Title="ALight Creator" Height="700" Width="950">
     <Grid>
-        <avalon:DockingManager x:Name="DockManager"  Foreground="White" BorderBrush="White" AllowMixedOrientation="True" ForceCursor="True">
-            <avalon:DockingManager.Theme>
-                <avalon:MetroTheme/>
-            </avalon:DockingManager.Theme>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition />
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        
+        <Menu Grid.Row="0" Grid.ColumnSpan="2">
+            <Menu.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <DockPanel HorizontalAlignment="Stretch"/>
+                </ItemsPanelTemplate>
+            </Menu.ItemsPanel>
+            <MenuItem Header="File">
+                <MenuItem IsCheckable="True" Header="New Item">
+                    <MenuItem Header="Item" />
+                </MenuItem>
+                <MenuItem Header="New Project">
+                    <MenuItem IsCheckable="True" IsEnabled="False" Header="Project"/>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="Save"/>
+                <MenuItem Header="Save All" IsEnabled="False"/>
+                <MenuItem Header="Save Copy of Project"/>
+                <Separator/>
+                <MenuItem Header="Import">
+                    <MenuItem IsCheckable="True" Header="Import Adobe Illustrator File"/>
+                    <MenuItem IsCheckable="True" Header="Import Adobe Photoshop File"/>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="Exit"/>
+                <Separator/>
+            </MenuItem>
+            <MenuItem Header="Edit">
+                <MenuItem IsCheckable="True" Header="Item">
+                    <MenuItem Header="Item" />
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="View">
+                <MenuItem IsCheckable="True" Header="Item">
+                    <MenuItem Header="Item" />
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="Object">
+                <MenuItem Header="Edit Text" IsEnabled="False"/>
+                <MenuItem Header="Edit Control" IsEnabled="False"/>
+                <Separator/>
+                <MenuItem Header="Order">
+                    <MenuItem Header="Bring to Front"/>
+                    <MenuItem Header="Bring Forward"/>
+                    <MenuItem Header="Send to Back"/>
+                </MenuItem>
+                <MenuItem Header="Align">
+                    <MenuItem Header="Left"/>
+                    <MenuItem Header="Top" IsChecked="True"/>
+                    <MenuItem Header="Right"/>
+                    <MenuItem Header="Bottom"/>
+                </MenuItem>
+                <MenuItem Header="Reset Layout"/>
+                <MenuItem Header="Make Same"/>
+                <MenuItem Header="Flip"/>
+                <Separator/>
+                <MenuItem Header="Group" IsEnabled="False"/>
+                <MenuItem Header="Ungroup" IsEnabled="False"/>
+                <MenuItem Header="Pin Active Container" IsEnabled="False"/>
+            </MenuItem>
+            <MenuItem Header="Help" IsEnabled="True" HorizontalAlignment="Right"/>
+        </Menu>
 
-            <avalon:LayoutRoot x:Name="Root">
-                <avalon:LayoutRoot.LeftSide>
-                    <avalon:LayoutAnchorSide>
-                        <avalon:LayoutAnchorGroup x:Name="LeftGroup"/>
-                    </avalon:LayoutAnchorSide>
-                </avalon:LayoutRoot.LeftSide>
+        <Separator Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Top"
+                   Background="{StaticResource BorderBrush}" Margin="0"/>
+        
+        <Grid Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" Background="{StaticResource AccentColorBrush}" Margin="0 1 0 0">
+            <TextBlock Text="ALight Creator Beta" Style="{StaticResource Header20}" Foreground="White" Margin="10 8 0 8"/>
+        </Grid>
 
-                <avalon:LayoutRoot.RightSide>
-                    <avalon:LayoutAnchorSide>
-                        <avalon:LayoutAnchorGroup x:Name="RightGroup"/>
-                    </avalon:LayoutAnchorSide>
-                </avalon:LayoutRoot.RightSide>
+        <Grid Grid.Row="1" Grid.Column="1" Margin="10 0 10 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Button Width="60" HorizontalAlignment="Left" Content="Undo" />
+            <Button Grid.Column="1" Width="60" HorizontalAlignment="Left" Content="Redo" />
+            <Button Grid.Column="2" Width="60" HorizontalAlignment="Right" Content="Edit" />
+            <Button Grid.Column="3" Width="60" HorizontalAlignment="Right" Content="Save" />
+            <ProgressBar Grid.Column="2" HorizontalAlignment="Left" Height="22" Margin="3,10,0,0" VerticalAlignment="Top" Width="408" Value="20" Foreground="#FF00B9FF"/>
+        </Grid>
+        
+        <Separator Grid.Row="2" Grid.Column="0" Width="200" VerticalAlignment="Bottom"
+                   Background="{StaticResource BorderBrush}" Margin="0"/>
+        
+        <!--<Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
 
-                <avalon:LayoutRoot.TopSide>
-                    <avalon:LayoutAnchorSide>
-                        <avalon:LayoutAnchorGroup x:Name="TopGroup">
-            
-                        </avalon:LayoutAnchorGroup>
-                    </avalon:LayoutAnchorSide>
-                </avalon:LayoutRoot.TopSide>
+            <avalon:DockingManager x:Name="DockManager"  Foreground="White" BorderBrush="White" AllowMixedOrientation="True" ForceCursor="True">
+                <avalon:DockingManager.Theme>
+                    <avalon:MetroTheme/>
+                </avalon:DockingManager.Theme>
 
-                <avalon:LayoutRoot.BottomSide>
-                    <avalon:LayoutAnchorSide>
-                        <avalon:LayoutAnchorGroup x:Name="BottomGroup"/>
-                    </avalon:LayoutAnchorSide>
-                </avalon:LayoutRoot.BottomSide>
+                <avalon:LayoutRoot x:Name="Root">
+                    <avalon:LayoutRoot.LeftSide>
+                        <avalon:LayoutAnchorSide>
+                            <avalon:LayoutAnchorGroup x:Name="LeftGroup"/>
+                        </avalon:LayoutAnchorSide>
+                    </avalon:LayoutRoot.LeftSide>
 
-                <avalon:LayoutPanel x:Name="Panel">
-                    <avalon:LayoutAnchorablePaneGroup  x:Name="LeftAnchorableGroup"  DockWidth="200" >
-                        <avalon:LayoutAnchorablePane x:Name="LeftPane">
-                            <avalon:LayoutAnchorable x:Name="Solution2" Title="渲染" ContentId="Solution">
-                                <Grid x:Name="Project_grid2">
-                                    <Button Click="ButtonBase_OnClick" Content="开始渲染"/>
-                                </Grid>
-                            </avalon:LayoutAnchorable>
+                    <avalon:LayoutRoot.RightSide>
+                        <avalon:LayoutAnchorSide>
+                            <avalon:LayoutAnchorGroup x:Name="RightGroup"/>
+                        </avalon:LayoutAnchorSide>
+                    </avalon:LayoutRoot.RightSide>
 
-                            <avalon:LayoutAnchorable x:Name="Solution" Title="材质" ContentId="Solution">
-                                <Grid x:Name="Project_grid">
-                                    <!--<Components:ResourceManager/>-->
-                                </Grid>
-                            </avalon:LayoutAnchorable>
+                    <avalon:LayoutRoot.TopSide>
+                        <avalon:LayoutAnchorSide>
+                            <avalon:LayoutAnchorGroup x:Name="TopGroup"/>
+                        </avalon:LayoutAnchorSide>
+                    </avalon:LayoutRoot.TopSide>
 
-                         
+                    <avalon:LayoutRoot.BottomSide>
+                        <avalon:LayoutAnchorSide>
+                            <avalon:LayoutAnchorGroup x:Name="BottomGroup"/>
+                        </avalon:LayoutAnchorSide>
+                    </avalon:LayoutRoot.BottomSide>
 
-                        </avalon:LayoutAnchorablePane>
-                    </avalon:LayoutAnchorablePaneGroup>
-                    <avalon:LayoutDocumentPaneGroup x:Name="DocumentGroup">
-                        <avalon:LayoutDocumentPane x:Name="DocumentPane"/>
-                    </avalon:LayoutDocumentPaneGroup>
+                    <avalon:LayoutPanel x:Name="Panel">
+                        <avalon:LayoutAnchorablePaneGroup  x:Name="LeftAnchorableGroup"  DockWidth="200" >
+                            <avalon:LayoutAnchorablePane x:Name="LeftPane">
+                                <avalon:LayoutAnchorable x:Name="Solution" Title="目录" ContentId="Solution">
+                                    <Grid x:Name="Project_grid">
+                                        <Panels:Setting />
+                                    </Grid>
+                                </avalon:LayoutAnchorable>
+                                <avalon:LayoutAnchorable Title="属性" ContentId="Property" >
+                                    <Grid x:Name="shuxing"/>
+                                </avalon:LayoutAnchorable>
+                            </avalon:LayoutAnchorablePane>
+                        </avalon:LayoutAnchorablePaneGroup>
+                        <avalon:LayoutDocumentPaneGroup x:Name="DocumentGroup">
+                            <avalon:LayoutDocumentPane x:Name="DocumentPane"/>
+                        </avalon:LayoutDocumentPaneGroup>
 
-                    <avalon:LayoutAnchorablePaneGroup x:Name="RightAnchorableGroup" Orientation="Vertical" DockWidth="200">
-                        <avalon:LayoutAnchorablePane x:Name="RightPane" >
-                            <avalon:LayoutAnchorable Title="属性" ContentId="Property" >
-                                <Grid x:Name="shuxing"/>
-                            </avalon:LayoutAnchorable>
-                        </avalon:LayoutAnchorablePane>
-                    </avalon:LayoutAnchorablePaneGroup>
+                        <avalon:LayoutAnchorablePaneGroup x:Name="RightAnchorableGroup" Orientation="Vertical" DockWidth="200">
+                            <avalon:LayoutAnchorablePane x:Name="RightPane" >
+                                --><!--<avalon:LayoutAnchorable Title="属性" ContentId="Property" >
+                                    <Grid x:Name="shuxing">
+                                        <Components:Attributes/>
+                                    </Grid>
+                                </avalon:LayoutAnchorable>--><!--
+                            </avalon:LayoutAnchorablePane>
+                        </avalon:LayoutAnchorablePaneGroup>
 
 
-                </avalon:LayoutPanel>
-            </avalon:LayoutRoot>
-        </avalon:DockingManager>
+                    </avalon:LayoutPanel>
+                </avalon:LayoutRoot>
+            </avalon:DockingManager>
 
+        </Grid>-->
+
+        <StatusBar Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
+            <StatusBarItem>Ready</StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Right" IsEnabled="False">INS</StatusBarItem>
+        </StatusBar>
     </Grid>
 </Window>
-

@@ -31,6 +31,7 @@ namespace ALight.Render.Mathematics
             if (float.IsNaN(r)) r = 0;
             if (float.IsNaN(g)) g = 0;
             if (float.IsNaN(b)) b = 0;
+            if (float.IsNaN(a)) a = 0;
             return this;
         }
 

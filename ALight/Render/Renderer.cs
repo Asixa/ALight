@@ -350,6 +350,21 @@ namespace ALight.Render
             //Demo();
             CornellBox();
             //MC();
+            //Model();
+        }
+
+        public void Model()
+        {
+            var lens_radius = 0;
+            var forcus_dis = 1;
+            camera = new Camera(new Vector3(1f, 1f, 0f), new Vector3(1, 0, 0), new Vector3(0, 1, 0), 90, (float)width / (float)height, lens_radius, forcus_dis, 0, 1);
+            var sun = new Sphere(new Vector3(-2, 10, 2), 4f,new DiffuseLight(new ConstantTexture(new Color32(1, 1, 1, 1)), 2));
+            world.list.Add(sun);//sun
+            Important.list.Add(sun);
+            world.list.Add(new Tri( new Vector3(0, 0, 0), new Vector3(1,0,0), new Vector3(1, 1, 0), new Lambertian(new ImageTexture("MC/glowstone.png"))   ));
+            //world.list.Add(new Triangle(new Vector3(0,1,1),new Vector3(0,1,0),new Vector3(0,0,0),new Lambertian(new ConstantTexture(Color32.White))   ));
+            //world.list.Add(new Triangle(new Vector3(0,1,1),new Vector3(0,0,0),new Vector3(0,1,0),new Lambertian(new ConstantTexture(Color32.White))   ));
+            world.list.Add(new PlaneXZ(-5, 5, -5, 5, -0.5f, new Metal(new CheckerTexture(new ConstantTexture(new Color32(0.5f, 0.5f, 0.5f)), new ConstantTexture(Color32.White)), 0.2f)));
         }
 
         private void Demo()
