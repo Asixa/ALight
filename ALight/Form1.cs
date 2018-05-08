@@ -10,6 +10,7 @@ namespace ALight
         public static Form1 main;
         private readonly Renderer renderer=new Renderer();
         public Timer timer=new Timer();
+        public DateTime StartTime;
         private int seconds;
         public Form1()
         {
@@ -18,14 +19,18 @@ namespace ALight
             timer.Enabled = true;
             timer.Interval =1000;
             progressBar1.Maximum = Configuration.SPP;
-            timer.Elapsed +=(s,e)=> BeginInvoke(new Action(() => { SPP.Text = "已采样"+renderer.now_sample+"次";
+            timer.Elapsed +=(s,e)=> BeginInvoke(new Action(() =>
+            {
+                SPP.Text = (DateTime.Now - StartTime).ToString(); // SPP.Text = "已采样"+renderer.now_sample+"次";
                 //progressBar1.Value = renderer.now_sample;
             }));
-            timer.Start();
+           
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            StartTime=DateTime.Now;
+            timer.Start();
             button1.Enabled = false;
             renderer.Init();
         }

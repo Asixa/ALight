@@ -26,7 +26,7 @@ namespace ALight.Render.Materials
 
         protected Vector3 GetRandomPointInUnitSphere()
         {
-            var  p=new Vector3();
+            var  p=new Vector3(0);
             do p = new Vector3(Random.Get(), Random.Get(), Random.Get()) * 2.0f - Vector3.one;
              while (Vector3.Dot(p, p) >= 1);
             return p.Normalized();
@@ -76,7 +76,7 @@ namespace ALight.Render.Materials
             srec.attenuation = new Color32(1.0f, 1.0f, 1.0f);
             Vector3 outward_normal;
             var reflected = Reflect(rayIn.direction, hrec.normal);
-            var refracted=new Vector3();
+            var refracted=new Vector3(0);
             float ni_over_nt;
             float cosine;
             if (Vector3.Dot(rayIn.direction, hrec.normal) > 0)

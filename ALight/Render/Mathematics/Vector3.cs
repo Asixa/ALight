@@ -1,8 +1,8 @@
 ﻿namespace ALight.Render.Mathematics
 {
-    public class Vector3
+    public struct Vector3
     {
-        private readonly float[] data=new float[3];
+        private readonly float[] data;
         public float x {get => data[0];set => data[0] = value;}
         public float y {get => data[1];set => data[1] = value;}
         public float z {get => data[2];set => data[2] = value;}
@@ -12,22 +12,10 @@
             get => data[index];
             set => data[index] = value;
         }
-        public Vector3(float x, float y, float z)
-        {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-        }
-
-        public Vector3()
-        {
-        }
-        public Vector3(Vector3 copy)
-        {
-            x = copy.x;
-            y = copy.y;
-            z = copy.z;
-        }
+        public Vector3(float x, float y, float z)=>data = new[] {x, y, z};
+        public Vector3(int a)=>data = new[] { 0f, 0f, 0f };
+        public Vector3(Vector3 copy)=> data = new[] { copy.x, copy.y, copy.z };
+        
         public float length() => Mathf.Sqrt(x * x + y * y + z * z);
 
         public override string ToString()
@@ -49,46 +37,21 @@
             return new Vector3(v.x / magnitude, v.y / magnitude, v.z / magnitude);
         }
      
-        public static Vector3 operator +(Vector3 lhs, Vector3 rhs) => new Vector3
-        {
-            x = lhs.x + rhs.x,
-            y = lhs.y + rhs.y,
-            z = lhs.z + rhs.z
-        };
+        public static Vector3 operator +(Vector3 lhs, Vector3 rhs) => new Vector3(lhs.x + rhs.x,lhs.y + rhs.y,lhs.z + rhs.z);
 
-        public static Vector3 operator *(Vector3 lhs, float v) => new Vector3
-        {
-            x = lhs.x * v,
-            y = lhs.y * v,
-            z = lhs.z * v
-        };
+        public static Vector3 operator *(Vector3 lhs, float v) => new Vector3(lhs.x * v,lhs.y * v,lhs.z * v);
 
-        public static Vector3 operator *(float v, Vector3 rhs) => new Vector3
-        {
-            x = rhs.x * v,
-            y = rhs.y * v,
-            z = rhs.z * v
-        };
+        public static Vector3 operator *(float v, Vector3 rhs) => new Vector3(rhs.x * v, rhs.y * v,rhs.z * v);
 
-        public static Vector3 operator /(Vector3 lhs, float v) => new Vector3
-        {
-            x = lhs.x / v,
-            y = lhs.y / v,
-            z = lhs.z / v
-        };
+        public static Vector3 operator /(Vector3 lhs, float v) => new Vector3(lhs.x / v,lhs.y / v,lhs.z / v);
 
-        public static Vector3 operator -(Vector3 lhs, Vector3 rhs) => new Vector3
-        {
-            x = lhs.x - rhs.x,
-            y = lhs.y - rhs.y,
-            z = lhs.z - rhs.z
-        };
+        public static Vector3 operator -(Vector3 lhs, Vector3 rhs) => new Vector3(lhs.x - rhs.x,lhs.y - rhs.y,lhs.z - rhs.z );
 
         public float SqrtMagnitude => x * x + y * y + z * z;
 
         public static Vector3 operator -(Vector3 a) => new Vector3(-a.x, -a.y, -a.z);
 
-        public static bool operator ==(Vector3 lhs, Vector3 rhs) => Vector3.SqrMagnitude(lhs - rhs) < 9.99999944E-11f;
+        public static bool operator ==(Vector3 lhs, Vector3 rhs) => SqrMagnitude(lhs - rhs) < 9.99999944E-11f;
 
         public static bool operator !=(Vector3 lhs, Vector3 rhs) => !(lhs == rhs);
 

@@ -2,7 +2,7 @@
 
 namespace ALight.Render.Mathematics
 {
-    public class Color32
+    public struct Color32
     {
         public  float r, b, g, a;
 
@@ -20,10 +20,6 @@ namespace ALight.Render.Mathematics
             g = Mathf.Range((float) c.G / 255, 0, 1);
             b = Mathf.Range((float) c.B / 255, 0, 1);
             a = Mathf.Range((float) c.A / 255, 0, 1);
-        }
-
-        public Color32()
-        {
         }
 
         public Color32 DeNaN()

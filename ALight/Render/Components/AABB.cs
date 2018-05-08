@@ -12,8 +12,8 @@ namespace ALight.Render.Components
         public Vector3 min, max;
         public AABB()
         {
-            min = new Vector3();
-            max =new Vector3();
+            min = new Vector3(0);
+            max =new Vector3(0);
         }
         public AABB(Vector3 a, Vector3 b)
         {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Threading;
+using System.Threading.Tasks;
 using AcDx;
 using ALight.Render.Components;
 using ALight.Render.Denoise;
@@ -55,25 +56,23 @@ namespace ALight.Render
         {
             ThreadPool.SetMaxThreads(16, 16);
             //await Task.Factory.StartNew(delegate { LinearScanner(new ScannerConfig(height, width)); });
-            //for (var i = 0; i < Samples; i+=SamplePerThread)
-            //    ThreadPool.QueueUserWorkItem(LinearScanner, new ScannerConfig(height, width));
+            //for (var i = 0; i < Configuration.SPP; i += Configuration.SamplePerThread)
+            //    ThreadPool.QueueUserWorkItem(LinearScanner, new ScannerConfig(Configuration.height, Configuration.width));
 
             var wp = Configuration.width / Configuration.divide;
             var hp = Configuration.height / Configuration.divide;
-            for (int i = Configuration.divide -1; i >=0; i--)
-            for (int j = Configuration.divide -1; j >=0; j--)
-            {
-                ThreadPool.QueueUserWorkItem(LinearScanner2, new ScannerConfig(hp*i,hp*(1+i), wp * j, wp * (1 +j) ));
-            }
-
+            for (var i = Configuration.divide - 1; i >= 0; i--)
+            for (var j = Configuration.divide - 1; j >= 0; j--)
+                ThreadPool.QueueUserWorkItem(LinearScanner2,
+                    new ScannerConfig(hp * i, hp * (1 + i), wp * j, wp * (1 + j)));
 
         }
-      
+
         private void LinearScanner2(object o)
         {
             var config = (ScannerConfig) o;
-            for (var a = 0; a < Configuration.SPP; a++)
-            {
+
+            Parallel.For(0, Configuration.SPP, a => {
                 for (var j = config.h; j < config.h2; j++)
                 for (var i = config.w; i < config.w2; i++)
                 {
@@ -86,7 +85,23 @@ namespace ALight.Render
                             (j + Random.Get()) * recip_height), Scene.main.world);
                     SetPixel(Configuration.width - i - 1, Configuration.height - j - 1, color);
                 }
-            }
+            });
+            
+            //for (var a = 0; a < Configuration.SPP; a++)
+            //{
+            //    for (var j = config.h; j < config.h2; j++)
+            //    for (var i = config.w; i < config.w2; i++)
+            //    {
+            //        var color = mode == Mode.Diffusing
+            //            ? DiffuseScanner.GetColor(Scene.main.camera.CreateRay(
+            //                (i + Random.Get()) * recip_width,
+            //                (j + Random.Get()) * recip_height), Scene.main.world, Scene.main.Important, 0).DeNaN()
+            //            : NormalMapScanner.GetColor(Scene.main.camera.CreateRay(
+            //                (i + Random.Get()) * recip_width,
+            //                (j + Random.Get()) * recip_height), Scene.main.world);
+            //        SetPixel(Configuration.width - i - 1, Configuration.height - j - 1, color);
+            //    }
+            //}
             now_sample += Configuration.SamplePerThread;
         }
 
