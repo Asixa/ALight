@@ -24,5 +24,7 @@ namespace ALightCreator.Panels
         {
             InitializeComponent();
         }
+
+        public void OnlyNumber(object sender, TextCompositionEventArgs e) =>ControlBase.OnlyNumber(sender, e);
     }
 }

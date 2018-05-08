@@ -1,12 +1,13 @@
-﻿<Application x:Class="WpfOfficeTheme.App"
+﻿<Application x:Class="ALightCreator.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:WpfOfficeTheme"
+             xmlns:local="clr-namespace:ALightCreator"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Themes/Styles/Generic.xaml"/>
+                <ResourceDictionary Source="Features/Localization/Packages/zh-CN.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <SolidColorBrush x:Key="AccentColorBrush" Color="#007ACC" />
         </ResourceDictionary>

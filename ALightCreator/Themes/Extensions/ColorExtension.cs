@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Media;
 
-namespace WpfOfficeTheme
+namespace ALightCreator
 {
     public static class ColorExtension
     {
