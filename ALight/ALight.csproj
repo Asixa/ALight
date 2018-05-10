@@ -84,6 +84,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Render\Components\AABB.cs" />
     <Compile Include="Render\Components\Camera.cs" />
+    <Compile Include="Render\Components\Component.cs" />
+    <Compile Include="Render\Components\GameObject.cs" />
+    <Compile Include="Render\Components\Light.cs" />
+    <Compile Include="Render\Components\Transform.cs" />
     <Compile Include="Render\Configuration.cs" />
     <Compile Include="Render\Denoise\Denoiser.cs" />
     <Compile Include="Render\Instances\Triangle.cs" />

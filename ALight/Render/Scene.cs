@@ -21,6 +21,7 @@ namespace ALight.Render
         public int height => Configuration.height;
         public void Init()
         {
+            //MC();
             CornellBox();
         }
 

@@ -7,17 +7,18 @@ using Random = ALight.Render.Mathematics.Random;
 
 namespace ALight.Render.Components
 {
-    public class HitRecord
+    public struct HitRecord
     {
         public float u, v;
         public float t;
         public Vector3 p;
         public Vector3 normal;
         public Material material;
-        public HitRecord() { }
+       // public HitRecord() { }
 
         public HitRecord(HitRecord copy)
         {
+            t = 0;
             u = copy.u;
             v = copy.v;
             p = copy.p;
@@ -106,13 +107,14 @@ namespace ALight.Render.Components
                 if (!a.BoundingBox(0, 0, ref l) || !b.BoundingBox(0, 0, ref r)) throw new Exception("NULL");
                 return l.min[i] - r.min[i]<0 ? -1 : 1;
             }
-             Hitable[] Split_array(Hitable[] Source, int StartIndex, int EndIndex)
+
+            Hitable[] Split_array(Hitable[] Source, int StartIndex, int EndIndex)
             {
-                    var result = new Hitable[EndIndex - StartIndex + 1];
-                    for (var i = 0; i <= EndIndex - StartIndex; i++) result[i] = Source[i + StartIndex];
-                    return result;
+                var result = new Hitable[EndIndex - StartIndex + 1];
+                for (var i = 0; i <= EndIndex - StartIndex; i++) result[i] = Source[i + StartIndex];
+                return result;
             }
-         
+
             var pl= p.ToList();
             var method = (int) (3 * Mathematics.Random.Get());
             pl.Sort((a, b) => Compare(a, b, method));
@@ -146,22 +148,22 @@ namespace ALight.Render.Components
         public override bool Hit(Ray ray, float t_min, float t_max, ref HitRecord rec)
         {
             if (!box.Hit(ray, t_min, t_max)) return false;
-            HitRecord left_rec=new HitRecord(),right_rec=new HitRecord();
-            var hit_left = left.Hit(ray, t_min, t_max, ref left_rec);
-            var hit_right = right.Hit(ray, t_min, t_max, ref right_rec);
+            HitRecord leftRec=new HitRecord(),rightRec=new HitRecord();
+            var hit_left = left.Hit(ray, t_min, t_max, ref leftRec);
+            var hit_right = right.Hit(ray, t_min, t_max, ref rightRec);
             if (hit_left && hit_right)
             {
-                rec = left_rec.t < right_rec.t ? left_rec : right_rec;
+                rec = leftRec.t < rightRec.t ? leftRec : rightRec;
                 return true;
             }
             if (hit_left)
             {
-                rec = left_rec;
+                rec = leftRec;
                 return true;
             }
             if (hit_right)
             {
-                rec = right_rec;
+                rec = rightRec;
                 return true;
             }
             return false;

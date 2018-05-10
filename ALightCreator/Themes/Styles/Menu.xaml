@@ -36,7 +36,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Separator}">
-                    <Grid SnapsToDevicePixels="True" Background="White">
+                    <Grid SnapsToDevicePixels="True" Background="{StaticResource Menu.Static.Background}">
                         <Border BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
                                 Background="{TemplateBinding Background}"
@@ -150,7 +150,7 @@
             <Border x:Name="templateRoot"
                 BorderBrush="{TemplateBinding BorderBrush}"
                 BorderThickness="{TemplateBinding BorderThickness}"
-                Background="{TemplateBinding Background}"
+                Background="{StaticResource Menu.Static.Background}"
                 SnapsToDevicePixels="True">
                 <Grid x:Name="Grid" VerticalAlignment="Center">
                     <Grid.ColumnDefinitions>
@@ -254,9 +254,9 @@
         <Grid SnapsToDevicePixels="True">
             <Border x:Name="BorderHelper"
                     Visibility="Hidden"
-                    BorderBrush="White"
+                    BorderBrush="{StaticResource Menu.Static.Background}"
                     BorderThickness="{TemplateBinding BorderThickness}"
-                    Background="White"
+                    Background="{StaticResource Menu.Static.Background}"
                     SnapsToDevicePixels="True"/>
             <Border x:Name="templateRoot"
                     BorderBrush="{TemplateBinding BorderBrush}"
@@ -324,7 +324,7 @@
     </ControlTemplate>
     
     <ControlTemplate x:Key="{ComponentResourceKey ResourceId=SubmenuItemTemplateKey, TypeInTargetAssembly={x:Type MenuItem}}" TargetType="{x:Type MenuItem}">
-        <Grid SnapsToDevicePixels="True" Background="White">
+        <Grid SnapsToDevicePixels="True" Background="{StaticResource Menu.Static.Background}">
             <Border x:Name="templateRoot"
                     BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}"
@@ -402,6 +402,10 @@
                 <Setter Property="TextElement.Foreground" TargetName="templateRoot" Value="{StaticResource Menu.MenuItem.Disabled.Foreground}"/>
                 <Setter Property="Fill" TargetName="Glyph" Value="{StaticResource Menu.MenuItem.Disabled.Foreground}"/>
             </Trigger>
+            <Trigger Property="IsEnabled" Value="True">
+                <Setter Property="TextElement.Foreground" TargetName="templateRoot" Value="White"/>
+                <Setter Property="Fill" TargetName="Glyph" Value="{StaticResource Menu.MenuItem.Disabled.Foreground}"/>
+            </Trigger>
             <MultiTrigger>
                 <MultiTrigger.Conditions>
                     <Condition Property="IsHighlighted" Value="True"/>
@@ -414,7 +418,7 @@
     </ControlTemplate>
 
     <ControlTemplate x:Key="{ComponentResourceKey ResourceId=SubmenuHeaderTemplateKey, TypeInTargetAssembly={x:Type MenuItem}}" TargetType="{x:Type MenuItem}">
-        <Grid SnapsToDevicePixels="True" Background="White">
+        <Grid SnapsToDevicePixels="True" Background="{StaticResource Menu.Static.Background}">
             <Border x:Name="templateRoot"
                     BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}"
@@ -580,7 +584,7 @@
         <Setter Property="FontSize" Value="{DynamicResource {x:Static SystemFonts.MenuFontSizeKey}}"/>
         <Setter Property="FontStyle" Value="{DynamicResource {x:Static SystemFonts.MenuFontStyleKey}}"/>
         <Setter Property="FontWeight" Value="{DynamicResource {x:Static SystemFonts.MenuFontWeightKey}}"/>
-        <Setter Property="Foreground" Value="{StaticResource {x:Static SystemColors.MenuTextBrushKey}}"/>
+        <Setter Property="Foreground" Value="{StaticResource ForegroundColor}"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="ItemContainerStyle" Value="{StaticResource MenuItemStyle}"/>
         <Setter Property="Template">

@@ -7,6 +7,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Themes/Styles/Generic.xaml"/>
+               
                 <ResourceDictionary Source="Features/Localization/Packages/zh-CN.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <SolidColorBrush x:Key="AccentColorBrush" Color="#007ACC" />

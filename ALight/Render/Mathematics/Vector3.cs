@@ -28,7 +28,11 @@
         public Vector3 Normalized()
         {
             var magnitude = Magnitude();
-            return new Vector3(x / magnitude, y / magnitude, z / magnitude);
+            x /= magnitude;
+            y /= magnitude;
+            z /= magnitude;
+            return this;
+            //return new Vector3(x / magnitude, y / magnitude, z / magnitude);
         }
 
         public static Vector3 Normalize(Vector3 v)
