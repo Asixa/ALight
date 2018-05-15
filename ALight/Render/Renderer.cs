@@ -36,8 +36,8 @@ namespace ALight.Render
 
         public void InitPreview()
         {
-            //preview = new Preview();
-            //preview.Run(new DxConfiguration("Preview", Configuration.width, Configuration.height));
+            preview = new Preview();
+            preview.Run(new DxConfiguration("Preview", Configuration.width, Configuration.height));
         }
 
         public void Init()

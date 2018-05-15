@@ -13,16 +13,16 @@ namespace ALight.Render.Primitives
     class PlaneXY:Hitable
     {
         private float x0, x1, y0, y1, k;
-        private Material material;
+        private Shader shader;
         public override bool BoundingBox(float t0, float t1, ref AABB box)
         {
             box=new AABB(new Vector3(x0,y0,k-0.0001f),new Vector3(x1,y1,k+0.0001f) );
             return true;
         }
 
-        public PlaneXY(float _x0, float _x1, float _y0, float _y1, float _k, Material mat)
+        public PlaneXY(float _x0, float _x1, float _y0, float _y1, float _k, Shader mat)
         {
-            material = mat;
+            shader = mat;
             x0 = _x0;
             x1 = _x1;
             y0 = _y0;
@@ -41,7 +41,7 @@ namespace ALight.Render.Primitives
             rec.u = (x - x0) / (x1 - x0);
             rec.v = (y - y0) / (y1 - y0);
             rec.t = t;
-            rec.material = material;
+            rec.shader = shader;
             rec.normal=new Vector3(0,0,1);
             rec.p = ray.GetPoint(t);
             return true;
@@ -51,11 +51,11 @@ namespace ALight.Render.Primitives
     class PlaneXZ : Hitable
     {
         private float x0, x1, z0, z1, k;
-        private Material material;
+        private Shader shader;
 
-        public PlaneXZ(float _x0, float _x1, float _z0, float _z1, float _k, Material mat)
+        public PlaneXZ(float _x0, float _x1, float _z0, float _z1, float _k, Shader mat)
         {
-            material = mat;
+            shader = mat;
             x0 = _x0;
             x1 = _x1;
             z0 = _z0;
@@ -99,21 +99,24 @@ namespace ALight.Render.Primitives
             rec.u = (x - x0) / (x1 - x0);
             rec.v = (z - z0) / (z1 - z0);
             rec.t = t;
-            rec.material = material;
+            rec.shader = shader;
             rec.normal = new Vector3(0, 1, 0);
+            
             rec.p = ray.GetPoint(t);
             return true;
         }
+
+
     }
 
     class PlaneYZ : Hitable
     {
         private float z0, z1, y0, y1, k;
-        private Material material;
+        private Shader shader;
 
-        public PlaneYZ(float _y0, float _y1, float _z0, float _z1, float _k, Material mat)
+        public PlaneYZ(float _y0, float _y1, float _z0, float _z1, float _k, Shader mat)
         {
-            material = mat;
+            shader = mat;
             z0 = _z0;
             z1 = _z1;
             y0 = _y0;
@@ -136,7 +139,7 @@ namespace ALight.Render.Primitives
             rec.u = (y - y0) / (y1 - y0);
             rec.v = (z - z0) / (z1 - z0);
             rec.t = t;
-            rec.material = material;
+            rec.shader = shader;
             rec.normal = new Vector3(1, 0, 0);
             rec.p = ray.GetPoint(t);
             return true;

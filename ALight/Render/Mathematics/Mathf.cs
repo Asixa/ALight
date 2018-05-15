@@ -40,5 +40,10 @@ namespace ALight.Render.Mathematics
         public static float Atan(float f)=>(float) Math.Atan(f);
         public static float Atan2(float y, float x)=> (float) Math.Atan2(y, x);
         public static float Log(float f)=>(float) Math.Log(f);
+
+        public static float DegreeToRadian(float angle)
+        {
+            return PI * angle / 180f;
+        }
     }
 }

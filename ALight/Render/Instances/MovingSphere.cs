@@ -15,13 +15,13 @@ namespace ALight.Render.Primitives
         public Vector3 pos0, pos1;
         public float time0, time1;
         public float radius;
-        public Material material;
+        public Shader shader;
 
-        public MovingSphere(Vector3 p0, Vector3 p1, float t0, float t1, float r, Material m)
+        public MovingSphere(Vector3 p0, Vector3 p1, float t0, float t1, float r, Shader m)
         {
             pos0 = p0;pos1 = p1;
             time0 = t0;time1 = t1;
-            radius = r;material = m;
+            radius = r;shader = m;
         }
 
         public Vector3 Center(float time) =>
@@ -44,7 +44,7 @@ namespace ALight.Render.Primitives
                     rec.t = temp;
                     rec.p = ray.GetPoint(rec.t);
                     rec.normal = (rec.p - Center(ray.time)) / radius;
-                    rec.material = material;
+                    rec.shader = shader;
                     return true;
                 }
                 temp = (-b + Mathf.Sqrt(discriminant)) / a;
@@ -53,7 +53,7 @@ namespace ALight.Render.Primitives
                     rec.t = temp;
                     rec.p = ray.GetPoint(rec.t);
                     rec.normal = (rec.p - Center(ray.time)) / radius;
-                    rec.material = material;
+                    rec.shader = shader;
                     return true;
                 }
             }

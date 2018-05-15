@@ -14,13 +14,13 @@ namespace ALight.Render.Primitives
     {
         public Vector3 center;
         public float radius;
-        public Material material;
+        public Shader shader;
 
-        public Sphere(Vector3 cen, float rad, Material m)
+        public Sphere(Vector3 cen, float rad, Shader m)
         {
             center = cen;
             radius = rad;
-            material = m;
+            shader = m;
         }
 
         public override float PdfValue(Vector3 o, Vector3 v)
@@ -78,7 +78,7 @@ namespace ALight.Render.Primitives
             var temp = (-b - Mathf.Sqrt(discriminant)) / a * 0.5f;
             if (temp < t_max && temp > t_min)
             {
-                rec.material = material;
+                rec.shader = shader;
                 rec.t = temp;
                 rec.p = ray.GetPoint(rec.t);
                 rec.normal = (rec.p - center).Normalized();
@@ -87,7 +87,7 @@ namespace ALight.Render.Primitives
             }
             temp = (-b + Mathf.Sqrt(discriminant)) / a * 0.5f;
             if (!(temp < t_max) || !(temp > t_min)) return false;
-            rec.material = material;
+            rec.shader = shader;
             rec.t = temp;
             rec.p = ray.GetPoint(rec.t);
             rec.normal = (rec.p - center).Normalized();

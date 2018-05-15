@@ -10,7 +10,7 @@ namespace ALight.Render.Instances
     {
         private readonly Vector3 pmin,pmax;
         private readonly Hitable list;
-        public Cube(Vector3 p0, Vector3 p1, Material mat,Material m2=null,Material m3=null)
+        public Cube(Vector3 p0, Vector3 p1, Shader mat,Shader m2=null,Shader m3=null)
         {
             pmax = p1;
             pmin = p0;

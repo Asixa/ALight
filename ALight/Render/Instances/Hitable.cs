@@ -13,7 +13,7 @@ namespace ALight.Render.Components
         public float t;
         public Vector3 p;
         public Vector3 normal;
-        public Material material;
+        public Shader shader;
        // public HitRecord() { }
 
         public HitRecord(HitRecord copy)
@@ -23,7 +23,12 @@ namespace ALight.Render.Components
             v = copy.v;
             p = copy.p;
             normal = copy.normal;
-            material = copy.material;
+            shader = copy.shader;
+        }
+
+        public override string ToString()
+        {
+            return " t:" + t + " u:" + u + " v:" + v + " p:" + p + " normal:" + normal;
         }
     }
 
@@ -284,7 +289,7 @@ namespace ALight.Render.Components
     {
         private Hitable boundary;
         private float density;
-        private Material phase_function;
+        private Shader phase_function;
 
         public ConstantMedium(Hitable b, float d, Texture a)
         {
@@ -318,7 +323,7 @@ namespace ALight.Render.Components
                         rec.t = rec1.t + hit_distance / ray.direction.length();
                         rec.p = ray.GetPoint(rec.t);
                         rec.normal = new Vector3(1, 0, 0); // arbitrary
-                        rec.material = phase_function;
+                        rec.shader = phase_function;
                         return true;
                     }
                 }

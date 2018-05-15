@@ -13,6 +13,6 @@ namespace ALight.Render.Components
         public List<Component> components=new List<Component>();
         public GameObject()=> all.Add(this);
         public Transform transform;
-        public Material material;
+        public Shader shader;
     }
 }

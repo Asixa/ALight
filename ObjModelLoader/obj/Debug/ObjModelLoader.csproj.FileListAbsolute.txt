@@ -1,0 +1,6 @@
+E:\Programing\C#\图形学\AcEngine_DX\ObjModelLoader\bin\Debug\ObjModelLoader.exe.config
+E:\Programing\C#\图形学\AcEngine_DX\ObjModelLoader\bin\Debug\ObjModelLoader.exe
+E:\Programing\C#\图形学\AcEngine_DX\ObjModelLoader\bin\Debug\ObjModelLoader.pdb
+E:\Programing\C#\图形学\AcEngine_DX\ObjModelLoader\obj\Debug\ObjModelLoader.csproj.CoreCompileInputs.cache
+E:\Programing\C#\图形学\AcEngine_DX\ObjModelLoader\obj\Debug\ObjModelLoader.exe
+E:\Programing\C#\图形学\AcEngine_DX\ObjModelLoader\obj\Debug\ObjModelLoader.pdb

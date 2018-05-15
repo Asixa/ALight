@@ -21,22 +21,31 @@ namespace ALight.Render
         public int height => Configuration.height;
         public void Init()
         {
+            Demo();
             //MC();
-            CornellBox();
+            //CornellBox();
+            //Model();
         }
 
         public void Model()
         {
             var lens_radius = 0;
             var forcus_dis = 1;
-            camera = new Camera(new Vector3(1f, 1f, 0f), new Vector3(1, 0, 0), new Vector3(0, 1, 0), 90, (float)width / (float)height, lens_radius, forcus_dis, 0, 1);
-            var sun = new Sphere(new Vector3(-2, 10, 2), 4f, new DiffuseLight(new ConstantTexture(new Color32(1, 1, 1, 1)), 2));
+            camera = new Camera(new Vector3(3,3f, 3), new Vector3(0f, 0, 0), new Vector3(0, 1, 0), 90, (float)width / (float)height, lens_radius, forcus_dis, 0, 1);
+            var sun = new Sphere(new Vector3(-2, 30, 2), 4f, new DiffuseLight(new ConstantTexture(new Color32(1, 1, 1, 1)), 4));
             world.list.Add(sun);//sun
             Important.list.Add(sun);
-            world.list.Add(new Tri(new Vector3(0, 0, 0), new Vector3(1, 0, 0), new Vector3(1, 1, 0), new Lambertian(new ImageTexture("MC/glowstone.png"))));
-            //world.list.Add(new Triangle(new Vector3(0,1,1),new Vector3(0,1,0),new Vector3(0,0,0),new Lambertian(new ConstantTexture(Color32.White))   ));
-            //world.list.Add(new Triangle(new Vector3(0,1,1),new Vector3(0,0,0),new Vector3(0,1,0),new Lambertian(new ConstantTexture(Color32.White))   ));
             world.list.Add(new PlaneXZ(-5, 5, -5, 5, -0.5f, new Metal(new CheckerTexture(new ConstantTexture(new Color32(0.5f, 0.5f, 0.5f)), new ConstantTexture(Color32.White)), 0.2f)));
+            var m = new Lambertian(new ConstantTexture(Color32.White));
+
+            //var m2 = new DiffuseLight(new ImageTexture("MC/bookshelf.png"), 1);
+            var m2 = new Lambertian(new ImageTexture("MC/bookshelf.png"));
+            var m3 = new Lambertian(new CheckerTexture(new ConstantTexture(new Color32(0.5f,0.5f,0.5f)), new ConstantTexture(Color32.White)));
+
+            var m4 = new Dielectirc(1.5f);
+            world.list.Add(new Translate(new Mesh(ObjModelLoader.ObjLoader.load("Model/barrel.obj"), m3).Create(),new Vector3(0,-1,0)));
+
+
         }
 
         private void Demo()
@@ -48,13 +57,13 @@ namespace ALight.Render
                 new DiffuseLight(new ConstantTexture(new Color32(1, 1, 1, 1)), 2));
             world.list.Add(sun);//sun
             Important.list.Add(sun);
-            world.list.Add(new PlaneXZ(-5, 5, -5, 5, -0.5f, new Metal(new CheckerTexture(new ConstantTexture(new Color32(0.5f, 0.5f, 0.5f)), new ConstantTexture(Color32.White)), 0.2f)));
+            world.list.Add(new PlaneXZ(-5, 5, -5, 5, -0.5f, new Metal(new ImageTexture("TexturesCom_MetalGalvanized0005_S.jpg"), 0.2f)));
             world.list.Add(new Sphere(new Vector3(-2, 0, 0), 0.5f, new Metal(new CheckerTexture(new ConstantTexture(new Color32(0.5f, 0.5f, 0.5f)), new ConstantTexture(Color32.White)), 0f)));
             world.list.Add(new Sphere(new Vector3(-1, 0, 0), 0.5f, new Metal(new CheckerTexture(new ConstantTexture(new Color32(0.5f, 0.5f, 0.5f)), new ConstantTexture(Color32.White)), 0.25f)));
             world.list.Add(new Sphere(new Vector3(0, 0, 0), 0.5f, new Metal(new CheckerTexture(new ConstantTexture(new Color32(0.5f, 0.5f, 0.5f)), new ConstantTexture(Color32.White)), 0.5f)));
             world.list.Add(new Sphere(new Vector3(1, 0, 0), 0.5f, new Metal(new CheckerTexture(new ConstantTexture(new Color32(0.5f, 0.5f, 0.5f)), new ConstantTexture(Color32.White)), 0.75f)));
             world.list.Add(new Sphere(new Vector3(2, 0, 0), 0.5f, new Metal(new CheckerTexture(new ConstantTexture(new Color32(0.5f, 0.5f, 0.5f)), new ConstantTexture(Color32.White)), 1)));
-
+            world.list.Add(new Translate(new Mesh(ObjModelLoader.ObjLoader.load("Model/barrel.obj"), new Metal(new ImageTexture("TexturesCom_MetalGalvanized0005_S.jpg"), 0.2f)).Create(), new Vector3(0, 0, -5)));
         }
 
         private void CornellBox()
@@ -87,12 +96,21 @@ namespace ALight.Render
                         new Vector3(165, 165, 165),
                         material), -18),
                 new Vector3(130, 0, 65));
-            world.list.Add(cube1);
-            world.list.Add(cube2);
+            //world.list.Add(cube1);
+            //world.list.Add(cube2);
 
             //var sphere = new Sphere(new Vector3(190, 90, 190), 90, new Dielectirc(1.5f));
             //Important.list.Add(sphere);
             //world.list.Add(sphere);
+
+            var m = new Lambertian(new ConstantTexture(Color32.White));
+
+            //var m2 = new DiffuseLight(new ImageTexture("MC/bookshelf.png"), 1);
+            var m2 = new Lambertian(new ImageTexture("MC/bookshelf.png"));
+            var m3 = new Lambertian(new CheckerTexture(new ConstantTexture(new Color32(0.5f, 0.5f, 0.5f)), new ConstantTexture(Color32.White)));
+
+            var m4 = new Dielectirc(1.5f);
+            world.list.Add(new Translate(new Mesh(ObjModelLoader.ObjLoader.load("Model/bear.obj"), m3).Create(), new Vector3(200, 0, 200)));
         }
 
         private void MC()

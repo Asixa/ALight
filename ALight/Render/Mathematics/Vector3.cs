@@ -1,4 +1,8 @@
-﻿namespace ALight.Render.Mathematics
+﻿using System.Collections.Generic;
+using System.Linq;
+using ObjModelLoader;
+
+namespace ALight.Render.Mathematics
 {
     public struct Vector3
     {
@@ -40,7 +44,12 @@
             var magnitude = v.Magnitude();
             return new Vector3(v.x / magnitude, v.y / magnitude, v.z / magnitude);
         }
-     
+
+        public static float Distance(Vector3 a, Vector3 b)
+        {
+            return (a - b).Magnitude();
+        }
+
         public static Vector3 operator +(Vector3 lhs, Vector3 rhs) => new Vector3(lhs.x + rhs.x,lhs.y + rhs.y,lhs.z + rhs.z);
 
         public static Vector3 operator *(Vector3 lhs, float v) => new Vector3(lhs.x * v,lhs.y * v,lhs.z * v);
@@ -69,5 +78,9 @@
 
         public static Vector3 zero = new Vector3(0, 0, 0);
         public static Vector3 one = new Vector3(1, 1, 1);
+
+        public static Vector3 FromObj(ObjVector3 v) =>  v==null?new Vector3(0): new Vector3(v.x, v.y, v.z);
+
+        public static List<Vector3> FromObj(ObjVector3[] v) => v.Select(FromObj).ToList();
     }
 }

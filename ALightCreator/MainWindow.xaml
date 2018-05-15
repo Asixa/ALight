@@ -113,13 +113,62 @@
         <Separator Grid.Row="2" Grid.Column="0" Width="200" VerticalAlignment="Bottom"
                    Background="{StaticResource BorderBrush}" Margin="0"/>
 
-  <!--      --><Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+        <!--      -->
+        <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
             <avalon:DockingManager x:Name="DockManager"  Foreground="White" BorderBrush="White" AllowMixedOrientation="True" ForceCursor="True">
                 <avalon:DockingManager.Theme>
                     <avalon:Vs2013DarkTheme/>
                 </avalon:DockingManager.Theme>
 
                 <avalon:LayoutRoot x:Name="Root">
+
+                    <avalon:LayoutPanel x:Name="Panel">
+
+                        <avalon:LayoutAnchorablePaneGroup  x:Name="LeftAnchorableGroup"  DockWidth="200" >
+                            <avalon:LayoutAnchorablePane x:Name="LeftPane">
+
+                                <avalon:LayoutAnchorable x:Name="Solution" Title="设置" ContentId="Solution">
+                                    <Panels:Setting />
+                                </avalon:LayoutAnchorable>
+                                <avalon:LayoutAnchorable  Title="层次面板" ContentId="Solution">
+                                    <HierarchyView:Hierarchy />
+                                </avalon:LayoutAnchorable>
+
+                            </avalon:LayoutAnchorablePane>
+
+                        </avalon:LayoutAnchorablePaneGroup>
+
+                        <avalon:LayoutAnchorablePaneGroup x:Name="RightAnchorableGroup2" Orientation="Horizontal" DockWidth="200">
+                            <avalon:LayoutAnchorablePane x:Name="RightPane2" >
+                                <avalon:LayoutAnchorable Title="创建" ContentId="Property" >
+                                    <creationView:Creation />
+                                </avalon:LayoutAnchorable>
+                            </avalon:LayoutAnchorablePane>
+                        </avalon:LayoutAnchorablePaneGroup>
+
+
+                        <avalon:LayoutDocumentPaneGroup x:Name="DocumentGroup">
+                            <avalon:LayoutDocumentPane x:Name="DocumentPane">
+                                <avalon:LayoutAnchorable Title="场景" ContentId="Property" >
+                                    <sceneView:Scene/>
+                                </avalon:LayoutAnchorable>
+                                <avalon:LayoutAnchorable Title="渲染" ContentId="Property" >
+                                    <Panels:RendererPreview/>
+                                </avalon:LayoutAnchorable>
+                            </avalon:LayoutDocumentPane>
+                        </avalon:LayoutDocumentPaneGroup>
+
+                        <avalon:LayoutAnchorablePaneGroup x:Name="RightAnchorableGroup" Orientation="Vertical" DockWidth="200">
+                            <avalon:LayoutAnchorablePane x:Name="RightPane" >
+                                <avalon:LayoutAnchorable Title="属性" ContentId="Property" >
+                                    <Panels:Inspector/>
+                                </avalon:LayoutAnchorable>
+                            </avalon:LayoutAnchorablePane>
+                        </avalon:LayoutAnchorablePaneGroup>
+
+
+
+                    </avalon:LayoutPanel>
 
                     <avalon:LayoutRoot.LeftSide>
                         <avalon:LayoutAnchorSide>
@@ -142,52 +191,12 @@
                     <avalon:LayoutRoot.BottomSide>
                         <avalon:LayoutAnchorSide>
                             <avalon:LayoutAnchorGroup x:Name="BottomGroup">
-                                <avalon:LayoutAnchorable  Title="资源面板" ContentId="Solution">
-                                    <resourceView:Resource />
-                                </avalon:LayoutAnchorable>
                             </avalon:LayoutAnchorGroup>
                         </avalon:LayoutAnchorSide>
                     </avalon:LayoutRoot.BottomSide>
 
-                    <avalon:LayoutPanel x:Name="Panel">
-
-                        <avalon:LayoutAnchorablePaneGroup  x:Name="LeftAnchorableGroup"  DockWidth="200" >
-                            <avalon:LayoutAnchorablePane x:Name="LeftPane">
-                                <avalon:LayoutAnchorable x:Name="Solution" Title="设置" ContentId="Solution">
-                                    <Panels:Setting />
-                                </avalon:LayoutAnchorable>
-                                <avalon:LayoutAnchorable  Title="层次面板" ContentId="Solution">
-                                    <HierarchyView:Hierarchy />
-                                </avalon:LayoutAnchorable>
-                                <avalon:LayoutAnchorable x:Name="Create" Title="创建" ContentId="Solution">
-                                    <creationView:Creation />
-                                </avalon:LayoutAnchorable>
-                            </avalon:LayoutAnchorablePane>
-                        </avalon:LayoutAnchorablePaneGroup>
-
-                        <avalon:LayoutDocumentPaneGroup x:Name="DocumentGroup">
-                            <avalon:LayoutDocumentPane x:Name="DocumentPane">
-                                <avalon:LayoutAnchorable Title="渲染" ContentId="Property" >
-                                    <Panels:RendererPreview/>
-                                </avalon:LayoutAnchorable>
-                                <avalon:LayoutAnchorable Title="场景" ContentId="Property" >
-                                    <sceneView:Scene/>
-                                </avalon:LayoutAnchorable>
-                            </avalon:LayoutDocumentPane>
-                        </avalon:LayoutDocumentPaneGroup>
-
-                        <avalon:LayoutAnchorablePaneGroup x:Name="RightAnchorableGroup" Orientation="Vertical" DockWidth="200">
-                            <avalon:LayoutAnchorablePane x:Name="RightPane" >
-                                <avalon:LayoutAnchorable Title="属性" ContentId="Property" >
-                                    <Grid x:Name="shuxing">
-                                        <Panels:Inspector/>
-                                    </Grid>
-                                </avalon:LayoutAnchorable>
-                            </avalon:LayoutAnchorablePane>
-                        </avalon:LayoutAnchorablePaneGroup>
 
 
-                    </avalon:LayoutPanel>
                 </avalon:LayoutRoot>
             </avalon:DockingManager>
 
@@ -197,6 +206,6 @@
             <StatusBarItem  Foreground="White">Ready</StatusBarItem>
             <StatusBarItem Foreground="White" HorizontalAlignment="Right" IsEnabled="False">INS</StatusBarItem>
         </StatusBar>
-        </Grid>
+    </Grid>
 </Window>
 

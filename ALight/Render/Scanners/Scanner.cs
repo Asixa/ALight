@@ -21,16 +21,18 @@ namespace ALight.Render.Scanners
             var hrec = new HitRecord();
             if (hitableList.Hit(r, 0.0001f, float.MaxValue, ref hrec))
             {
+                //Console.WriteLine(hrec);
+                
                 var srec = new ScatterRecord();
-                var emitted = hrec.material.emitted(r, hrec, hrec.u, hrec.v, hrec.p);
-                if (depth < Configuration.MAX_SCATTER_TIME && hrec.material.scatter(r, ref hrec, ref srec))
+                var emitted = hrec.shader.emitted(r, hrec, hrec.u, hrec.v, hrec.p);
+                if (depth < Configuration.MAX_SCATTER_TIME && hrec.shader.scatter(r, ref hrec, ref srec))
                 {
                     if (srec.is_specular) return srec.attenuation * GetColor(srec.specular_ray, Scene.main.world, importance, depth + 1);
                     var plight = new HitablePdf(importance, hrec.p);
                     var p = new MixturePdf(plight, srec.pdf);
                     var scattered = new Ray(hrec.p, p.Generate(), r.time);
                     var pdf = p.Value(scattered.direction);
-                    return emitted + srec.attenuation * hrec.material.scattering_pdf(r, hrec, scattered) *
+                    return emitted + srec.attenuation * hrec.shader.scattering_pdf(r, hrec, scattered) *
                            GetColor(scattered, Scene.main.world, importance, depth + 1) / pdf;
                 }
                 else return emitted;
