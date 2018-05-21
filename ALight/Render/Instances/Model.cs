@@ -90,11 +90,14 @@ namespace ALight.Render.Instances
         /// 顶点位置
         /// </summary>
         public Vector3 point;
+
         /// <summary>
         /// 纹理坐标
         /// </summary>
-        public float u;
-        public float v;
+        /// 
+        public Vector2 uv;
+        //public float u;
+        //public float v;
         /// <summary>
         /// 顶点色
         /// </summary>
@@ -118,8 +121,7 @@ namespace ALight.Render.Instances
             this.normal = normal;
             vcolor = new Color32(color.x, color.y, color.z);
             onePerZ = 1;
-            this.u = u;
-            this.v = v;
+            uv=new Vector2(u,v);
             lightingColor = new Color32(1, 1, 1);
         }
 
@@ -128,7 +130,7 @@ namespace ALight.Render.Instances
             point = new Vector3();
             vcolor = new Color32(0, 0, 0);
             lightingColor = new Color32(0, 0, 0);
-            u = v = 0;
+            uv=new Vector2();
             normal = new Vector3();
             onePerZ = 1;
         }
@@ -137,7 +139,7 @@ namespace ALight.Render.Instances
             point = v3;
             vcolor = new Color32(0, 0, 0);
             lightingColor = new Color32(0, 0, 0);
-            u = v = 0;
+            uv = new Vector2();
             normal = new Vector3();
             onePerZ = 1;
         }
@@ -148,8 +150,7 @@ namespace ALight.Render.Instances
             normal = v.normal;
             this.vcolor = v.vcolor;
             onePerZ = 1;
-            this.u = v.u;
-            this.v = v.v;
+            uv = v.uv;
             this.lightingColor = v.lightingColor;
         }
     }

@@ -54,7 +54,7 @@ namespace ALight.Render
 
         private async void Start()
         {
-            ThreadPool.SetMaxThreads(16, 16);
+            ThreadPool.SetMaxThreads(32, 32);
             //await Task.Factory.StartNew(delegate { LinearScanner(new ScannerConfig(height, width)); });
             //for (var i = 0; i < Configuration.SPP; i += Configuration.SamplePerThread)
             //    ThreadPool.QueueUserWorkItem(LinearScanner, new ScannerConfig(Configuration.height, Configuration.width));

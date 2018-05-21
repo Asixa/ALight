@@ -12,40 +12,32 @@ namespace ALight.Render.Instances
 
     public class Tri:Hitable
     {
-        public Vector3 v0, v1, v2;
-        public Vector2 uv0, uv1, uv2;
-        public Vector3 normal;
+        public Vertex v0, v1, v2;
+        private Vector3 Gnormal;
         public Shader shader;
 
-        ///                a           b           c
         public Tri(Vertex a, Vertex b, Vertex c, Shader shader)
         {
-            //Console.WriteLine("添加三角形 " + a.point + b.point + c.point);
-            v0 = a.point;//a
-            v1 = b.point;//b
-            v2 =c.point; //c
-            uv0 = new Vector2(a.u,a.v);
-            uv1 = new Vector2(b.u, b.v);
-            uv2 = new Vector2(c.u, c.v);
-            normal = a.normal;
-            //normal = Vector3.Cross(v1 - v0, v2 - v0);
-            //Console.WriteLine("Normal "+normal);
-
+            v0 = a;//a
+            v1 = b;//b
+            v2 =c; //c
+            Gnormal =( a.normal+b.normal+c.normal)/3;
             this.shader = shader;
         }
 
-        Vector2 __a(Vector3 p)
+        Vector2 GetUV(Vector3 p,out Vector3 normal)
         {
-            var f1 = v0 - p;
-            var f2 = v1 - p;
-            var f3 = v2 - p;
+            var f1 = v0.point - p;
+            var f2 = v1.point - p;
+            var f3 = v2.point - p;
             // calculate the areas and factors (order of parameters doesn't matter):
-            var a = Vector3.Cross(v0 - v1, v0 - v2).Magnitude(); // main triangle area a
+            var a = Vector3.Cross(v0.point - v1.point, v0.point - v2.point).Magnitude(); // main triangle area a
             var a1= Vector3.Cross(f2, f3).Magnitude() / a; // p1's triangle area / a
             var a2= Vector3.Cross(f3, f1).Magnitude() / a; // p2's triangle area / a 
             var a3= Vector3.Cross(f1, f2).Magnitude() / a; // p3's triangle area / a
             // find the uv corresponding to point f (uv1/uv2/uv3 are associated to p1/p2/p3):
-            var uv  = uv0 * a1 + uv1 * a2 + uv2 * a3;
+            var uv  = v0.uv * a1 + v1.uv * a2 + v2.uv * a3;
+            normal = v0.normal * a1 + v1.normal * a2 + v2.normal * a3;
             return uv;
         }
 
@@ -91,20 +83,22 @@ namespace ALight.Render.Instances
             //    rec.p = r.GetPoint(rec.t);
             //    rec.normal = normal;
             //    rec.shader = shader;
-            //    var uvw = __a(rec.p); //Console.WriteLine(temp);
+            //    var uvw = GetUV(rec.p); //Console.WriteLine(temp);
             //    rec.u = uvw.x;
             //    rec.v = uvw.y;
             //    return true;
             //}
             //return false;
             #endregion
-            if(Vector3.Dot(normal,r.direction)>=0)return false;
+            if(Vector3.Dot(Gnormal,r.direction)>=0)return false;
             if (!RayIntersectsTriangle(r.origin, r.direction.Normalized(), out Vector3 p)) return false;
+
             rec.t = Vector3.Distance(r.origin,p);
             rec.p = p;
-            rec.normal = normal;
+           
             rec.shader = shader;
-            var uvw = __a(rec.p); //Console.WriteLine(temp);
+            var uvw = GetUV(rec.p,out p); //Console.WriteLine(temp);
+            rec.normal = p;
             rec.u = uvw.x;
             rec.v = uvw.y;
             return true;
@@ -113,8 +107,14 @@ namespace ALight.Render.Instances
 
         public override bool BoundingBox(float t0, float t1, ref AABB box)
         {
-            var bl = new Vector3(Mathf.Min(Mathf.Min(v0[0], v1[0]), v2[0]), Mathf.Min(Mathf.Min(v0[1], v1[1]), v2[1]), Mathf.Min(Mathf.Min(v0[2], v1[2]), v2[2]));
-            var tr = new Vector3(Mathf.Max(Mathf.Max(v0[0], v1[0]), v2[0]), Mathf.Max(Mathf.Max(v0[1], v1[1]), v2[1]), Mathf.Max(Mathf.Max(v0[2], v1[2]), v2[2]));
+            var bl = new Vector3(
+                Mathf.Min(Mathf.Min(v0.point[0], v1.point[0]), v2.point[0]), 
+                Mathf.Min(Mathf.Min(v0.point[1], v1.point[1]), v2.point[1]), 
+                Mathf.Min(Mathf.Min(v0.point[2], v1.point[2]), v2.point[2]));
+            var tr = new Vector3(
+                Mathf.Max(Mathf.Max(v0.point[0], v1.point[0]), v2.point[0]),
+                Mathf.Max(Mathf.Max(v0.point[1], v1.point[1]), v2.point[1]), 
+                Mathf.Max(Mathf.Max(v0.point[2], v1.point[2]), v2.point[2]));
             box = new AABB(bl-new Vector3(0.1f, 0.1f, 0.1f), tr+new Vector3(0.1f, 0.1f, 0.1f));
             return true;
         }
@@ -124,19 +124,17 @@ namespace ALight.Render.Instances
         {
             outIntersectionPoint=new Vector3();
             const float EPSILON = 0.0000001f;
-            Vector3 vertex0 = v0;
-            Vector3 vertex1 = v1;
-            Vector3 vertex2 = v2;
+           
             Vector3 edge1, edge2, h, s, q;
             float a, f, u, v;
-            edge1 = vertex1 - vertex0;
-            edge2 = vertex2 - vertex0;
+            edge1 = v1.point - v0.point;
+            edge2 = v2.point - v0.point;
             h =Vector3.Cross(rayVector,edge2); 
             a = Vector3.Dot(edge1,h);
             if (a > -EPSILON && a < EPSILON)
                 return false;
             f = 1 / a;
-            s = rayOrigin - vertex0;
+            s = rayOrigin - v0.point;
             u = f * (Vector3.Dot(s,h));
             if (u < 0.0 || u > 1.0)
                 return false;

@@ -97,6 +97,7 @@
     <Compile Include="Render\Instances\Triangle.cs" />
     <Compile Include="Render\Materials\Material.cs" />
     <Compile Include="Render\Materials\Texture.cs" />
+    <Compile Include="Render\Materials\CubeMap.cs" />
     <Compile Include="Render\Mathematics\Onb.cs" />
     <Compile Include="Render\Mathematics\Pdf.cs" />
     <Compile Include="Render\Mathematics\Perlin.cs" />

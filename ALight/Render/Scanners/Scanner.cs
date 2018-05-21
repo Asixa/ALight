@@ -37,6 +37,8 @@ namespace ALight.Render.Scanners
                 }
                 else return emitted;
             }
+
+            return Scene.main.sky.Value(r.direction.Normalized());
             var t = 0.5f * r.normal_direction.y + 1f;
             return Scene.main.SkyColor ? (1 - t) * new Color32(2, 2, 2) + t * new Color32(0.5f, 0.7f, 1) : Color32.Black;
         }

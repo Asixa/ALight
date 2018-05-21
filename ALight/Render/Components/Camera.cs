@@ -9,10 +9,11 @@ namespace ALight.Render.Components
         public Vector3 u, v, w;
         private readonly float radius;
         private readonly float time0,time1;
-
+        public Vector3 direction;
         public Camera(Vector3 lookFrom, Vector3 lookat, Vector3 vup, float vfov, float aspect, 
             float r = 0,float focus_dist = 1,float t0=0,float t1=0)
         {
+            direction = (lookat - lookFrom).Normalized();
             time0 = t0;
             time1 = t1;
             radius = r * 0.5f;
