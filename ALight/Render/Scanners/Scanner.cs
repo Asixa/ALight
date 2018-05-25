@@ -11,7 +11,10 @@ namespace ALight.Render.Scanners
 {
     public abstract class Scanner
     {
-     
+        public void Test()
+        {
+          
+        }
     }
 
     public class DiffuseScanner : Scanner
@@ -49,8 +52,7 @@ namespace ALight.Render.Scanners
         public static Color32 GetColor(Ray ray, HitableList hitableList)
         {
             var record = new HitRecord();
-            if (hitableList.Hit(ray, 0f, float.MaxValue, ref record))
-                return 0.5f * new Color32(record.normal.x + 1, record.normal.y + 1, record.normal.z + 1, 2f);
+            if (hitableList.Hit(ray, 0f, float.MaxValue, ref record))return 0.5f * new Color32(record.normal.x + 1, record.normal.y + 1, record.normal.z + 1, 2f);
             var t = 0.5f * ray.normal_direction.y + 1f;
             return (1 - t) * new Color32(1, 1, 1) + t * new Color32(0.5f, 0.7f, 1);
         }

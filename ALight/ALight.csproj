@@ -11,6 +11,8 @@
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -56,13 +58,16 @@
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>ACEngine.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="AcDx, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\AcDx.dll</HintPath>
     </Reference>
-    <Reference Include="FileFormatWavefront">
-      <HintPath>..\packages\FileFormatWavefront.dll</HintPath>
+    <Reference Include="CjClutter.ObjLoader.Loader">
+      <HintPath>..\packages\CjClutter.ObjLoader.Loader.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -94,6 +99,8 @@
     <Compile Include="Render\Configuration.cs" />
     <Compile Include="Render\Denoise\Denoiser.cs" />
     <Compile Include="Render\Instances\Model.cs" />
+    <Compile Include="Render\Instances\ShaderBall.cs" />
+    <Compile Include="Render\Instances\Transform.cs" />
     <Compile Include="Render\Instances\Triangle.cs" />
     <Compile Include="Render\Materials\Material.cs" />
     <Compile Include="Render\Materials\Texture.cs" />
@@ -115,6 +122,7 @@
     <Compile Include="Render\Instances\Plane.cs" />
     <Compile Include="Render\Instances\Sphere.cs" />
     <Compile Include="Render\Renderer.cs" />
+    <Compile Include="Render\ResourceManager.cs" />
     <Compile Include="Render\Scanners\Scanner.cs" />
     <Compile Include="Render\Scanners\ScannerConfig.cs" />
     <Compile Include="Render\Scene.cs" />
@@ -130,6 +138,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -148,6 +157,10 @@
       <Project>{e2e3fa96-6fd7-457b-9461-2b5ae0555a23}</Project>
       <Name>AcObjLoader</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ACEngine.ico" />
+    <Content Include="FodyWeavers.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

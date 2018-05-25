@@ -6,6 +6,8 @@ namespace ALight.Render.Materials
     public abstract class Texture
     {
         public abstract Color32 Value(float u, float v, Vector3 p);
+        public static CheckerTexture checker=new CheckerTexture(new ConstantTexture(Color32.White), new ConstantTexture(new Color32(0.5f,0.5f,0.5f)));
+        public static ConstantTexture WhiteTexture=new ConstantTexture(Color32.White);
     }
 
     public class ConstantTexture : Texture

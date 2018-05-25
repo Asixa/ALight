@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 using ALight.Render.Components;
 using ALight.Render.Materials;
 using ALight.Render.Mathematics;
-using FileFormatWavefront;
+using ObjLoader.Loader.Data.Elements;
+using ObjLoader.Loader.Loaders;
 using ObjModelLoader;
 using Random = System.Random;
 
@@ -25,45 +26,24 @@ namespace ALight.Render.Instances
             {
                 var index = model.indexs[i];
                 var point = model.points[index];
-                vertices[i] = new Vertex(point, model.norlmas[i], model.uvs[i].x, model.uvs[i].y, model.vertColors[index]);
+                vertices[i] = new Vertex(point, model.norlmas[i], model.uvs[i].x, model.uvs[i].y);
             }
         }
-        public Mesh(FileLoadResult<FileFormatWavefront.Model.Scene> model, Shader s)
+
+        public Hitable Create() => Create(vertices,shader);
+
+        public static Hitable Create(Vertex[] vertices,Shader shader)
         {
-            
-            //shader = s;
-
-            //vertices = new Vertex[model.Model.UngroupedFaces.Count];
-            //for (var i = 0; i < model.Model.UngroupedFaces.Count]; i++)
-            //{
-            //    var color = Mathematics.Random.Get();
-            //    var index = model.Model.UngroupedFaces[i];
-            //    var point = model.VertexArray[index];
-            //    vertices[i] = new Vertex(Vector3.FromObj(point),
-            //        Vector3.FromObj(model.NormalArray[index]),
-            //        model.UVArray[index].x,
-            //        model.UVArray[index].y, new Vector3(color, color, color));
-            //}
-
-            //vertices = new Vertex[model.indexs.Count];
-            //for (var i = 0; i < model.indexs.Count; i++)
-            //{
-            //    var index = model.indexs[i];
-            //    var point = model.points[index];
-            //    vertices[i] = new Vertex(point, model.norlmas[i], model.uvs[i].x, model.uvs[i].y, model.vertColors[index]);
-            //}
-        }
-
-        //public Hitable Create()
-        //{
-        //    var list = new HitableList();
-        //    for (var i = 0; i < vertices.Length / 3; i++) list.list.Add(new Tri(vertices[3 * i], vertices[3 * i + 1], vertices[3 * i + 2], shader));
-        //    return list;
-        //}
-        public Hitable Create()
-        {
+            //Console.WriteLine("______________________");
             var list = new List<Hitable>();
-            for (var i = 0; i < vertices.Length / 3; i++) list.Add(new Tri(vertices[3 * i], vertices[3 * i + 1], vertices[3 * i + 2], shader));
+            for (var i = 0; i < vertices.Length / 3; i++)
+            {
+                //Console.WriteLine("-----");
+                //Console.WriteLine("顶点 " + vertices[3 * i].point + " " + vertices[3 * i].normal + " " + vertices[3 * i].uv);
+                //Console.WriteLine("顶点 " + vertices[3 * i+1].point + " " + vertices[3 * i+1].normal + " " + vertices[3 * i+1].uv);
+                //Console.WriteLine("顶点 " + vertices[3 * i+2].point + " " + vertices[3 * i+2].normal + " " + vertices[3 * i+2].uv);
+                list.Add(new Triangle(vertices[3 * i], vertices[3 * i + 1], vertices[3 * i + 2], shader));
+            }
             return new BVHNode(list.ToArray(), list.Count, 0, 1);
         }
 
@@ -73,85 +53,47 @@ namespace ALight.Render.Instances
             vertices = new Vertex[model.TriangleArray.Length];
             for (var i = 0; i < model.TriangleArray.Length; i++)
             {
-                var color = Mathematics.Random.Get();
                 var index = model.TriangleArray[i];
                 var point = model.VertexArray[index];
                 vertices[i] = new Vertex(Vector3.FromObj(point),
                     Vector3.FromObj(model.NormalArray[index]),
                     model.UVArray[index].x,
-                    model.UVArray[index].y, new Vector3(color, color, color));
+                    model.UVArray[index].y);
             }
         }
     }
 
     public class Vertex
     {
-        /// <summary>
-        /// 顶点位置
-        /// </summary>
         public Vector3 point;
-
-        /// <summary>
-        /// 纹理坐标
-        /// </summary>
-        /// 
         public Vector2 uv;
-        //public float u;
-        //public float v;
-        /// <summary>
-        /// 顶点色
-        /// </summary>
-        public Color32 vcolor;
-        /// <summary>
-        /// 法线
-        /// </summary>
         public Vector3 normal;
-        /// <summary>
-        /// 光照颜色
-        /// </summary>
-        public Color32 lightingColor;
-        /// <summary>
-        /// 1/z，用于顶点信息的透视校正
-        /// </summary>
-        public float onePerZ;
 
-        public Vertex(Vector3 point, Vector3 normal, float u, float v, Vector3 color)
+        public Vertex(Vector3 point, Vector3 normal, float u, float v)
         {
             this.point = point;
             this.normal = normal;
-            vcolor = new Color32(color.x, color.y, color.z);
-            onePerZ = 1;
             uv=new Vector2(u,v);
-            lightingColor = new Color32(1, 1, 1);
         }
 
         public Vertex()
         {
             point = new Vector3();
-            vcolor = new Color32(0, 0, 0);
-            lightingColor = new Color32(0, 0, 0);
             uv=new Vector2();
             normal = new Vector3();
-            onePerZ = 1;
         }
         public Vertex(Vector3 v3)
         {
             point = v3;
-            vcolor = new Color32(0, 0, 0);
-            lightingColor = new Color32(0, 0, 0);
             uv = new Vector2();
             normal = new Vector3();
-            onePerZ = 1;
         }
 
         public Vertex(Vertex v)
         {
             point = v.point;
             normal = v.normal;
-            this.vcolor = v.vcolor;
-            onePerZ = 1;
             uv = v.uv;
-            this.lightingColor = v.lightingColor;
         }
     }
 
@@ -166,8 +108,7 @@ namespace ALight.Render.Instances
         //uv坐标
         public List<Vector2> uvs = new List<Vector2>();
 
-        //顶点色
-        public List<Vector3> vertColors = new List<Vector3>();
+
 
         //法线
         public List<Vector3> norlmas = new List<Vector3>();
@@ -179,7 +120,6 @@ namespace ALight.Render.Instances
             points = p;
             indexs = i;
             uvs = uv;
-            vertColors = vertC;
             norlmas = n;
         }
         public Model() { }
@@ -287,26 +227,7 @@ namespace ALight.Render.Instances
                     new Vector2(1, 1),
                     new Vector2(1, 0)
                 },
-                vertColors =
-                {
-                    //new Vector3(0, 0, 0),
-                    //new Vector3(0.125f,0.125f, 0.125f),
-                    //new Vector3(0.25f,0.25f, 0.25f),
-                    //new Vector3(0.375f, 0.375f, 00.375f),
-                    //new Vector3(0.5f, 0.5f, 0.5f),
-                    //new Vector3(0.625f, 0.625f, 0.625f),
-                    //new Vector3(0.75f, 0.75f, 0.75f),
-                    //new Vector3(1, 1, 1),
-                    new Vector3(0.5f, 1, 0),
-                    new Vector3(0, 1, 0),
-                    new Vector3(1, 0, 0),
-                    new Vector3(0, 0, 1),
-                    new Vector3(1, 1, 0),
-                    new Vector3(0, 1, 1),
-                    new Vector3(1, 0, 1),
-                    new Vector3(0, 1, 0.5f),
-
-                },
+               
                 norlmas =
                 {
                     new Vector3(0, 0, -1),
@@ -599,120 +520,7 @@ namespace ALight.Render.Instances
                     new Vector2(1, 1),
                     new Vector2(1, 0),
                 },
-                vertColors = new List<Vector3>
-                {
-                    new Vector3(0, 1, 0),
-                    new Vector3(0, 0, 1),
-                    new Vector3(1, 0, 0),
-                    new Vector3(0, 1, 0),
-                    new Vector3(1, 0, 0),
-                    new Vector3(0, 0, 1),
-
-                    new Vector3(0, 1, 0),
-                    new Vector3(0, 0, 1),
-                    new Vector3(1, 0, 0),
-                    new Vector3(0, 1, 0),
-                    new Vector3(1, 0, 0),
-                    new Vector3(0, 0, 1),
-
-                    new Vector3(0, 1, 0),
-                    new Vector3(0, 0, 1),
-                    new Vector3(1, 0, 0),
-                    new Vector3(0, 1, 0),
-                    new Vector3(1, 0, 0),
-                    new Vector3(0, 0, 1),
-
-                    new Vector3(0, 1, 0),
-                    new Vector3(0, 0, 1),
-                    new Vector3(1, 0, 0),
-                    new Vector3(0, 1, 0),
-                    new Vector3(1, 0, 0),
-                    new Vector3(0, 0, 1),
-
-                    new Vector3(0, 1, 0),
-                    new Vector3(0, 0, 1),
-                    new Vector3(1, 0, 0),
-                    new Vector3(0, 1, 0),
-                    new Vector3(1, 0, 0),
-                    new Vector3(0, 0, 1),
-
-                    new Vector3(0, 1, 0),
-                    new Vector3(0, 0, 1),
-                    new Vector3(1, 0, 0),
-                    new Vector3(0, 1, 0),
-                    new Vector3(1, 0, 0),
-                    new Vector3(0, 0, 1),
-
-                    new Vector3(0, 1, 0),
-                    new Vector3(0, 0, 1),
-                    new Vector3(1, 0, 0),
-                    new Vector3(0, 1, 0),
-                    new Vector3(1, 0, 0),
-                    new Vector3(0, 0, 1),
-
-                    new Vector3(0, 1, 0),
-                    new Vector3(0, 0, 1),
-                    new Vector3(1, 0, 0),
-                    new Vector3(0, 1, 0),
-                    new Vector3(1, 0, 0),
-                    new Vector3(0, 0, 1),
-
-                    new Vector3(0, 1, 0),
-                    new Vector3(0, 0, 1),
-                    new Vector3(1, 0, 0),
-                    new Vector3(0, 1, 0),
-                    new Vector3(1, 0, 0),
-                    new Vector3(0, 0, 1),
-
-                    new Vector3(0, 1, 0),
-                    new Vector3(0, 0, 1),
-                    new Vector3(1, 0, 0),
-                    new Vector3(0, 1, 0),
-                    new Vector3(1, 0, 0),
-                    new Vector3(0, 0, 1),
-
-                    new Vector3(0, 1, 0),
-                    new Vector3(0, 0, 1),
-                    new Vector3(1, 0, 0),
-                    new Vector3(0, 1, 0),
-                    new Vector3(1, 0, 0),
-                    new Vector3(0, 0, 1),
-
-                    new Vector3(0, 1, 0),
-                    new Vector3(0, 0, 1),
-                    new Vector3(1, 0, 0),
-                    new Vector3(0, 1, 0),
-                    new Vector3(1, 0, 0),
-                    new Vector3(0, 0, 1),
-
-                    new Vector3(0, 1, 0),
-                    new Vector3(0, 0, 1),
-                    new Vector3(1, 0, 0),
-                    new Vector3(0, 1, 0),
-                    new Vector3(1, 0, 0),
-                    new Vector3(0, 0, 1),
-
-                    new Vector3(0, 1, 0),
-                    new Vector3(0, 0, 1),
-                    new Vector3(1, 0, 0),
-                    new Vector3(0, 1, 0),
-                    new Vector3(1, 0, 0),
-                    new Vector3(0, 0, 1),
-
-                    new Vector3(0, 1, 0),
-                    new Vector3(0, 0, 1),
-                    new Vector3(1, 0, 0),
-                    new Vector3(0, 1, 0),
-                    new Vector3(1, 0, 0),
-                    new Vector3(0, 0, 1),
-
-                    new Vector3(0, 1, 0),
-                    new Vector3(0, 0, 1),
-                    new Vector3(1, 0, 0),
-                    new Vector3(0, 1, 0),
-                    new Vector3(1, 0, 0),
-                    new Vector3(0, 0, 1),
-                },
+                
                 norlmas = new List<Vector3>
                 {
                     new Vector3(0, 0, -1),
@@ -930,26 +738,7 @@ namespace ALight.Render.Instances
                     new Vector2(1, 1),
                     new Vector2(1, 0)
                 },
-                vertColors =
-                {
-                    //new Vector3(0, 0, 0),
-                    //new Vector3(0.125f,0.125f, 0.125f),
-                    //new Vector3(0.25f,0.25f, 0.25f),
-                    //new Vector3(0.375f, 0.375f, 00.375f),
-                    //new Vector3(0.5f, 0.5f, 0.5f),
-                    //new Vector3(0.625f, 0.625f, 0.625f),
-                    //new Vector3(0.75f, 0.75f, 0.75f),
-                    //new Vector3(1, 1, 1),
-                    new Vector3(0.5f, 1, 0),
-                    new Vector3(0, 1, 0),
-                    new Vector3(1, 0, 0),
-                    new Vector3(0, 0, 1),
-                    new Vector3(1, 1, 0),
-                    new Vector3(0, 1, 1),
-                    new Vector3(1, 0, 1),
-                    new Vector3(0, 1, 0.5f),
-
-                },
+              
                 //vertColors =
                 //{
                 //    new Vector3(0, 1, 0),
@@ -1122,26 +911,6 @@ namespace ALight.Render.Instances
                     //new Vector2(1, 1),
                     //new Vector2(1, 0)
                 },
-                vertColors =
-                {
-                    //new Vector3(0, 0, 0),
-                    //new Vector3(0.125f,0.125f, 0.125f),
-                    //new Vector3(0.25f,0.25f, 0.25f),
-                    //new Vector3(0.375f, 0.375f, 00.375f),
-                    //new Vector3(0.5f, 0.5f, 0.5f),
-                    //new Vector3(0.625f, 0.625f, 0.625f),
-                    //new Vector3(0.75f, 0.75f, 0.75f),
-                    //new Vector3(1, 1, 1),
-                    new Vector3(0.5f, 1, 0),
-                    new Vector3(0, 1, 0),
-                    new Vector3(1, 0, 0),
-                    new Vector3(0, 0, 1),
-                    new Vector3(1, 1, 0),
-                    new Vector3(0, 1, 1),
-                    new Vector3(1, 0, 1),
-                    new Vector3(0, 1, 0.5f),
-
-                },
                 norlmas =
                 {
                     new Vector3(0, 0, -1),
@@ -1189,13 +958,80 @@ namespace ALight.Render.Instances
             };
     }
 
-    public class Loader
+    public class ObjModel
     {
-        public static void Load(string file)
+        public static Hitable Load(string path,params Shader[] shaders)
         {
-            var result = FileFormatObj.Load("MyFile.obj", false);
+            var result = new ObjLoaderFactory().Create().Load(new FileStream(path, FileMode.Open));
+            List<Hitable> list=new List<Hitable>();
+
+            Vertex Get(FaceVertex face)
+            {
+                var v = result.Vertices[face.VertexIndex];
+                var n = result.Normals[face.NormalIndex];
+                var uv = result.Textures[face.TextureIndex];
+                return new Vertex(
+                    new Vector3(v.X, v.Y, v.Z),
+                    new Vector3(n.X, n.Y, n.Z),
+                    uv.X, uv.Y
+                );
+            }
+
+            int ig = 0;
+            for (var index = 0; index < result.Groups.Count; index++)
+            {
+                if (result.Groups[index].Faces.Count == 0)
+                {
+                    ig++;continue;}
+                Console.WriteLine("载入物体 "+index);
+                var triangles = new List<Triangle>();
+
+                int i = 0;
+              
+                foreach (var f in result.Groups[index].Faces)
+                {
+
+                    Console.WriteLine("载入物体 " + index + "面"+ ++i+"/"+result.Groups[index].Faces.Count);
+                    if (f.Count == 4)
+                    {
+                        var v0 = Get(f[0]);
+                        var v1 = Get(f[1]);
+                        var v2 = Get(f[2]);
+                        triangles.Add(new Triangle(v0,v1 , v2,shaders[index-ig]));
+
+                        triangles.Add(new Triangle(Get(f[1]), Get(f[2]), Get(f[3]), shaders[index-ig]));
+                    }
+                }
+
+                //list.Add(new BVHNode(triangles.ToArray(),triangles.Count,0,1));
+            }
 
 
+            return new BVHNode(list.ToArray(), list.Count, 0, 1);
+        }
+    }
+
+
+    public class ByteModel
+    {
+        public static Hitable Load(string path,Shader shader)
+        {
+            var binary_reader = new BinaryReader(new FileStream(path, FileMode.Open));
+            var count = binary_reader.ReadInt32();
+
+            var vertices=new List<Vertex>();
+            for (var i = 0; i < count; i++)
+            {
+                var p=new Vector3(binary_reader.ReadSingle(), binary_reader.ReadSingle(), binary_reader.ReadSingle());
+                var n = new Vector3(binary_reader.ReadSingle(), binary_reader.ReadSingle(), binary_reader.ReadSingle());
+                var uv = new Vector2(binary_reader.ReadSingle(), binary_reader.ReadSingle());
+                vertices.Add(new Vertex(p,n,uv.x,uv.y));
+               
+            }
+            
+
+            binary_reader.Close();
+            return Mesh.Create(vertices.ToArray(), shader);
         }
     }
 }

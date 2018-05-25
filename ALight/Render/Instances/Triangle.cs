@@ -1,22 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 using ALight.Render.Components;
 using ALight.Render.Materials;
 using ALight.Render.Mathematics;
 
 namespace ALight.Render.Instances
 {
-
-    public class Tri:Hitable
+    public class Triangle:Hitable
     {
         public Vertex v0, v1, v2;
         private Vector3 Gnormal;
         public Shader shader;
 
-        public Tri(Vertex a, Vertex b, Vertex c, Shader shader)
+        public Triangle(Vertex a, Vertex b, Vertex c, Shader shader)
         {
             v0 = a;//a
             v1 = b;//b
@@ -30,79 +25,30 @@ namespace ALight.Render.Instances
             var f1 = v0.point - p;
             var f2 = v1.point - p;
             var f3 = v2.point - p;
-            // calculate the areas and factors (order of parameters doesn't matter):
-            var a = Vector3.Cross(v0.point - v1.point, v0.point - v2.point).Magnitude(); // main triangle area a
-            var a1= Vector3.Cross(f2, f3).Magnitude() / a; // p1's triangle area / a
-            var a2= Vector3.Cross(f3, f1).Magnitude() / a; // p2's triangle area / a 
-            var a3= Vector3.Cross(f1, f2).Magnitude() / a; // p3's triangle area / a
-            // find the uv corresponding to point f (uv1/uv2/uv3 are associated to p1/p2/p3):
+            //计算面积和因子（参数顺序无关紧要）：
+            var a = Vector3.Cross(v0.point - v1.point, v0.point - v2.point).Magnitude(); // 主三角形面积 a
+            var a1= Vector3.Cross(f2, f3).Magnitude() / a; // p1 三角形面积 / a
+            var a2= Vector3.Cross(f3, f1).Magnitude() / a; // p2 三角形面积 / a 
+            var a3= Vector3.Cross(f1, f2).Magnitude() / a; // p3 三角形面积 / a
+            // 找到对应于点f的uv（uv1 / uv2 / uv3与p1 / p2 / p3相关）：
             var uv  = v0.uv * a1 + v1.uv * a2 + v2.uv * a3;
+            // 找到对应于点f的法线（法线1 / 法线2 / 法线3与p1 / p2 / p3相关）：
             normal = v0.normal * a1 + v1.normal * a2 + v2.normal * a3;
             return uv;
         }
 
         public override bool Hit(Ray r, float t_min, float t_max, ref HitRecord rec)
         {
-            #region OLD
-
-
-
-
-            //var dir = r.direction.Normalized();
-            //var v0v1 = v1 - v0;
-            //var v0v2 = v2 - v0;
-            //var ao = r.origin - v0;
-            //float D = v0v1[0] * v0v2[1] * (-dir[2]) + v0v1[1] * v0v2[2] * (-dir[0]) + v0v1[2] * v0v2[0] * (-dir[1]) -
-            //          (-dir[0] * v0v2[1] * v0v1[2] - dir[1] * v0v2[2] * v0v1[0] - dir[2] * v0v2[0] * v0v1[1]);
-            //float D1 = ao[0] * v0v2[1] * (-dir[2]) + ao[1] * v0v2[2] * (-dir[0]) + ao[2] * v0v2[0] * (-dir[1]) -
-            //           (-dir[0] * v0v2[1] * ao[2] - dir[1] * v0v2[2] * ao[0] - dir[2] * v0v2[0] * ao[1]);
-
-            //float D2 = v0v1[0] * ao[1] * (-dir[2]) + v0v1[1] * ao[2] * (-dir[0]) + v0v1[2] * ao[0] * (-dir[1]) -
-            //           (-dir[0] * ao[1] * v0v1[2] - dir[1] * ao[2] * v0v1[0] - dir[2] * ao[0] * v0v1[1]);
-
-            //float D3 = v0v1[0] * v0v2[1] * ao[2] + v0v1[1] * v0v2[2] * ao[0] + v0v1[2] * v0v2[0] * ao[1] -
-            //           (ao[0] * v0v2[1] * v0v1[2] + ao[1] * v0v2[2] * v0v1[0] + ao[2] * v0v2[0] * v0v1[1]);
-
-            //float a = D1 / D;
-            //float b = D2 / D;
-            //float temp = D3 / D;
-
-            //if (temp < 0)
-            //{
-            //    return false;
-            //}
-
-            //if (a >= 0 && b >= 0 && a + b < 1)
-            //{
-            //    if (temp == 0)
-            //    {
-            //        Console.WriteLine(D3 + " " + D);
-            //        Console.ReadLine();
-            //    }
-            //    rec.t = temp;
-            //    rec.p = r.GetPoint(rec.t);
-            //    rec.normal = normal;
-            //    rec.shader = shader;
-            //    var uvw = GetUV(rec.p); //Console.WriteLine(temp);
-            //    rec.u = uvw.x;
-            //    rec.v = uvw.y;
-            //    return true;
-            //}
-            //return false;
-            #endregion
             if(Vector3.Dot(Gnormal,r.direction)>=0)return false;
-            if (!RayIntersectsTriangle(r.origin, r.direction.Normalized(), out Vector3 p)) return false;
-
+            if (!Intersects(r.origin, r.direction.Normalized(), out var p)) return false;
             rec.t = Vector3.Distance(r.origin,p);
             rec.p = p;
-           
             rec.shader = shader;
-            var uvw = GetUV(rec.p,out p); //Console.WriteLine(temp);
+            var uvw = GetUV(rec.p,out p);
             rec.normal = p;
             rec.u = uvw.x;
             rec.v = uvw.y;
             return true;
-
         }
 
         public override bool BoundingBox(float t0, float t1, ref AABB box)
@@ -119,321 +65,49 @@ namespace ALight.Render.Instances
             return true;
         }
 
-
-        bool RayIntersectsTriangle(Vector3 rayOrigin,Vector3 rayVector,out Vector3 outIntersectionPoint)
+        private bool Intersects(Vector3 ray_origin,Vector3 ray_dir,out Vector3 point)
         {
-            outIntersectionPoint=new Vector3();
+            point=new Vector3();
             const float EPSILON = 0.0000001f;
-           
-            Vector3 edge1, edge2, h, s, q;
-            float a, f, u, v;
-            edge1 = v1.point - v0.point;
-            edge2 = v2.point - v0.point;
-            h =Vector3.Cross(rayVector,edge2); 
-            a = Vector3.Dot(edge1,h);
-            if (a > -EPSILON && a < EPSILON)
-                return false;
-            f = 1 / a;
-            s = rayOrigin - v0.point;
-            u = f * (Vector3.Dot(s,h));
-            if (u < 0.0 || u > 1.0)
-                return false;
-            q = Vector3.Cross(s,edge1);
-            v = f * Vector3.Dot(rayVector,q);
-            if (v < 0.0 || u + v > 1.0)
-                return false;
-            // At this stage we can compute t to find out where the intersection point is on the line.
+            var edge1 = v1.point - v0.point;
+            var edge2 = v2.point - v0.point;
+            var h = Vector3.Cross(ray_dir,edge2); 
+            var a = Vector3.Dot(edge1,h);
+            if (a > -EPSILON && a < EPSILON)return false;
+            var f = 1 / a;
+            var s = ray_origin - v0.point;
+            var u = f * (Vector3.Dot(s,h));
+            if (u < 0.0 || u > 1.0)return false;
+            var q = Vector3.Cross(s,edge1);
+            var v = f * Vector3.Dot(ray_dir,q);
+            if (v < 0.0 || u + v > 1.0)return false;
             var t = f * Vector3.Dot(edge2,q);
-            if (t > EPSILON) // ray intersection
-            {
-                outIntersectionPoint = rayOrigin + rayVector * t;
-                return true;
-            }
-            else  return false;
-        }
-    }
-
-    
-
-    public class Matrices
-    {
-        private double[,] matrix;
-        public double[,] Matrix
-        {
-            get { return matrix; }
-            set { matrix = value; }
-        }
-        private int _row;
-
-        public int Row
-        {
-            get { return _row; }
-            set { _row = value; }
+            if (!(t > EPSILON)) return false;
+            point = ray_origin + ray_dir * t;
+            return true;
         }
 
-        private int _col;
-
-        public int Col
+        private bool Intersects2(Vector3 ray_origin, Vector3 dir, out Vector3 point)
         {
-            get { return _col; }
-            set { _col = value; }
-        }
-
-        private double[,] _invers;
-
-        public double[,] Invers
-        {
-            get { return _invers; }
-            set { _invers = value; }
-        }
-
-        private bool isInvertable;
-
-        public Matrices(string command, double x, double y, double z)
-        {
-            if (command.Equals("translate"))
-            {
-                this.matrix = new double[4, 4]
-                    { {1.0 ,0   ,0   ,x},
-                      {0   ,1.0 ,0   ,y},
-                      {0   ,0   ,1.0 ,z},
-                      {0   ,0   ,0   ,1.0} };
-            }
-            else if (command.Equals("scale"))
-            {
-                Console.WriteLine("dalam scale");
-                this.matrix = new double[4, 4]
-                    { {x ,0 ,0 ,0  },
-                      {0 ,y ,0 ,0  },
-                      {0 ,0 ,z ,0  },
-                      {0 ,0 ,0 ,1.0} };
-            }
-            this.Row = this.Col = 4;
-            this.isInvertable = true;
-        }
-
-        public Matrices(int row, int col)
-        {
-            this.Row = row;
-            this.Col = col;
-            this.matrix = new double[row, col];
-            if (row == col)
-            {
-                for (int i = 0; i < row; i++)
-                {
-                    this.Matrix[i, i] = 1.0;
-                }
-            }
-            if (col == row) this.isInvertable = true;
-            else this.isInvertable = false;
-        }
-
-        public Matrices(int x, int y, int z, float angle)
-        {
-            double cos = Math.Cos(Mathf.DegreeToRadian(angle));
-            double sin = Math.Sin(Mathf.DegreeToRadian(angle));
-            if (x == 1)
-            {
-                this.matrix = new double[4, 4]
-                    { {1.0  ,0    ,0    ,0  },
-                      {0    ,cos  ,-sin ,0  },
-                      {0    ,sin  ,cos  ,0  },
-                      {0    ,0    ,0    ,1.0} };
-                this.Row = this.Col = 4;
-            }
-            else if (y == 1)
-            {
-                this.matrix = new double[4, 4]
-                    { {cos  ,0    ,sin  ,0  },
-                      {0    ,1.0  ,0    ,0  },
-                      {-sin ,0    ,cos  ,0  },
-                      {0    ,0    ,0    ,1.0} };
-                this.Row = this.Col = 4;
-            }
-            else if (z == 1)
-            {
-                this.matrix = new double[4, 4]
-                    { {cos  ,-sin ,0    ,0  },
-                      {sin  ,cos  ,0    ,0  },
-                      {0    ,0    ,1.0  ,0  },
-                      {0    ,0    ,0    ,1.0} };
-                this.Row = this.Col = 4;
-            }
-            this.isInvertable = true;
-        }
-
-        public Matrices(double a, double b, double c, double d)
-        {
-            this.matrix = new double[4, 1]
-                { {a},
-                  {b},
-                  {c},
-                  {d}};
-            this.Row = 4;
-            this.Col = 1;
-            this.isInvertable = false;
-        }
-
-        public static double[,] InversCalculate(double[,] matrixTemp)
-        {
-            int n = matrixTemp.GetLength(0);
-            double[,] invers = new double[n, n];
-
-            double scale;
-            for (int i = 0; i < n; i++)
-                invers[i, i] = 1.0;
-
-            for (int r0 = 0; r0 < n; r0++)
-            {
-                if (Math.Abs(matrixTemp[r0, r0]) <= 2.0 * double.Epsilon)
-                {
-                    for (int r1 = r0 + 1; r1 < n; r1++)
-                    {
-                        if (Math.Abs(matrixTemp[r1, r0]) <= 2.0 * double.Epsilon)
-                        {
-                            RowSwap(matrixTemp, n, r0, r1);
-                            RowSwap(invers, n, r0, r1);
-                            break;
-                        }
-                    }
-                }
-                scale = 1.0 / matrixTemp[r0, r0];
-                RowScale(matrixTemp, n, scale, r0);
-                RowScale(invers, n, scale, r0);
-
-                for (int r1 = 0; r1 < n; r1++)
-                {
-                    if (r1 != r0)
-                    {
-                        scale = -matrixTemp[r1, r0];
-                        RowScaleAdd(matrixTemp, n, scale, r0, r1);
-                        RowScaleAdd(invers, n, scale, r0, r1);
-                    }
-                }
-            }
-            return invers;
-        }
-
-        private static void RowScale(double[,] matrixTemp, int n, double a, int r)
-        {
-            for (int i = 0; i < n; ++i)
-            {
-                matrixTemp[r, i] *= a;
-            }
-        }
-
-        private static void RowScaleAdd(double[,] matrixTemp, int n, double a, int r0, int r1)
-        {
-            for (int i = 0; i < n; ++i)
-            {
-                matrixTemp[r1, i] += a * matrixTemp[r0, i];
-            }
-        }
-
-        private static void RowSwap(double[,] matrixTemp, int n, int r0, int r1)
-        {
-            double tmp;
-            for (int a = 0; a < n; a++)
-            {
-                tmp = matrixTemp[r0, a];
-                matrixTemp[r0, a] = matrixTemp[r1, a];
-                matrixTemp[r1, a] = tmp;
-            }
-        }
-
-        public static Matrices operator *(double[,] matrix1, Matrices matrix2)
-        {
-            Matrices hasil = new Matrices(matrix1.GetLength(0), matrix2.Col);
-            for (int row = 0; row < hasil.Row; row++)
-            {
-                for (int col = 0; col < hasil.Col; col++)
-                {
-                    double temp = 0.0;
-                    for (int count = 0; count < matrix2.Row; count++)
-                    {
-                        temp += matrix1[row, count] * matrix2.Matrix[count, col];
-                    }
-                    hasil.Matrix[row, col] = temp;
-                }
-            }
-
-            return hasil;
-        }
-
-        public static Matrices operator *(Matrices matrix1, Matrices matrix2)
-        {
-            Matrices hasil = new Matrices(matrix1.Row, matrix2.Col);
-
-            for (int row = 0; row < hasil.Row; row++)
-            {
-                for (int col = 0; col < hasil.Col; col++)
-                {
-                    hasil.Matrix[row, col] = 0;
-                    for (int count = 0; count < matrix1.Col; count++)
-                    {
-                        hasil.Matrix[row, col] += matrix1.Matrix[row, count] * matrix2.Matrix[count, col];
-                    }
-                }
-            }
-            return hasil;
-        }
-
-        public static Matrices operator /(Matrices matrix1, double n)
-        {
-            Matrices hasil = new Matrices(matrix1.Row, matrix1.Col);
-
-            for (int row = 0; row < hasil.Row; row++)
-            {
-                for (int col = 0; col < hasil.Col; col++)
-                {
-                    hasil.Matrix[row, col] = matrix1.Matrix[row, col] / n;
-                }
-            }
-
-            return hasil;
-        }
-
-        public static Matrices operator *(Matrices matrix1, double n)
-        {
-            Matrices hasil = new Matrices(matrix1.Row, matrix1.Col);
-
-            for (int row = 0; row < hasil.Row; row++)
-            {
-                for (int col = 0; col < hasil.Col; col++)
-                {
-                    hasil.Matrix[row, col] = matrix1.Matrix[row, col] * n;
-                }
-            }
-
-            return hasil;
-        }
-
-        public static Matrices operator +(Matrices matrix1, Matrices matrix2)
-        {
-            int n = matrix1.Row;
-            Matrices hasil = new Matrices(n, n);
-            for (int i = 0; i < n; i++)
-            {
-                for (int j = 0; j < n; j++)
-                {
-                    hasil.Matrix[i, j] = matrix1.Matrix[i, j] + matrix2.Matrix[i, j];
-                }
-            }
-            return hasil;
-        }
-
-        public static Matrices operator -(Matrices matrix1, Matrices matrix2)
-        {
-            int n = matrix1.Row;
-            Matrices hasil = new Matrices(n, n);
-            for (int i = 0; i < n; i++)
-            {
-                for (int j = 0; j < n; j++)
-                {
-                    hasil.Matrix[i, j] = matrix1.Matrix[i, j] - matrix2.Matrix[i, j];
-                }
-            }
-            return hasil;
+            point = new Vector3();
+            var v0_v1 = v1.point - v0.point;
+            var v0_v2 = v2.point - v0.point;
+            var ao = ray_origin - v0.point;
+            var D = v0_v1[0] * v0_v2[1] * (-dir[2]) + v0_v1[1] * v0_v2[2] * (-dir[0]) + v0_v1[2] * v0_v2[0] * (-dir[1]) -
+                      (-dir[0] * v0_v2[1] * v0_v1[2] - dir[1] * v0_v2[2] * v0_v1[0] - dir[2] * v0_v2[0] * v0_v1[1]);
+            var D1 = ao[0] * v0_v2[1] * (-dir[2]) + ao[1] * v0_v2[2] * (-dir[0]) + ao[2] * v0_v2[0] * (-dir[1]) -
+                       (-dir[0] * v0_v2[1] * ao[2] - dir[1] * v0_v2[2] * ao[0] - dir[2] * v0_v2[0] * ao[1]);
+            var D2 = v0_v1[0] * ao[1] * (-dir[2]) + v0_v1[1] * ao[2] * (-dir[0]) + v0_v1[2] * ao[0] * (-dir[1]) -
+                       (-dir[0] * ao[1] * v0_v1[2] - dir[1] * ao[2] * v0_v1[0] - dir[2] * ao[0] * v0_v1[1]);
+            var D3 = v0_v1[0] * v0_v2[1] * ao[2] + v0_v1[1] * v0_v2[2] * ao[0] + v0_v1[2] * v0_v2[0] * ao[1] -
+                       (ao[0] * v0_v2[1] * v0_v1[2] + ao[1] * v0_v2[2] * v0_v1[0] + ao[2] * v0_v2[0] * v0_v1[1]);
+            var a = D1 / D;
+            var b = D2 / D;
+            var t = D3 / D;
+            if (t < 0) return false;
+            if (a < 0 || b < 0 || a + b >= 1) return false;
+            point = ray_origin + dir * t;
+            return true;
         }
     }
 }

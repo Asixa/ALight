@@ -2,15 +2,13 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using AcDx;
-using ALight.Render.Components;
 using ALight.Render.Denoise;
-using ALight.Render.Instances;
-using ALight.Render.Materials;
 using ALight.Render.Mathematics;
-using ALight.Render.Primitives;
 using ALight.Render.Scanners;
 using Random = ALight.Render.Mathematics.Random;
 
@@ -24,16 +22,19 @@ namespace ALight.Render
     public class Renderer
     {
         public static Renderer main;
-        private const Mode mode = Mode.Diffusing;
+      
 
+        public delegate void ChunkEnd(int i);
+
+        public ChunkEnd chunk_end;
         private Preview preview = new Preview();
         public float[] buff;
+        public float[] View_buff;
         public int[] Changes;
-
+        public int FinishedChunks;
         
         private float recip_width, recip_height;
         public int now_sample = 0;
-
         public void InitPreview()
         {
             preview = new Preview();
@@ -42,11 +43,13 @@ namespace ALight.Render
 
         public void Init()
         {
+   
             main = this;
             recip_width = 1f / Configuration.width;
             recip_height = 1f / Configuration.height;
             buff = new float[Configuration.width * Configuration.height * 4];
             Changes = new int[Configuration.width * Configuration.height];
+            View_buff=new float[Configuration.divide*Configuration.divide];
             Scene.main.Init();
             Start();
             InitPreview();
@@ -54,7 +57,7 @@ namespace ALight.Render
 
         private async void Start()
         {
-            ThreadPool.SetMaxThreads(32, 32);
+            ThreadPool.SetMaxThreads(Configuration.divide* Configuration.divide, Configuration.divide * Configuration.divide);
             //await Task.Factory.StartNew(delegate { LinearScanner(new ScannerConfig(height, width)); });
             //for (var i = 0; i < Configuration.SPP; i += Configuration.SamplePerThread)
             //    ThreadPool.QueueUserWorkItem(LinearScanner, new ScannerConfig(Configuration.height, Configuration.width));
@@ -63,20 +66,19 @@ namespace ALight.Render
             var hp = Configuration.height / Configuration.divide;
             for (var i = Configuration.divide - 1; i >= 0; i--)
             for (var j = Configuration.divide - 1; j >= 0; j--)
-                ThreadPool.QueueUserWorkItem(LinearScanner2,
-                    new ScannerConfig(hp * i, hp * (1 + i), wp * j, wp * (1 + j)));
-
+                ThreadPool.QueueUserWorkItem(LinearScanner,
+                    new ScannerConfig(hp * i, hp * (1 + i), wp * j, wp * (1 + j),i*Configuration.divide+(Configuration.divide-j)));
         }
 
-        private void LinearScanner2(object o)
+        private void LinearScanner(object o)
         {
             var config = (ScannerConfig) o;
 
-            Parallel.For(0, Configuration.SPP, a => {
+           Parallel.For(0, Configuration.SPP, a => {
                 for (var j = config.h; j < config.h2; j++)
                 for (var i = config.w; i < config.w2; i++)
                 {
-                    var color = mode == Mode.Diffusing
+                    var color = Configuration.mode == Mode.Diffusing
                         ? DiffuseScanner.GetColor(Scene.main.camera.CreateRay(
                             (i + Random.Get()) * recip_width,
                             (j + Random.Get()) * recip_height), Scene.main.world, Scene.main.Important, 0).DeNaN()
@@ -85,6 +87,14 @@ namespace ALight.Render
                             (j + Random.Get()) * recip_height), Scene.main.world);
                     SetPixel(Configuration.width - i - 1, Configuration.height - j - 1, color);
                 }
+
+               if (a == Configuration.SPP - 1)
+               {
+                   FinishedChunks++;
+                   chunk_end?.Invoke(FinishedChunks);
+                   if (FinishedChunks == Configuration.divide * Configuration.divide)
+                       MessageBox.Show("渲染完成");
+               }
             });
             
             //for (var a = 0; a < Configuration.SPP; a++)
@@ -105,27 +115,6 @@ namespace ALight.Render
             now_sample += Configuration.SamplePerThread;
         }
 
-        private void LinearScanner(object o)
-        {
-            var config = (ScannerConfig)o;
-            for (var j = config.h - 1; j >= 0; j--)
-                for (var i = 0; i < config.w; i++)
-                {
-                    for (var a= 0; a < Configuration.SamplePerThread;a++)
-                    {
-                        var color = mode == Mode.Diffusing
-                            ? DiffuseScanner.GetColor(Scene.main.camera.CreateRay(
-                                (i + Random.Get()) * recip_width,
-                                (j + Random.Get()) * recip_height), Scene.main.world, Scene.main.Important, 0).DeNaN()
-                            : NormalMapScanner.GetColor(Scene.main.camera.CreateRay(
-                                (i + Random.Get()) * recip_width,
-                                (j + Random.Get()) * recip_height), Scene.main.world);
-                        SetPixel(config.w - i - 1, config.h - j - 1, color);
-                    }
-                }
-            now_sample += Configuration.SamplePerThread;
-        }
-
         private void SetPixel(int x, int y, Color32 c32)
         { 
             var i = Configuration.width * 4 * y + x * 4;
@@ -136,8 +125,10 @@ namespace ALight.Render
             buff[i + 3] += c32.a;
         }
 
-        public void Save(string path="a.png")
+        public void Save(string path="Result"+".png")
         {
+            if (!Directory.Exists("Output")) Directory.CreateDirectory("Output");
+
             int Get(int i)=> (byte)Mathf.Range(main.buff[i] * 255 / main.Changes[i / 4] + 0.5f, 0, 255f);
             var pic = new Bitmap(Configuration.width, Configuration.height, PixelFormat.Format32bppArgb);
             for (var i = 0; i < main.buff.Length; i+=4)
@@ -145,7 +136,7 @@ namespace ALight.Render
                 var c = Color.FromArgb(Get(i+3), Get(i), Get(i + 1), Get(i + 2));
                 pic.SetPixel(i % (Configuration.width*4)/4, i / (Configuration.width*4), c);
             }
-            pic.Save(path);
+            pic.Save("Output/"+path);
         }
 
         #region Denoise

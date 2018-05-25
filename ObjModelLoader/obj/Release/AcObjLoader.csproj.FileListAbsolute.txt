@@ -17,3 +17,4 @@ E:\Programing\C#\图形学\我的静态渲染器\ALight\ObjModelLoader\bin\Relea
 E:\Programing\C#\图形学\我的静态渲染器\ALight\ObjModelLoader\obj\Release\AcObjLoader.csproj.CoreCompileInputs.cache
 E:\Programing\C#\图形学\我的静态渲染器\ALight\ObjModelLoader\obj\Release\AcObjLoader.dll
 E:\Programing\C#\图形学\我的静态渲染器\ALight\ObjModelLoader\obj\Release\AcObjLoader.pdb
+D:\Asixa\Projects\ALight\ObjModelLoader\obj\Release\AcObjLoader.csprojResolveAssemblyReference.cache

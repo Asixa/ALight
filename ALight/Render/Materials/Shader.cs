@@ -41,6 +41,8 @@ namespace ALight.Render.Materials
             refracted = ni_no * (uvin - normal * dt) - normal * Mathf.Sqrt(discrimination);
             return true;
         }
+
+        public static  Dielectirc Glass=new Dielectirc(1.5f);
     }
 
     public class Metal : Shader

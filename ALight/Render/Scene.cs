@@ -21,38 +21,71 @@ namespace ALight.Render
         public int height => Configuration.height;
         public void Init()
         {
-            string skyname = "c" + "/";
-            sky = new CubeMap("Sky/" + skyname + "Front.png", "Sky/" + skyname + "Up.png",
-                "Sky/" + skyname + "Left.png",
-                "Sky/" + skyname + "Back.png", "Sky/" + skyname + "Down.png", "Sky/" + skyname + "Right.png");
+            string skyname =  "Snow" + "/";
+            sky = new CubeMap(ResourceManager.SkyboxPath + skyname + "Front.png", ResourceManager.SkyboxPath + skyname + "Up.png",
+                ResourceManager.SkyboxPath + skyname + "Left.png",
+                ResourceManager.SkyboxPath + skyname + "Back.png", ResourceManager.SkyboxPath + skyname + "Down.png", ResourceManager.SkyboxPath + skyname + "Right.png");
             //Sky();
             //Demo();
             //MC();
             //CornellBox();
-            Model();
+            ByteModels();
+            
+        }
+        public void ByteModels()
+        {
+            camera = new Camera(new Vector3(-0f, 2.5f, 4f), new Vector3(0.5f, 1, 0), new Vector3(0, 1, 0), 80, (float)width / (float)height, 0, 1, 0, 1);
+            world.list.Add(new Translate(new PlaneXZ(-5,5, -5, 5, -0.5f, new Metal(new ImageTexture(ResourceManager.TexturePath + "TexturesCom_WoodPlanksBare0467_2_seamless_S.jpg", 1), 0.2f)), new Vector3(1, 0, 0)));
+            var m = new Lambertian(new ConstantTexture(Color32.White));
+            var m2 = new Lambertian(new ConstantTexture(new Color32(0.2f,0.2f,0.2f)));
+            var m3 = new Lambertian(new CheckerTexture(new ConstantTexture(new Color32(0.5f, 0.5f, 0.5f)), new ConstantTexture(Color32.White)));
+            var m5 = new Metal(Texture.WhiteTexture, 0);
+            var m7 = new Metal(new ConstantTexture(new Color32(0.2f, 0.2f, 0.2f)), 0);
+            var m6 = new Metal(new ConstantTexture(new Color32(255 / 255f, 215 / 255f, 0)), 0.1f);
+            var m4 = new Dielectirc(1.5f);
+            //var tea = ObjModelLoader.ObjLoader.load(ResourceManager.ModelPath + "tea.obj");
 
+            //var model =new Translate(new RotateY(ShaderBall.Create(m5, m7,m7),-20),new Vector3(0,-0.5f,0));
+
+            var model = new Translate(ByteModel.Load(ResourceManager.ModelPath + "/ByteModel/Bunny.ACM",m5),new Vector3(0,-1.2f,0));
+            var cube=new Translate(new Mesh(Instances.Model.Cube, m).Create(),new Vector3(10,0,0));
+            var list = new List<Hitable>();
+           
+            list.Add(model);
+            Important.list.Add(cube);
+            world.list.Add(new RotateY(new BVHNode(list.ToArray(), list.Count, 0, 1), 0));
         }
 
         public void Model()
         {
-            var lens_radius = 0;
+            var lens_radius = 0f;
             var forcus_dis = 1;
-            camera = new Camera(new Vector3(0,8f, -8), new Vector3(0f, 0, 0), new Vector3(0, 1, 0), 90, (float)width / (float)height, lens_radius, forcus_dis, 0, 1);
-            var sun = new Sphere(new Vector3(-2, 30, 2), 4f, new DiffuseLight(new ConstantTexture(new Color32(1, 1, 1, 1)), 4));
-            world.list.Add(sun);//sun
-            Important.list.Add(sun);//TexturesCom_MetalGalvanized0005_S.jpg
-            world.list.Add(new PlaneXZ(-50, 50, -50, 50, -0.5f, new Metal(new ImageTexture("CalibrationFloorDiffuse.png"), 0.2f)));
+            camera = new Camera(new Vector3(-5,10f, -10), new Vector3(0f, 0, 0), new Vector3(0, 1, 0), 80, (float)width / (float)height, lens_radius, forcus_dis, 0, 1);
+            //var sun = new Sphere(new Vector3(-200, 300, 2), 4f, new DiffuseLight(new ConstantTexture(new Color32(1, 1, 1, 1)), 1));
+            //world.list.Add(sun);//sun
+            //Important.list.Add(sun);//TexturesCom_MetalGalvanized0005_S.jpg
+            world.list.Add(new Translate(new PlaneXZ(-20, 20, -20, 20, -0.5f, new Metal(new ImageTexture(ResourceManager.TexturePath+"TexturesCom_WoodPlanksBare0467_2_seamless_S.jpg",2), 0.2f)),new Vector3(3,0,0)));
             var m = new Lambertian(new ConstantTexture(Color32.White));
-
-            //var m2 = new DiffuseLight(new ImageTexture("MC/bookshelf.png"), 1);
             var m2 = new Lambertian(new ConstantTexture(Color32.Blue));
             var m3 = new Lambertian(new CheckerTexture(new ConstantTexture(new Color32(0.5f,0.5f,0.5f)), new ConstantTexture(Color32.White)));
-            var m5=new Metal(new ConstantTexture(Color32.White),0 );
+            var m5=new Metal(Texture.WhiteTexture, 0 );
+            var m6 = new Metal(new ConstantTexture(new Color32(255/255f,215/255f,0)), 0.1f);
             var m4 = new Dielectirc(1.5f);
-            world.list.Add(new Translate(new Mesh(ObjModelLoader.ObjLoader.load("tea.obj"), m3).Create(),new Vector3(0,0,0)));
+            var tea = ObjModelLoader.ObjLoader.load(ResourceManager.ModelPath+"tea.obj");
 
+            var model = ByteModel.Load("D:/MyModel.ACM", m);
 
+            var list=new List<Hitable>();
+            
+            list.Add(new Translate(new RotateY( new Mesh(tea, m6).Create(),30),new Vector3(-4,0,0)));
+            list.Add(new Translate(new RotateY(new Mesh(tea, m5).Create(), 170), new Vector3(2, 0, 8)));
+            var sphere = new Translate(new Sphere(new Vector3(0, 0, 0), 4, m4), new Vector3(8, 3, 0));
+            list.Add(sphere);
+            Important.list.Add(sphere);
+            world.list.Add(new RotateY(new BVHNode(list.ToArray(),list.Count,0,1),0 ));
         }
+
+
 
         public void Sky()
         {

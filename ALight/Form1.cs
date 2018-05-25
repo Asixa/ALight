@@ -16,15 +16,15 @@ namespace ALight
         {
             main = this;
             InitializeComponent();
-            timer.Enabled = true;
-            timer.Interval =1000;
-            progressBar1.Maximum = Configuration.SPP;
-            timer.Elapsed +=(s,e)=> BeginInvoke(new Action(() =>
+            progressBar1.Maximum = Configuration.divide*Configuration.divide;
+            renderer.chunk_end += (chunks) =>
             {
-                SPP.Text = (DateTime.Now - StartTime).ToString(); // SPP.Text = "已采样"+renderer.now_sample+"次";
-                //progressBar1.Value = renderer.now_sample;
-            }));
-           
+                main.BeginInvoke(new Action(() =>
+                {
+                    main.SPP.Text = TimeSpan.FromSeconds((int) (DateTime.Now - main.StartTime).TotalSeconds).ToString();
+                    main.progressBar1.Value = chunks;
+                }));
+            };
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -37,7 +37,7 @@ namespace ALight
 
         private void button2_Click(object sender, EventArgs e)
         {
-            renderer.Save();
+            renderer.Save("Result_"+DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss")+".png");
             
         }
 
