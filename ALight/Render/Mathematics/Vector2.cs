@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Runtime.InteropServices;
 
 namespace ALight.Render.Mathematics
 {
+    [StructLayout(LayoutKind.Sequential)]
     public class Vector2
     {
         private readonly float[] data = new float[2];

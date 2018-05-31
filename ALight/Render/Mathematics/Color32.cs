@@ -61,12 +61,17 @@ namespace ALight.Render.Mathematics
 
         public static Color32 Lerp(Color32 a, Color32 b, float t) => new Color32(a.r + (b.r - a.r) * t,
             a.g + (b.g - a.g) * t, a.b + (b.b - a.b) * t, a.a + (b.a - a.a) * t);
-
+        public  Color32 Normalized()
+        {
+            a = 1;
+            return this;
+        }
         public static readonly Color32 
             Black = new Color32(0, 0, 0),
             Red = new Color32(1, 0, 0),
             Green = new Color32(0, 1, 0),
             Blue = new Color32(0, 0, 1),
-            White = new Color32(1, 1, 1);
+            White = new Color32(1, 1, 1),
+        Transparent = new Color32(0, 0, 0,0);
     }
 }

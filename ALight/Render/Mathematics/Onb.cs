@@ -1,8 +1,11 @@
-﻿namespace ALight.Render.Mathematics
+﻿using System.Runtime.InteropServices;
+
+namespace ALight.Render.Mathematics
 {
-    public class Onb
+    [StructLayout(LayoutKind.Sequential)]
+    public struct Onb
     {
-        private readonly Vector3 [] data = new Vector3[3];
+        private readonly Vector3[] data;
         private Vector3 u { get => data[0]; set => data[0] = value; }
         private Vector3 v { get => data[1]; set => data[1] = value; }
         public Vector3 w { get => data[2]; set => data[2] = value; }
@@ -15,6 +18,7 @@
 
         public Onb(Vector3 n)
         {
+            data= new Vector3[3];
             w = n.Normalized();
             var a = (Mathf.Abs(w.x) > 0.9f) ? new Vector3(0, 1, 0) : new Vector3(1, 0, 0);
             v = Vector3.Cross(w, a).Normalized();

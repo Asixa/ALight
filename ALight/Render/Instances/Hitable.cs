@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using ALight.Render.Materials;
 using ALight.Render.Mathematics;
 using Random = ALight.Render.Mathematics.Random;
 
 namespace ALight.Render.Components
 {
+    [StructLayout(LayoutKind.Sequential)]
     public struct HitRecord
     {
         public float u, v;
@@ -14,7 +16,6 @@ namespace ALight.Render.Components
         public Vector3 p;
         public Vector3 normal;
         public Shader shader;
-       // public HitRecord() { }
 
         public HitRecord(HitRecord copy)
         {
@@ -59,6 +60,8 @@ namespace ALight.Render.Components
 
         public override bool Hit(Ray ray, float t_min, float t_max, ref HitRecord rec)
         {
+            //if (Renderer.main.hit[ray.id] == 1)return false;
+            
             var temp_record = new HitRecord();
             var hit_anything = false;
             var closest = t_max;
@@ -69,7 +72,8 @@ namespace ALight.Render.Components
                 closest = temp_record.t;
                 rec = temp_record;
             }
-
+           // if (!hit_anything)Renderer.main.hit[ray.id]= 1;
+            
             return hit_anything;
         }
 

@@ -39,7 +39,7 @@ namespace ALight.Render.Instances
 
         public override bool Hit(Ray r, float t_min, float t_max, ref HitRecord rec)
         {
-            if(Vector3.Dot(Gnormal,r.direction)>=0)return false;
+            if(shader.BackCulling&&Vector3.Dot(Gnormal,r.direction)>=0)return false;
             if (!Intersects(r.origin, r.direction.Normalized(), out var p)) return false;
             rec.t = Vector3.Distance(r.origin,p);
             rec.p = p;
@@ -68,7 +68,7 @@ namespace ALight.Render.Instances
         private bool Intersects(Vector3 ray_origin,Vector3 ray_dir,out Vector3 point)
         {
             point=new Vector3();
-            const float EPSILON = 0.0000001f;
+            const float EPSILON = 1e-4f;
             var edge1 = v1.point - v0.point;
             var edge2 = v2.point - v0.point;
             var h = Vector3.Cross(ray_dir,edge2); 

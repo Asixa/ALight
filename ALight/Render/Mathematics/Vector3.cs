@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using ObjModelLoader;
 
 namespace ALight.Render.Mathematics
 {
+    [StructLayout(LayoutKind.Sequential)]
     public struct Vector3
     {
         private readonly float[] data;

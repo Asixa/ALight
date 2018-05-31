@@ -1,9 +1,11 @@
-﻿using ALight.Render.Components;
+﻿using System.Runtime.InteropServices;
+using ALight.Render.Components;
 using ALight.Render.Mathematics;
 using Random = ALight.Render.Mathematics.Random;
 
 namespace ALight.Render.Materials
 {
+    [StructLayout(LayoutKind.Sequential)]
     public struct ScatterRecord
     {
         public Ray specular_ray;
@@ -13,6 +15,7 @@ namespace ALight.Render.Materials
     }
     public abstract class Shader
     {
+        public bool BackCulling = true;
         protected static float Schlick(float cosine, float ref_idx)
         {
             var r0 = (1 - ref_idx) / (1 + ref_idx);
@@ -42,7 +45,11 @@ namespace ALight.Render.Materials
             return true;
         }
 
-        public static  Dielectirc Glass=new Dielectirc(1.5f);
+        public static  Dielectirc Glass=new Dielectirc(1.5f,new Color32(1,1,1));
+        public static Lambertian WhiteLambertion=new Lambertian(new ConstantTexture(Color32.White));
+        public static Lambertian GrayLambertion = new Lambertian(new ConstantTexture(new Color32(0.2f,0.2f,0.2f)));
+        public static Lambertian BlueLambertion = new Lambertian(new ConstantTexture(Color32.Blue));
+        public static Metal Sliver = new Metal(new ConstantTexture(Color32.White),0);
     }
 
     public class Metal : Shader
@@ -69,13 +76,29 @@ namespace ALight.Render.Materials
     public class Dielectirc : Shader
     {
         private readonly float ref_idx;
-        public Dielectirc(float ri) => ref_idx = ri;
 
+        public Dielectirc(float ri, Color32 c)
+        {
+            BackCulling = false;
+            ref_idx = ri;
+            color = c;
+        }
+        public Dielectirc(float ri)
+        {
+            BackCulling = false;
+            ref_idx = ri;
+            color = Color32.White;
+        }
+        public Color32 color;
         public override bool scatter(Ray rayIn, ref HitRecord hrec, ref ScatterRecord srec)
         {
             srec.is_specular = true;
             srec.pdf = null;
-            srec.attenuation = new Color32(1.0f, 1.0f, 1.0f);
+            //var origin = new Color32(1.0f, 1.0f, 1.0f);
+            //var result_c=new Color32(origin.r*color.r,,);
+            //srec.attenuation = new Color32(1.0f, 1.0f, 1.0f)*(color*color.a);
+            srec.attenuation = color;
+            //srec.attenuation.a = 1;
             Vector3 outward_normal;
             var reflected = Reflect(rayIn.direction, hrec.normal);
             var refracted=new Vector3(0);

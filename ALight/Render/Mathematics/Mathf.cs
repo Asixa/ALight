@@ -15,7 +15,22 @@ namespace ALight.Render.Mathematics
         public static float Tan(float f) => (float) Math.Tan(f);
         public static float Min(float a, float b) { return a < b ? a : b; }
         public static float Max(float a, float b) { return a > b ? a : b; }
-
+        public static float Lerp(float a, float b, float t)
+        {
+            if (t <= 0)return a;
+            if (t >= 1)return b;
+            return b * t + (1 - t) * a;
+        }
+        public static int Lerp(int a, int b, float t)
+        {
+            if (t <= 0) return a;
+            if (t >= 1) return b;
+            return (int)(b * t + (1 - t) * a+0.5f);
+        }
+        public static Point Lerp(Point a, Point b, float t)
+        {
+            return new Point(Lerp(a.x,b.x,t),Lerp(a.y,b.y,t));
+        }
         public static Vector3 RandomCosineDirection()
         {
             var r2 = Random.Get();

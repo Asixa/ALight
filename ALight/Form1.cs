@@ -16,11 +16,12 @@ namespace ALight
         {
             main = this;
             InitializeComponent();
-            progressBar1.Maximum = Configuration.divide*Configuration.divide;
+      
             renderer.chunk_end += (chunks) =>
             {
                 main.BeginInvoke(new Action(() =>
                 {
+                    progressBar1.Maximum = Configuration.divide_h * Configuration.divide_w;
                     main.SPP.Text = TimeSpan.FromSeconds((int) (DateTime.Now - main.StartTime).TotalSeconds).ToString();
                     main.progressBar1.Value = chunks;
                 }));

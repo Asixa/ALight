@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -10,8 +11,9 @@ using AcDx;
 using ALight.Render.Denoise;
 using ALight.Render.Mathematics;
 using ALight.Render.Scanners;
+using static  ALight.Render.Configuration;
 using Random = ALight.Render.Mathematics.Random;
-
+using Point=ALight.Render.Mathematics.Point;
 namespace ALight.Render
 {
     public enum Mode
@@ -22,103 +24,169 @@ namespace ALight.Render
     public class Renderer
     {
         public static Renderer main;
-      
-
         public delegate void ChunkEnd(int i);
 
         public ChunkEnd chunk_end;
         private Preview preview = new Preview();
         public float[] buff;
-        public float[] View_buff;
         public int[] Changes;
         public int FinishedChunks;
-        
+        public int[] scaned;
+        public int[] hit;
+        public List<Point> aliveBlocks=new List<Point>();
+        public byte[] previewUI;
+
+        public bool First;
         private float recip_width, recip_height;
-        public int now_sample = 0;
         public void InitPreview()
         {
             preview = new Preview();
-            preview.Run(new DxConfiguration("Preview", Configuration.width, Configuration.height));
+            preview.Run(new DxConfiguration("Preview", width, height));
         }
 
         public void Init()
         {
-   
             main = this;
-            recip_width = 1f / Configuration.width;
-            recip_height = 1f / Configuration.height;
-            buff = new float[Configuration.width * Configuration.height * 4];
-            Changes = new int[Configuration.width * Configuration.height];
-            View_buff=new float[Configuration.divide*Configuration.divide];
+            recip_width = 1f / width;
+            recip_height = 1f / height;
+            divide_w = width / block_size + 1;
+            divide_h = height / block_size + 1;
+            buff = new float[width * height * 4];
+            Changes = new int[width * height];
+            previewUI = new byte [width * height*4];
+            hit=new int[width*height];
+            scaned = new int[divide_w * divide_h];
+            for (var h = 0; h <divide_h; h++)
+            for (var w = 0; w < divide_w; w++)
+            aliveBlocks.Add(new Point(w,h));
+            for (var index = 0; index < scaned.Length; index++)scaned[index]= SPP;
             Scene.main.Init();
-            Start();
-            InitPreview();
+            Start(); 
         }
-
+     
         private async void Start()
         {
-            ThreadPool.SetMaxThreads(Configuration.divide* Configuration.divide, Configuration.divide * Configuration.divide);
-            //await Task.Factory.StartNew(delegate { LinearScanner(new ScannerConfig(height, width)); });
-            //for (var i = 0; i < Configuration.SPP; i += Configuration.SamplePerThread)
-            //    ThreadPool.QueueUserWorkItem(LinearScanner, new ScannerConfig(Configuration.height, Configuration.width));
 
-            var wp = Configuration.width / Configuration.divide;
-            var hp = Configuration.height / Configuration.divide;
-            for (var i = Configuration.divide - 1; i >= 0; i--)
-            for (var j = Configuration.divide - 1; j >= 0; j--)
-                ThreadPool.QueueUserWorkItem(LinearScanner,
-                    new ScannerConfig(hp * i, hp * (1 + i), wp * j, wp * (1 + j),i*Configuration.divide+(Configuration.divide-j)));
+            ThreadPool.SetMaxThreads(divide_w * divide_h, divide_w * divide_h);
+            for (var h = 0; h < divide_h; h++)
+            for (var w = 0; w < divide_w; w++)
+                ThreadPool.QueueUserWorkItem(Scanner,
+                    new ScannerConfig(w * block_size, h * block_size, h * divide_w + w, aliveBlocks[h * divide_w + w]));
+            InitPreview();
         }
-
-        private void LinearScanner(object o)
+        
+        private void Scanner(object o)
         {
             var config = (ScannerConfig) o;
-
-           Parallel.For(0, Configuration.SPP, a => {
-                for (var j = config.h; j < config.h2; j++)
-                for (var i = config.w; i < config.w2; i++)
+            for(;0< scaned[config.ID] ;)
+            {
+                if (scaned[config.ID] == SPP) SetPixelPriview(config, Color32.White);
+                for (var h = config.h; h < config.h + block_size; h++)
                 {
-                    var color = Configuration.mode == Mode.Diffusing
-                        ? DiffuseScanner.GetColor(Scene.main.camera.CreateRay(
-                            (i + Random.Get()) * recip_width,
-                            (j + Random.Get()) * recip_height), Scene.main.world, Scene.main.Important, 0).DeNaN()
-                        : NormalMapScanner.GetColor(Scene.main.camera.CreateRay(
-                            (i + Random.Get()) * recip_width,
-                            (j + Random.Get()) * recip_height), Scene.main.world);
-                    SetPixel(Configuration.width - i - 1, Configuration.height - j - 1, color);
+                    if (h >= height) continue;
+                    for (var w = config.w; w < config.w + block_size; w++)
+                    {
+                        if (w >= width) continue;
+                        var id = h * width + w;
+                        var color = mode == Mode.Diffusing
+                            ? DiffuseScanner.GetColor(Scene.main.camera.CreateRay(
+                                    (width - w + Random.Get()) * recip_width,
+                                    (height - h + Random.Get()) * recip_height, id), Scene.main.world,
+                                Scene.main.Important, 0).DeNaN()
+                            : NormalMapScanner.GetColor(Scene.main.camera.CreateRay(
+                                (width - w + Random.Get()) * recip_width,
+                                (height - h + Random.Get()) * recip_height, h * width + w), Scene.main.world);
+                        SetPixel(w, h, color);
+                    }
+                }
+                scaned[config.ID]--;
+                if (scaned[config.ID] == 0)
+                {
+                    FinishedChunks++;
+                    if (config.ID == divide_h * divide_h - 1)First = true;
+                    SetPixelPriview(config, Color32.Transparent);
+                    chunk_end?.Invoke(FinishedChunks);
+                    aliveBlocks.Remove(config.point);
+                    if (FinishedChunks == divide_w * divide_h)MessageBox.Show("渲染完成", "渲染器");
+                    else if (First)
+                    {
+                        var h = aliveBlocks[0].y;
+                        var w = aliveBlocks[0].x;
+                        ThreadPool.QueueUserWorkItem(Scanner, new ScannerConfig(w * block_size, h * block_size, h * divide_w + w, aliveBlocks[0]));
+                    }
+                }
+            } 
+        }
+
+        private void Scanner2(object o)
+        {
+            var config = (ScannerConfig)o;
+            Parallel.For(0, SPP, a =>
+            {
+                if (a == 0)
+                {
+                    SetPixelPriview(config, Color32.White);
+                }
+                for (var h = config.h; h < config.h + block_size; h++)
+                {
+                    if (h >= height) continue;
+                    for (var w = config.w; w < config.w + block_size; w++)
+                    {
+                        if (w >= width) continue;
+                        var id = h * width + w;
+                        var color = mode == Mode.Diffusing
+                            ? DiffuseScanner.GetColor(Scene.main.camera.CreateRay(
+                                    (width - w + Random.Get()) * recip_width,
+                                    (height - h + Random.Get()) * recip_height, id), Scene.main.world,
+                                Scene.main.Important, 0).DeNaN()
+                            : NormalMapScanner.GetColor(Scene.main.camera.CreateRay(
+                                (width - w + Random.Get()) * recip_width,
+                                (height - h + Random.Get()) * recip_height, h * width + w), Scene.main.world);
+                        SetPixel(w, h, color);
+                    }
                 }
 
-               if (a == Configuration.SPP - 1)
-               {
-                   FinishedChunks++;
-                   chunk_end?.Invoke(FinishedChunks);
-                   if (FinishedChunks == Configuration.divide * Configuration.divide)
-                       MessageBox.Show("渲染完成");
-               }
+
+                if (a == SPP - 1)
+                {
+                    FinishedChunks++;
+                    SetPixelPriview(config, Color32.Transparent);
+                    chunk_end?.Invoke(FinishedChunks);
+                    if (FinishedChunks == divide_w * divide_h)
+                        MessageBox.Show("渲染完成", "渲染器");
+                }
             });
+        }
+        private void SetPixelPriview(ScannerConfig config, Color32 c32)
+        {
+            void Set(int _x, int _y, Color32 c)
+            {
+                if (_x >= width || _y >= height) return;
+                var i = width * 4 * _y + _x * 4;
+                previewUI[i] = (byte)(c.r * 255);
+                previewUI[i + 1] = (byte)(c.g * 255);
+                previewUI[i + 2] = (byte)(c.b * 255);
+                previewUI[i + 3] = (byte)(c.a * 255);
+
+            }
+            for (var i = 0; i < block_size; i++)
+            {
+                for (var j = 0; j < 2; j++)
+                {
+                    Set(config.w + i, config.h + j, c32); //横着
+                    Set(config.w + i, config.h + block_size - j-1, c32); //横着
+                    if (i >= 10 && i <= block_size - 10) continue;
+                    Set(config.w + j, config.h + i, c32);
+                    Set(config.w + block_size - j, config.h + i, c32);
+                }
+            }
             
-            //for (var a = 0; a < Configuration.SPP; a++)
-            //{
-            //    for (var j = config.h; j < config.h2; j++)
-            //    for (var i = config.w; i < config.w2; i++)
-            //    {
-            //        var color = mode == Mode.Diffusing
-            //            ? DiffuseScanner.GetColor(Scene.main.camera.CreateRay(
-            //                (i + Random.Get()) * recip_width,
-            //                (j + Random.Get()) * recip_height), Scene.main.world, Scene.main.Important, 0).DeNaN()
-            //            : NormalMapScanner.GetColor(Scene.main.camera.CreateRay(
-            //                (i + Random.Get()) * recip_width,
-            //                (j + Random.Get()) * recip_height), Scene.main.world);
-            //        SetPixel(Configuration.width - i - 1, Configuration.height - j - 1, color);
-            //    }
-            //}
-            now_sample += Configuration.SamplePerThread;
         }
 
         private void SetPixel(int x, int y, Color32 c32)
         { 
-            var i = Configuration.width * 4 * y + x * 4;
-            Changes[Configuration.width * y + x]++;
+            var i = width * 4 * y + x * 4;
+            Changes[width * y + x]++;
             buff[i] += c32.r;
             buff[i + 1] += c32.g;
             buff[i + 2] += c32.b;
@@ -130,13 +198,14 @@ namespace ALight.Render
             if (!Directory.Exists("Output")) Directory.CreateDirectory("Output");
 
             int Get(int i)=> (byte)Mathf.Range(main.buff[i] * 255 / main.Changes[i / 4] + 0.5f, 0, 255f);
-            var pic = new Bitmap(Configuration.width, Configuration.height, PixelFormat.Format32bppArgb);
+            var pic = new Bitmap(width, height, PixelFormat.Format32bppArgb);
             for (var i = 0; i < main.buff.Length; i+=4)
             {
                 var c = Color.FromArgb(Get(i+3), Get(i), Get(i + 1), Get(i + 2));
-                pic.SetPixel(i % (Configuration.width*4)/4, i / (Configuration.width*4), c);
+                pic.SetPixel(i % (width*4)/4, i / (width*4), c);
             }
             pic.Save("Output/"+path);
+            MessageBox.Show( "Output/" + path, "保存完成");
         }
 
         #region Denoise

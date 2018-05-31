@@ -22,7 +22,7 @@ namespace ALight.Render.Scanners
         public static Color32 GetColor(Ray r, HitableList hitableList, Hitable importance, int depth)
         {
             var hrec = new HitRecord();
-            if (hitableList.Hit(r, 0.0001f, float.MaxValue, ref hrec))
+            if (hitableList.Hit(r, 0.00001f, float.MaxValue, ref hrec))
             {
                 //Console.WriteLine(hrec);
                 
@@ -40,8 +40,8 @@ namespace ALight.Render.Scanners
                 }
                 else return emitted;
             }
-
-            return Scene.main.sky.Value(r.direction.Normalized());
+            return Scene.main.SkyColor ? Scene.main.sky.Value(r.direction.Normalized()) : Color32.Black;
+      
             var t = 0.5f * r.normal_direction.y + 1f;
             return Scene.main.SkyColor ? (1 - t) * new Color32(2, 2, 2) + t * new Color32(0.5f, 0.7f, 1) : Color32.Black;
         }

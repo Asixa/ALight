@@ -36,13 +36,13 @@ namespace ALight.Render.Components
             return p.Normalized() * Random.Get();
         }
 
-        public Ray CreateRay(float x, float y)
+        public Ray CreateRay(float x, float y,int id)
         {
-            if (radius == 0f)return new Ray(position, low_left_corner + x * horizontal + y * vertical - position,time0 + Random.Get() * (time1 - time0));
+            if (radius == 0f)return new Ray(position, low_left_corner + x * horizontal + y * vertical - position,time0 + Random.Get() * (time1 - time0), id);
             var rd = radius * GetRandomPointInUnitDisk();
             var offset = rd.x * u + rd.y * v;
            
-            return new Ray(position + offset, low_left_corner + x * horizontal + y * vertical - position - offset, time0 + Random.Get() * (time1 - time0));
+            return new Ray(position + offset, low_left_corner + x * horizontal + y * vertical - position - offset, time0 + Random.Get() * (time1 - time0),id);
         }
     }
 }
