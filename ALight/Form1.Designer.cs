@@ -47,6 +47,7 @@
             // button1
             // 
             this.button1.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button1.ForeColor = System.Drawing.SystemColors.Control;
             this.button1.Location = new System.Drawing.Point(584, 14);
             this.button1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -71,6 +72,7 @@
             // button2
             // 
             this.button2.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button2.ForeColor = System.Drawing.SystemColors.Control;
             this.button2.Location = new System.Drawing.Point(153, 82);
             this.button2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -146,6 +148,7 @@
             // button4
             // 
             this.button4.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button4.ForeColor = System.Drawing.SystemColors.Control;
             this.button4.Location = new System.Drawing.Point(30, 91);
             this.button4.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -172,6 +175,7 @@
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Form1";
             this.Text = "ALight";
+            this.Shown += new System.EventHandler(this.Form1_Shown);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);

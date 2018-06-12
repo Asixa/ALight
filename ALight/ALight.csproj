@@ -162,6 +162,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="ALight.ruleset" />
     <None Include="Properties\Settings.settings">
@@ -186,6 +187,7 @@
   <ItemGroup>
     <Content Include="Images\ACEngine.ico" />
     <Content Include="FodyWeavers.xml" />
+    <Content Include="Images\save.png" />
     <Resource Include="Images\chese_dark.png" />
   </ItemGroup>
   <ItemGroup>

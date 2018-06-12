@@ -11,7 +11,7 @@ namespace ALight
         private readonly Renderer renderer=new Renderer();
         public Timer timer=new Timer();
         public DateTime StartTime;
-        private int seconds;
+        public int seconds;
         public Form1()
         {
             main = this;
@@ -22,10 +22,15 @@ namespace ALight
                 main.BeginInvoke(new Action(() =>
                 {
                     progressBar1.Maximum = Configuration.divide_h * Configuration.divide_w;
-                    main.SPP.Text = TimeSpan.FromSeconds((int) (DateTime.Now - main.StartTime).TotalSeconds).ToString();
+                    seconds = (int) (DateTime.Now - main.StartTime).TotalSeconds;
+                    main.SPP.Text = TimeSpan.FromSeconds(seconds).ToString();
+                    renderer.preview.TimeLabel.Text = main.SPP.Text;
                     main.progressBar1.Value = chunks;
                 }));
             };
+
+           // button1_Click(null, null);
+           //this.Hide();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -38,7 +43,7 @@ namespace ALight
 
         private void button2_Click(object sender, EventArgs e)
         {
-            renderer.Save("Result_"+DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss")+".png");
+            renderer.Save("Result_"+DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss")+"-T"+seconds+"s"+".png");
             
         }
 
@@ -52,6 +57,12 @@ namespace ALight
         {
             var a =new PreviewWindow();
             a.Show();
+        }
+
+        private void Form1_Shown(object sender, EventArgs e)
+        {
+            button1_Click(null, null);
+            Hide();
         }
     }
 }

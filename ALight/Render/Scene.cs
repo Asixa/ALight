@@ -18,15 +18,6 @@ namespace ALight.Render
 
         public void Init()
         {
-            string e = ".png";
-            string skyname = "Snow" + "/";
-            sky = new CubeMap(ResourceManager.SkyboxPath + skyname + "Front" + e,
-                ResourceManager.SkyboxPath + skyname + "Up" + e,
-                ResourceManager.SkyboxPath + skyname + "Left" + e,
-                ResourceManager.SkyboxPath + skyname + "Back" + e, ResourceManager.SkyboxPath + skyname + "Down" + e,
-                ResourceManager.SkyboxPath + skyname + "Right" + e);
-
-            //sky =new CubeMap(ResourceManager.SkyboxPath+"Saitama_park.jpg");
             //Sky();
             //Demo();
             //MC();
@@ -38,6 +29,21 @@ namespace ALight.Render
             //高考();
             //GlassTest();
             //Model();
+            LoadSky();
+
+            
+        }
+
+        public void LoadSky()
+        {
+            if (!SkyColor) return;
+            string e = ".png";
+            string skyname = "Snow" + "/";
+            sky = new CubeMap(ResourceManager.SkyboxPath + skyname + "Front" + e,
+                ResourceManager.SkyboxPath + skyname + "Up" + e,
+                ResourceManager.SkyboxPath + skyname + "Left" + e,
+                ResourceManager.SkyboxPath + skyname + "Back" + e, ResourceManager.SkyboxPath + skyname + "Down" + e,
+                ResourceManager.SkyboxPath + skyname + "Right" + e);
         }
 
         public void GlassTest()

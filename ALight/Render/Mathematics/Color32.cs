@@ -56,6 +56,9 @@ namespace ALight.Render.Mathematics
 
         public static Color32 operator /(Color32 a, float b) => new Color32(a.r / b, a.g / b, a.b / b, a.a / b);
 
+
+        public static bool operator ==(Color32 a, Color32 b) => (a.r==b.r&&a.g==b.g&&a.b==b.b&&a.a==b.a);
+        public static bool operator !=(Color32 a, Color32 b) => !(a.r == b.r && a.g == b.g && a.b == b.b && a.a == b.a);
         public static Color32 Lerp(Color32 a, Color32 b, float t) => new Color32(a.r + (b.r - a.r) * t,
             a.g + (b.g - a.g) * t, a.b + (b.b - a.b) * t, a.a + (b.a - a.a) * t);
         public  Color32 Normalized()

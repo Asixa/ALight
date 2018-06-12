@@ -30,7 +30,7 @@ namespace ALight.Render
 
         public ChunkEnd chunk_end;
         //private Preview preview = new Preview();
-        private PreviewWindow preview;
+        public PreviewWindow preview;
         public float[] buff;
         public int[] Changes;
         public int FinishedChunks;

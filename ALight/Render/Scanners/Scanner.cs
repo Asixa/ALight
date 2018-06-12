@@ -26,18 +26,22 @@ namespace ALight.Render.Scanners
             {
                 var srec = new ScatterRecord();
                 var emitted = hrec.shader.emitted(r, hrec, hrec.u, hrec.v, hrec.p);
-                if (depth < Configuration.MAX_SCATTER_TIME && hrec.shader.scatter(r, ref hrec, ref srec))
+                if (depth < Configuration.MAX_SCATTER_TIME )
                 {
-                    if (srec.is_specular)
-                        return srec.attenuation * GetColor(srec.specular_ray, Scene.main.world, importance, depth + 1);
-                    var plight = new HitablePdf(importance, hrec.p);
-                    var p = new MixturePdf(plight, srec.pdf);
-                    var scattered = new Ray(hrec.p, p.Generate(), r.time);
-                    var pdf = p.Value(scattered.direction);
-                    return emitted + srec.attenuation * hrec.shader.scattering_pdf(r, hrec, scattered) *
-                           GetColor(scattered, Scene.main.world, importance, depth + 1) / pdf;
+                    if (hrec.shader.scatter(r, ref hrec, ref srec))
+                    {
+                        if (srec.is_specular)
+                            return srec.attenuation *
+                                   GetColor(srec.specular_ray, Scene.main.world, importance, depth + 1);
+                        var p = new MixturePdf(new HitablePdf(importance, hrec.p), srec.pdf);
+                        var scattered = new Ray(hrec.p, p.Generate(), r.time);
+                        var pdf = p.Value(scattered.direction);
+                        return emitted + srec.attenuation * hrec.shader.scattering_pdf(r, hrec, scattered) *
+                               GetColor(scattered, Scene.main.world, importance, depth + 1) / pdf;
+                    }
+                    else return depth == 0 ? emitted.Aravge() : emitted;
                 }
-                else return depth==0?emitted.Aravge():emitted;
+                else  return depth==0?emitted.Aravge():emitted;
             }
             return Scene.main.SkyColor ? Scene.main.sky.Value(r.direction.Normalized()) : Color32.Black;
       
