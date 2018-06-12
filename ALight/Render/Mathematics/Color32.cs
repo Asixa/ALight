@@ -44,14 +44,11 @@ namespace ALight.Render.Mathematics
             return Color.FromArgb((int) (a * 255+0.5f), (int) (r * 255 + 0.5f), (int) (g * 255 + 0.5f), (int) (b * 255 +0.5f));
         }
 
-        public static Color32 operator +(Color32 a, Color32 b) =>
-            new Color32(a.r + b.r, a.g + b.g, a.b + b.b, a.a + b.a);
+        public static Color32 operator +(Color32 a, Color32 b) =>new Color32(a.r + b.r, a.g + b.g, a.b + b.b, a.a + b.a);
 
-        public static Color32 operator -(Color32 a, Color32 b) =>
-            new Color32(a.r - b.r, a.g - b.g, a.b - b.b, a.a - b.a);
+        public static Color32 operator -(Color32 a, Color32 b) =>new Color32(a.r - b.r, a.g - b.g, a.b - b.b, a.a - b.a);
 
-        public static Color32 operator *(Color32 a, Color32 b) =>
-            new Color32(a.r * b.r, a.g * b.g, a.b * b.b, a.a * b.a);
+        public static Color32 operator *(Color32 a, Color32 b) =>new Color32(a.r * b.r, a.g * b.g, a.b * b.b, a.a * b.a);
 
         public static Color32 operator *(Color32 a, float b) => new Color32(a.r * b, a.g * b, a.b * b, a.a * b);
 
@@ -66,6 +63,9 @@ namespace ALight.Render.Mathematics
             a = 1;
             return this;
         }
+
+        public Color32 Aravge()=>this/=a;
+        
         public static readonly Color32 
             Black = new Color32(0, 0, 0),
             Red = new Color32(1, 0, 0),

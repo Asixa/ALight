@@ -24,13 +24,12 @@ namespace ALight.Render.Scanners
             var hrec = new HitRecord();
             if (hitableList.Hit(r, 0.00001f, float.MaxValue, ref hrec))
             {
-                //Console.WriteLine(hrec);
-                
                 var srec = new ScatterRecord();
                 var emitted = hrec.shader.emitted(r, hrec, hrec.u, hrec.v, hrec.p);
                 if (depth < Configuration.MAX_SCATTER_TIME && hrec.shader.scatter(r, ref hrec, ref srec))
                 {
-                    if (srec.is_specular) return srec.attenuation * GetColor(srec.specular_ray, Scene.main.world, importance, depth + 1);
+                    if (srec.is_specular)
+                        return srec.attenuation * GetColor(srec.specular_ray, Scene.main.world, importance, depth + 1);
                     var plight = new HitablePdf(importance, hrec.p);
                     var p = new MixturePdf(plight, srec.pdf);
                     var scattered = new Ray(hrec.p, p.Generate(), r.time);
@@ -38,7 +37,7 @@ namespace ALight.Render.Scanners
                     return emitted + srec.attenuation * hrec.shader.scattering_pdf(r, hrec, scattered) *
                            GetColor(scattered, Scene.main.world, importance, depth + 1) / pdf;
                 }
-                else return emitted;
+                else return depth==0?emitted.Aravge():emitted;
             }
             return Scene.main.SkyColor ? Scene.main.sky.Value(r.direction.Normalized()) : Color32.Black;
       

@@ -19,7 +19,8 @@ namespace ALight.Render.Mathematics
             set => data[index] = value;
         }
         public Vector3(float x, float y, float z)=>data = new[] {x, y, z};
-        public Vector3(int a)=>data = new[] { 0f, 0f, 0f };
+        public Vector3(float a)=>data = new[] { a, a, a };
+
         public Vector3(Vector3 copy)=> data = new[] { copy.x, copy.y, copy.z };
         
         public float length() => Mathf.Sqrt(x * x + y * y + z * z);
@@ -65,6 +66,9 @@ namespace ALight.Render.Mathematics
         public float SqrtMagnitude => x * x + y * y + z * z;
 
         public static Vector3 operator -(Vector3 a) => new Vector3(-a.x, -a.y, -a.z);
+
+        public static Vector3 operator *(Vector3 lhs, Vector3 rhs) =>
+            new Vector3(lhs.x * rhs.x, lhs.y * rhs.y,lhs.z* rhs.z);
 
         public static bool operator ==(Vector3 lhs, Vector3 rhs) => SqrMagnitude(lhs - rhs) < 9.99999944E-11f;
 

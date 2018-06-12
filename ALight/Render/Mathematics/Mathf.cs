@@ -37,7 +37,6 @@ namespace ALight.Render.Mathematics
             var phi = 2 * PI * Random.Get();
             return new Vector3(Cos(phi) * 2 * Sqrt(r2), Sin(phi) * 2 * Sqrt(r2), Sqrt(1 - r2));
         }
-
         public static void Swap(ref float a, ref float b)
         {
             var c = a;

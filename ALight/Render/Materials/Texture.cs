@@ -1,4 +1,8 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Windows.Forms;
 using ALight.Render.Mathematics;
 
 namespace ALight.Render.Materials
@@ -32,7 +36,7 @@ namespace ALight.Render.Materials
     public class ImageTexture : Texture
     {
         private readonly byte[] data;
-        private readonly int w, h;
+        public readonly int w, h;
         private readonly float scale = 1;
         private readonly int dir;
         public ImageTexture(string file, float s = 1, int d = 0)
@@ -60,6 +64,31 @@ namespace ALight.Render.Materials
             w = x;
             h = y;
         }
+
+        public Color32 GetPixel(int x, int y)
+        {
+            if(x>=w)return Color32.Red;
+            if(y>=h)return Color32.Red;
+            //Console.WriteLine(w+"/"+h);
+            var i = w * 3 * y + x * 3;
+            return new Color32((int)(data[i] / 255f), (int) (data[i+1] / 255f), (int) (data[i+2] / 255f),1);
+        }
+        public void Save(string name)
+        {
+
+            if (!Directory.Exists("Output")) Directory.CreateDirectory("Output");
+
+            int Get(int i) => (byte) Mathf.Range(data[i] * 255 + 0.5f, 0, 255f);
+            var pic = new Bitmap(w, h, PixelFormat.Format32bppArgb);
+            for (var i = 0; i < data.Length; i += 4)
+            {
+                var c = Color.FromArgb(255, Get(i + 2), Get(i + 1), Get(i));
+                pic.SetPixel(i % (w * 4) / 4, i / (w * 4), c);
+            }
+
+            pic.Save("Output/" + name + ".png");
+        }
+
         public override Color32 Value(float u, float v, Vector3 p)
         {
             if (dir == 1)

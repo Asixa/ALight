@@ -7,8 +7,6 @@ using System.Threading.Tasks;
 using ALight.Render.Components;
 using ALight.Render.Materials;
 using ALight.Render.Mathematics;
-using ObjLoader.Loader.Data.Elements;
-using ObjLoader.Loader.Loaders;
 using ObjModelLoader;
 using Random = System.Random;
 
@@ -958,63 +956,65 @@ namespace ALight.Render.Instances
             };
     }
 
-    public class ObjModel
-    {
-        public static Hitable Load(string path,params Shader[] shaders)
-        {
-            var result = new ObjLoaderFactory().Create().Load(new FileStream(path, FileMode.Open));
-            List<Hitable> list=new List<Hitable>();
+    //public class ObjModel
+    //{
+    //    public static Hitable Load(string path,params Shader[] shaders)
+    //    {
+    //        var result = new ObjLoaderFactory().Create().Load(new FileStream(path, FileMode.Open));
+    //        List<Hitable> list=new List<Hitable>();
 
-            Vertex Get(FaceVertex face)
-            {
-                var v = result.Vertices[face.VertexIndex];
-                var n = result.Normals[face.NormalIndex];
-                var uv = result.Textures[face.TextureIndex];
-                return new Vertex(
-                    new Vector3(v.X, v.Y, v.Z),
-                    new Vector3(n.X, n.Y, n.Z),
-                    uv.X, uv.Y
-                );
-            }
+    //        Vertex Get(FaceVertex face)
+    //        {
+    //            var v = result.Vertices[face.VertexIndex];
+    //            var n = result.Normals[face.NormalIndex];
+    //            var uv = result.Textures[face.TextureIndex];
+    //            return new Vertex(
+    //                new Vector3(v.X, v.Y, v.Z),
+    //                new Vector3(n.X, n.Y, n.Z),
+    //                uv.X, uv.Y
+    //            );
+    //        }
 
-            int ig = 0;
-            for (var index = 0; index < result.Groups.Count; index++)
-            {
-                if (result.Groups[index].Faces.Count == 0)
-                {
-                    ig++;continue;}
-                Console.WriteLine("载入物体 "+index);
-                var triangles = new List<Triangle>();
+    //        int ig = 0;
+    //        for (var index = 0; index < result.Groups.Count; index++)
+    //        {
+    //            if (result.Groups[index].Faces.Count == 0)
+    //            {
+    //                ig++;continue;}
+    //            Console.WriteLine("载入物体 "+index);
+    //            var triangles = new List<Triangle>();
 
-                int i = 0;
+    //            int i = 0;
               
-                foreach (var f in result.Groups[index].Faces)
-                {
+    //            foreach (var f in result.Groups[index].Faces)
+    //            {
 
-                    Console.WriteLine("载入物体 " + index + "面"+ ++i+"/"+result.Groups[index].Faces.Count);
-                    if (f.Count == 4)
-                    {
-                        var v0 = Get(f[0]);
-                        var v1 = Get(f[1]);
-                        var v2 = Get(f[2]);
-                        triangles.Add(new Triangle(v0,v1 , v2,shaders[index-ig]));
+    //                Console.WriteLine("载入物体 " + index + "面"+ ++i+"/"+result.Groups[index].Faces.Count);
+    //                if (f.Count == 4)
+    //                {
+    //                    var v0 = Get(f[0]);
+    //                    var v1 = Get(f[1]);
+    //                    var v2 = Get(f[2]);
+    //                    triangles.Add(new Triangle(v0,v1 , v2,shaders[index-ig]));
 
-                        triangles.Add(new Triangle(Get(f[1]), Get(f[2]), Get(f[3]), shaders[index-ig]));
-                    }
-                }
+    //                    triangles.Add(new Triangle(Get(f[1]), Get(f[2]), Get(f[3]), shaders[index-ig]));
+    //                }
+    //            }
 
-                //list.Add(new BVHNode(triangles.ToArray(),triangles.Count,0,1));
-            }
+    //            //list.Add(new BVHNode(triangles.ToArray(),triangles.Count,0,1));
+    //        }
 
 
-            return new BVHNode(list.ToArray(), list.Count, 0, 1);
-        }
-    }
+    //        return new BVHNode(list.ToArray(), list.Count, 0, 1);
+    //    }
+    //}
 
 
     public class ByteModel
     {
-        public static Hitable Load(string path,Shader shader)
+   
+        public static Hitable Load(string path, Shader shader) => Load(path, shader, Vector3.one);
+        public static Hitable Load(string path,Shader shader,Vector3 scale)
         {
             var binary_reader = new BinaryReader(new FileStream(path, FileMode.Open));
             var count = binary_reader.ReadInt32();
@@ -1022,14 +1022,11 @@ namespace ALight.Render.Instances
             var vertices=new List<Vertex>();
             for (var i = 0; i < count; i++)
             {
-                var p=new Vector3(binary_reader.ReadSingle(), binary_reader.ReadSingle(), binary_reader.ReadSingle());
+                var p=new Vector3(binary_reader.ReadSingle(), binary_reader.ReadSingle(), binary_reader.ReadSingle())*scale;
                 var n = new Vector3(binary_reader.ReadSingle(), binary_reader.ReadSingle(), binary_reader.ReadSingle());
                 var uv = new Vector2(binary_reader.ReadSingle(), binary_reader.ReadSingle());
                 vertices.Add(new Vertex(p,n,uv.x,uv.y));
-               
             }
-            
-
             binary_reader.Close();
             return Mesh.Create(vertices.ToArray(), shader);
         }

@@ -1,7 +1,12 @@
-﻿namespace ALight.Render.Mathematics
+﻿using System;
+using System.Threading;
+
+namespace ALight.Render.Mathematics
 {
+
     public static class Random
     {
+        //[ThreadStatic]
         static long seed = 1;
         public static float Get()
         {
