@@ -76,12 +76,15 @@ namespace ALight.Render
         {
 
             ThreadPool.SetMaxThreads(divide_w * divide_h, divide_w * divide_h);
+            //ThreadPool.SetMaxThreads(1,1);
             //for (var h = 0; h < divide_h; h++)
             //for (var w = 0; w < divide_w; w++)
             //    ThreadPool.QueueUserWorkItem(Scanner,
             //        new ScannerConfig(w * block_size, h * block_size, h * divide_w + w, aliveBlocks[h * divide_w + w]));
             var seq = xxxxxxxxx(divide_w, divide_h);
             seq.Reverse();
+            
+           // for(int i=0;i<SPP;i++)
             foreach (var t in seq)
             {
                 ThreadPool.QueueUserWorkItem(Scanner,
@@ -89,6 +92,58 @@ namespace ALight.Render
             }
 
             InitPreview();
+        }
+
+        private void Scanner3(object o)
+        {
+            var config = (ScannerConfig)o;
+          
+                SetPixelPriview(config, Color32.White);
+
+            for (int i = 0; i < 4; i++)
+            {
+
+
+                for (var h = config.h; h < config.h + block_size; h++)
+                {
+                    if (h >= height) continue;
+                    for (var w = config.w; w < config.w + block_size; w++)
+                    {
+                        if (w >= width) continue;
+                        var id = h * width + w;
+                        var color = mode == Mode.Diffusing
+                            ? DiffuseScanner.GetColor(Scene.main.camera.CreateRay(
+                                    (width - w + Random.Get()) * recip_width,
+                                    (height - h + Random.Get()) * recip_height, id), Scene.main.world,
+                                Scene.main.Important, 0).DeNaN()
+                            : NormalMapScanner.GetColor(Scene.main.camera.CreateRay(
+                                (width - w + Random.Get()) * recip_width,
+                                (height - h + Random.Get()) * recip_height, h * width + w), Scene.main.world);
+                        SetPixel(w, h, color);
+                    }
+                }
+            }
+
+            scaned[config.ID]-=4;
+                if (scaned[config.ID] == 0)
+                {
+                    FinishedChunks++;
+                    if (config.ID == divide_h * divide_h - 1) First = true;
+                chunk_end?.Invoke(FinishedChunks);
+                    aliveBlocks.Remove(config.point);
+                    if (FinishedChunks == divide_w * divide_h) MessageBox.Show("渲染完成", "渲染器");
+                    else if (First)
+                    {
+                        var h = aliveBlocks[0].y;
+                        var w = aliveBlocks[0].x;
+                        //ThreadPool.QueueUserWorkItem(Scanner,
+                        //    new ScannerConfig(w * block_size, h * block_size, h * divide_w + w, aliveBlocks[0]));
+                    }
+                }
+
+            
+            SetPixelPriview(config, Color32.Transparent);
+
         }
 
         private void Scanner(object o)
@@ -298,8 +353,7 @@ namespace ALight.Render
                             x++;
                             state = 0;
                         }
-                        else
-                            y++;
+                        else y++;
 
                         break;
                 }

@@ -1028,7 +1028,13 @@ namespace ALight.Render.Instances
                 vertices.Add(new Vertex(p,n,uv.x,uv.y));
             }
             binary_reader.Close();
-            return Mesh.Create(vertices.ToArray(), shader);
+            
+
+            //
+            var a = Mesh.Create(vertices.ToArray(), shader);
+            shader.special = a;
+            return a;
+            //return Mesh.Create(vertices.ToArray(), shader);
         }
     }
 }

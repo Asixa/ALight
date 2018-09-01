@@ -39,7 +39,6 @@ namespace ALight.Render.Components
         public abstract bool BoundingBox(float t0, float t1,ref AABB box);
         public virtual float PdfValue(Vector3 o, Vector3 v) => 0;
         public virtual Vector3 Random(Vector3 o)=>new Vector3(1,0,0);
-
         protected static AABB GetBox(AABB box0, AABB box1)
         {
             var small = new Vector3(
@@ -315,6 +314,7 @@ namespace ALight.Render.Components
                 if (boundary.Hit(ray, rec1.t + 0.0001f, float.MaxValue, ref rec2))
                 {
                     rec1.t = Mathf.Range(rec1.t, t_min, t_max);
+
                     if (rec1.t < t_min) rec1.t = t_min;
                     if (rec2.t > t_max) rec2.t = t_max;
                     if (rec1.t >= rec2.t) return false;

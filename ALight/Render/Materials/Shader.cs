@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 using ALight.Render.Components;
 using ALight.Render.Mathematics;
 using Random = ALight.Render.Mathematics.Random;
@@ -15,6 +16,7 @@ namespace ALight.Render.Materials
     }
     public abstract class Shader
     {
+        public Hitable special;
         public bool BackCulling = true;
         protected static float Schlick(float cosine, float ref_idx)
         {
@@ -141,6 +143,74 @@ namespace ALight.Render.Materials
         }
     }
 
+    public class Subsurface : Shader
+    {
+        private readonly float ref_idx,fuzz,density;
+        public Color32 color;
+        public Subsurface(float ri, Color32 c, float glossy)
+        {
+            BackCulling = false;
+            ref_idx = ri;
+            color = c;
+            fuzz = glossy;
+        }
+
+        public override bool scatter(Ray rayIn, ref HitRecord hrec, ref ScatterRecord srec)
+        {
+            srec.is_specular = true;
+            srec.pdf = null;
+            srec.attenuation = color;
+            Vector3 outward_normal;
+            var reflected = Reflect(rayIn.direction, hrec.normal);
+            var refracted = new Vector3(0);
+            float ni_over_nt;
+            float cosine;
+            if (Vector3.Dot(rayIn.direction, hrec.normal) > 0)
+            {
+                outward_normal = -hrec.normal;
+                ni_over_nt = ref_idx;
+                cosine = ref_idx * Vector3.Dot(rayIn.direction, hrec.normal) / rayIn.direction.length();
+            }
+            else
+            {
+                outward_normal = hrec.normal;
+                ni_over_nt = 1.0f / ref_idx;
+                cosine = -Vector3.Dot(rayIn.direction, hrec.normal) / rayIn.direction.length();
+            }
+
+            var reflect_prob = Refract(rayIn.direction, outward_normal, ni_over_nt, ref refracted)
+                ? Schlick(cosine, ref_idx)
+                : 1.0f;
+
+
+            //if (Random.Get() < reflect_prob)
+            //{
+            //    srec.specular_ray = new Ray(hrec.p, reflected + fuzz * GetRandomPointInUnitSphere());
+            //}
+            //else
+            //{
+
+            //    var rec2=new HitRecord();
+            //    var refracetRay = new Ray(hrec.p, refracted);
+            //    if (special.Hit(refracetRay, 0.0001f, float.MaxValue, ref rec2))
+            //    {
+            //        Console.WriteLine("HEY");
+            //        float distance_inside_boundary = (rec2.t - hrec.t) * rayIn.direction.length();
+            //        float hit_distance = -(1 / density) * Mathf.Log(Random.Get());
+            //        if (hit_distance < distance_inside_boundary)
+            //        {
+            //            srec.specular_ray=new Ray(refracetRay.GetPoint( hit_distance / rayIn.direction.length()),GetRandomPointInUnitSphere() );
+            //            return true;
+            //        }
+            //    }
+            //}
+
+            srec.specular_ray = Random.Get() < reflect_prob
+                ? new Ray(hrec.p, reflected + fuzz * GetRandomPointInUnitSphere())
+                : new Ray(hrec.p, refracted + fuzz * GetRandomPointInUnitSphere());
+            return true;
+        }
+    }
     public class DiffuseLight : Shader
     {
         private readonly Texture texture;

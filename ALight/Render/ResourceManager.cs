@@ -11,5 +11,6 @@ namespace ALight.Render
         public static string ModelPath = "Resources/Model/";
         public static string TexturePath = "Resources/Textures/Demo/";
         public static string SkyboxPath = "Resources/Textures/Sky/";
+        public static string ScenePath;
     }
 }

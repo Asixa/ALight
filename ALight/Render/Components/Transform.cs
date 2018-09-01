@@ -11,6 +11,5 @@ namespace ALight.Render.Components
     {
         public Vector3 position, scale, rotation;
         public GameObject gameobject;
-
     }
 }

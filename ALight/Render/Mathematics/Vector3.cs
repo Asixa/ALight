@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using ObjModelLoader;
@@ -21,7 +22,12 @@ namespace ALight.Render.Mathematics
         public Vector3(float x, float y, float z)=>data = new[] {x, y, z};
         public Vector3(float a)=>data = new[] { a, a, a };
 
-        public Vector3(Vector3 copy)=> data = new[] { copy.x, copy.y, copy.z };
+        //public Vector3(Vector3 copy)=> data = new[] { copy.x, copy.y, copy.z };
+        public Vector3(Vector3 copy)
+        {
+            //Console.WriteLine(copy);
+            data = new[] {copy.x, copy.y, copy.z};
+        }
         
         public float length() => Mathf.Sqrt(x * x + y * y + z * z);
 
