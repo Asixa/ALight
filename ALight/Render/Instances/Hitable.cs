@@ -292,7 +292,9 @@ namespace ALight.Render.Components
     {
         private Hitable boundary;
         private float density;
+#pragma warning disable CS0649 // 从未对字段“ConstantMedium.phase_function”赋值，字段将一直保持其默认值 null
         private Shader phase_function;
+#pragma warning restore CS0649 // 从未对字段“ConstantMedium.phase_function”赋值，字段将一直保持其默认值 null
 
         public ConstantMedium(Hitable b, float d, Texture a)
         {

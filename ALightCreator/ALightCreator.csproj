@@ -126,6 +126,7 @@
     <Compile Include="Features\SceneView\Scene.xaml.cs">
       <DependentUpon>Scene.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Panels\RendererPreivew.xaml.cs">
       <DependentUpon>RendererPreivew.xaml</DependentUpon>
     </Compile>

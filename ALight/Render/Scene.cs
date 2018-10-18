@@ -50,10 +50,10 @@ namespace ALight.Render
             //CornellBox();
             //ByteModels();
             //Bunny();
-            // Dragon();
-            BDCornellBox();
+             //Dragon();
+            //BDCornellBox();
 
-            //CornellBox18();
+            CornellBox18();
             //高考();
             //GlassTest();
             //Model();
@@ -145,9 +145,9 @@ namespace ALight.Render
             //list.Add(new Translate(new PlaneXZ(-5, 5, -5, 5, -0.5f, new Metal(new ImageTexture(ResourceManager.TexturePath + "TexturesCom_WoodPlanksBare0467_2_seamless_S.jpg", 1), 0.08f)), new Vector3(1, 0, 0)));
             var g = new Dielectirc(1.5f, new Color32(0, 1f, 0, 1f));
             var inside = new Metal(new ConstantTexture(new Color32(0f, 0.6f, 01f)), 0);
-            var model =new Translate(new RotateY(ShaderBall.Create(new Subsurface(1.5f,Color32.White, 0.0f), inside, inside),+20),new Vector3(0,-0.5f,0));
+            //var model =new Translate(new RotateY(ShaderBall.Create(new Subsurface(1.5f,Color32.White, 0.0f), inside, inside),+20),new Vector3(0,-0.5f,0));
 
-            //var model = new Translate(ByteModel.Load(ResourceManager.ModelPath + "/ByteModel/Bunny.ACM",inside),new Vector3(-0f,-1.2f,0));
+            var model = new Translate(ByteModel.Load(ResourceManager.ModelPath + "/ByteModel/Bunny.ACM",inside),new Vector3(-0f,-1.2f,0));
             //var model = new RotateY(new Translate(car(), new Vector3(-0f, -0.5f, 0)), 90);
             var cube = new Translate(new Mesh(Instances.Model.Cube, new DiffuseLight(new ConstantTexture(new Color32(1,1,1)),10)).Create(), new Vector3(0, 0, -4));
             
@@ -357,7 +357,7 @@ namespace ALight.Render
                     new Cube(
                         new Vector3(0, 0, 0),
                         new Vector3(165, 330, 165),
-                        material), 15)
+                        glass), 15)
                 , new Vector3(265, 0, 295));
             var cube2 = new Translate(new RotateY(
                     new Cube(
@@ -368,7 +368,7 @@ namespace ALight.Render
             //list.Add(cube1);
             //list.Add(cube2);
             var model = new RotateY(new Translate(ByteModel.Load(ResourceManager.ModelPath + "/ByteModel/Bunny.ACM",
-               new Subsurface(1.5f,Color32.Green, 0.05f)
+               new Subsurface(1.5f,Color32.White, 0.05f)
                
                 , new Vector3(100)),new Vector3(-307.5f, 30, -277.5f)),180);
             list.Add(model);

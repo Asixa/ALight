@@ -7,7 +7,11 @@ using ObjModelLoader;
 namespace ALight.Render.Mathematics
 {
     [StructLayout(LayoutKind.Sequential)]
+#pragma warning disable CS0661 // “Vector3”定义运算符 == 或运算符 !=，但不重写 Object.GetHashCode()
+#pragma warning disable CS0660 // “Vector3”定义运算符 == 或运算符 !=，但不重写 Object.Equals(object o)
     public struct Vector3
+#pragma warning restore CS0660 // “Vector3”定义运算符 == 或运算符 !=，但不重写 Object.Equals(object o)
+#pragma warning restore CS0661 // “Vector3”定义运算符 == 或运算符 !=，但不重写 Object.GetHashCode()
     {
         private readonly float[] data;
         public float x {get => data[0];set => data[0] = value;}

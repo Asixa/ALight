@@ -145,7 +145,9 @@ namespace ALight.Render.Materials
 
     public class Subsurface : Shader
     {
+#pragma warning disable CS0169 // 从不使用字段“Subsurface.density”
         private readonly float ref_idx,fuzz,density;
+#pragma warning restore CS0169 // 从不使用字段“Subsurface.density”
         public Color32 color;
         public Subsurface(float ri, Color32 c, float glossy)
         {

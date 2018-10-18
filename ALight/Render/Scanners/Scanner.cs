@@ -45,7 +45,9 @@ namespace ALight.Render.Scanners
             }
             return Scene.main.SkyColor ? Scene.main.sky.Value(r.direction.Normalized()) : Color32.Black;
       
+#pragma warning disable CS0162 // 检测到无法访问的代码
             var t = 0.5f * r.normal_direction.y + 1f;
+#pragma warning restore CS0162 // 检测到无法访问的代码
             return Scene.main.SkyColor ? (1 - t) * new Color32(2, 2, 2) + t * new Color32(0.5f, 0.7f, 1) : Color32.Black;
         }
     }

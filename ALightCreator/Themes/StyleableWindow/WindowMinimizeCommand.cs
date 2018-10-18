@@ -16,7 +16,9 @@ namespace ADK.StyleableWindow
             return true;
         }
 
+#pragma warning disable CS0067 // 从不使用事件“WindowMinimizeCommand.CanExecuteChanged”
         public event EventHandler CanExecuteChanged;
+#pragma warning restore CS0067 // 从不使用事件“WindowMinimizeCommand.CanExecuteChanged”
 
         public void Execute(object parameter)
         {

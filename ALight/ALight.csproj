@@ -103,6 +103,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Editor\PointBitmap.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="PreviewWindow.cs">
       <SubType>Form</SubType>
     </Compile>

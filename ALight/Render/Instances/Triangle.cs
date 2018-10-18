@@ -10,7 +10,7 @@ namespace ALight.Render.Instances
         public Vertex v0, v1, v2;
         private Vector3 Gnormal;
         public Shader shader;
-
+        const float EPSILON = 1e-4f;
         public Triangle(Vertex a, Vertex b, Vertex c, Shader shader)
         {
             v0 = a;//a
@@ -68,7 +68,6 @@ namespace ALight.Render.Instances
         private bool Intersects(Vector3 ray_origin,Vector3 ray_dir,out Vector3 point)
         {
             point=new Vector3();
-            const float EPSILON = 1e-4f;
             var edge1 = v1.point - v0.point;
             var edge2 = v2.point - v0.point;
             var h = Vector3.Cross(ray_dir,edge2); 

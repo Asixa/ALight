@@ -2,7 +2,11 @@
 
 namespace ALight.Render.Mathematics
 {
+#pragma warning disable CS0660 // “Color32”定义运算符 == 或运算符 !=，但不重写 Object.Equals(object o)
+#pragma warning disable CS0661 // “Color32”定义运算符 == 或运算符 !=，但不重写 Object.GetHashCode()
     public struct Color32
+#pragma warning restore CS0661 // “Color32”定义运算符 == 或运算符 !=，但不重写 Object.GetHashCode()
+#pragma warning restore CS0660 // “Color32”定义运算符 == 或运算符 !=，但不重写 Object.Equals(object o)
     {
         public  float r, b, g, a;
 
