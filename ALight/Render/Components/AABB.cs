@@ -31,10 +31,8 @@ namespace ALight.Render.Components
                     (max[a] - r.origin[a]) / r.direction[a]);
                 tmin = Mathf.Max(t0, tmin);
                 tmax = Mathf.Min(t1, tmax);
-                if (tmax <= tmin)
-                {
-                    return false;
-                }
+                if (tmax <= tmin)return false;
+                
 
                 //float invD = 1.0f / r.direction[a];
                 //float t0 = (min[a] - r.origin[a] * invD);

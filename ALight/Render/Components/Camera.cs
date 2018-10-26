@@ -10,24 +10,25 @@ namespace ALight.Render.Components
         private readonly float radius;
         private readonly float time0,time1;
         public Vector3 direction;
-        public Camera(Vector3 lookFrom, Vector3 lookat, Vector3 vup, float vfov, float aspect, 
-            float r = 0,float focus_dist = 1,float t0=0,float t1=0)
+
+        public Camera(Vector3 lookFrom, Vector3 lookat, Vector3 vup, float vfov, float aspect,
+            float r = 0, float focus_dist = 1, float Shuttertime = 0)
         {
             direction = (lookat - lookFrom).Normalized();
-            time0 = t0;
-            time1 = t1;
+            time0 = 0;
+            time1 = Shuttertime;
             radius = r * 0.5f;
             var unit_angle = Mathf.PI / 180f * vfov;
             var half_height = Mathf.Tan(unit_angle * 0.5f);
             var half_width = aspect * half_height;
             position = lookFrom;
-             w = (lookat - lookFrom).Normalized();
-             u = Vector3.Cross(vup, w).Normalized();
-             v = Vector3.Cross(w, u).Normalized();
+            w = (lookat - lookFrom).Normalized();
+            u = Vector3.Cross(vup, w).Normalized();
+            v = Vector3.Cross(w, u).Normalized();
             low_left_corner = lookFrom + w - half_width * u - half_height * v;
             horizontal = 2 * half_width * u;
             vertical = 2 * half_height * v;
-            
+
         }
 
         private static Vector3 GetRandomPointInUnitDisk()

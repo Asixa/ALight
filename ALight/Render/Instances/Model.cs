@@ -26,22 +26,35 @@ namespace ALight.Render.Instances
                 var point = model.points[index];
                 vertices[i] = new Vertex(point, model.norlmas[i], model.uvs[i].x, model.uvs[i].y);
             }
+
+
+
+            for (var i = 0; i < vertices.Length; i += 3)
+            {
+                // Edges of the triangle : position delta
+                var deltaPos1 = vertices[i + 1].point - vertices[i + 0].point;
+                var deltaPos2 = vertices[i + 2].point - vertices[i + 0].point;
+
+                // UV delta
+                var deltaUV1 = vertices[i + 1].uv - vertices[i + 0].uv;
+                var deltaUV2 = vertices[i + 2].uv - vertices[i + 0].uv;
+
+                var r = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
+                var tangent = (deltaPos1 * deltaUV2.y - deltaPos2 * deltaUV1.y) * r;
+                var bitangent = (deltaPos2 * deltaUV1.x - deltaPos1 * deltaUV2.x) * r;
+
+                vertices[i + 0].tangent = vertices[i + 1].tangent = vertices[i + 2].tangent = tangent;
+                vertices[i + 0].bitangent = vertices[i + 1].bitangent = vertices[i + 2].bitangent = bitangent;
+            }
         }
 
         public Hitable Create() => Create(vertices,shader);
 
         public static Hitable Create(Vertex[] vertices,Shader shader)
         {
-            //Console.WriteLine("______________________");
             var list = new List<Hitable>();
             for (var i = 0; i < vertices.Length / 3; i++)
-            {
-                //Console.WriteLine("-----");
-                //Console.WriteLine("顶点 " + vertices[3 * i].point + " " + vertices[3 * i].normal + " " + vertices[3 * i].uv);
-                //Console.WriteLine("顶点 " + vertices[3 * i+1].point + " " + vertices[3 * i+1].normal + " " + vertices[3 * i+1].uv);
-                //Console.WriteLine("顶点 " + vertices[3 * i+2].point + " " + vertices[3 * i+2].normal + " " + vertices[3 * i+2].uv);
                 list.Add(new Triangle(vertices[3 * i], vertices[3 * i + 1], vertices[3 * i + 2], shader));
-            }
             return new BVHNode(list.ToArray(), list.Count, 0, 1);
         }
 
@@ -66,6 +79,7 @@ namespace ALight.Render.Instances
         public Vector3 point;
         public Vector2 uv;
         public Vector3 normal;
+        public Vector3 tangent, bitangent;
 
         public Vertex(Vector3 point, Vector3 normal, float u, float v)
         {
@@ -1028,8 +1042,25 @@ namespace ALight.Render.Instances
                 vertices.Add(new Vertex(p,n,uv.x,uv.y));
             }
             binary_reader.Close();
-            
 
+            for (var i = 0; i < vertices.Count; i += 3)
+            {
+                // Edges of the triangle : position delta
+                var deltaPos1 = vertices[i + 1].point - vertices[i + 0].point;
+                var deltaPos2 = vertices[i + 2].point - vertices[i + 0].point;
+
+                // UV delta
+                var deltaUV1 = vertices[i + 1].uv - vertices[i + 0].uv;
+                var deltaUV2 = vertices[i + 2].uv - vertices[i + 0].uv;
+
+                var r = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
+                var tangent = (deltaPos1 * deltaUV2.y - deltaPos2 * deltaUV1.y) * r;
+                var bitangent = (deltaPos2 * deltaUV1.x - deltaPos1 * deltaUV2.x) * r;
+
+                vertices[i + 0].tangent = vertices[i + 1].tangent = vertices[i + 2].tangent = tangent;
+                vertices[i + 0].bitangent = vertices[i + 1].bitangent = vertices[i + 2].bitangent = bitangent;
+
+            }
             //
             var a = Mesh.Create(vertices.ToArray(), shader);
             shader.special = a;

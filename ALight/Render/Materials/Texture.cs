@@ -33,6 +33,13 @@ namespace ALight.Render.Materials
         public override Color32 Value(float u, float v, Vector3 p)=>Mathf.Sin(10 * p.x) * Mathf.Sin(10 * p.y) * Mathf.Sin(10 * p.z) <= 0?odd.Value(u,v,p):even.Value(u,v,p);
     }
 
+    public class GrayTexture : Texture
+    {
+        private readonly Color32 color;
+        public GrayTexture(float v) => color = new Color32(v,v,v);
+        public override Color32 Value(float u, float v, Vector3 p) => color;
+    }
+
     public class ImageTexture : Texture
     {
         private readonly byte[] data;

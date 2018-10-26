@@ -16,7 +16,7 @@ namespace ALight.Render.Components
         public Vector3 p;
         public Vector3 normal;
         public Shader shader;
-
+        public Vector3 bitangent,tangent;
         public HitRecord(HitRecord copy)
         {
             t = 0;
@@ -25,6 +25,8 @@ namespace ALight.Render.Components
             p = copy.p;
             normal = copy.normal;
             shader = copy.shader;
+            bitangent = copy.bitangent;
+            tangent = copy.tangent;
         }
 
         public override string ToString()
@@ -218,6 +220,8 @@ namespace ALight.Render.Components
             return true;
         }
     }
+
+
     public class RotateY : Hitable
     {
         private readonly AABB bbox = new AABB();

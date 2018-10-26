@@ -53,7 +53,41 @@ namespace ALight.Render.Materials
         public static Lambertian BlueLambertion = new Lambertian(new ConstantTexture(Color32.Blue));
         public static Metal Sliver = new Metal(new ConstantTexture(Color32.White),0);
     }
+    public class StardardShader : Shader
+    {
+        private readonly Texture texture;
+        private readonly Texture reflective;
+        private readonly Texture normal_texture;
 
+        public StardardShader(Texture diff, Texture normal, Texture reflective)
+        {
+            this.normal_texture = normal;
+            this.reflective = reflective;
+            texture = diff;
+        }
+
+        public override bool scatter(Ray rayIn, ref HitRecord hrec, ref ScatterRecord srec)
+        {
+            var fx = Vector3.Cross(hrec.tangent, hrec.normal);
+            var trans=new Matrix3x3(new[,]
+            {
+                {fx.x,hrec.tangent.x,hrec.normal.x },
+                {fx.y,hrec.tangent.y,hrec.normal.y },
+                {fx.z,hrec.tangent.z,hrec.normal.z}
+            });
+            var normal = (trans * -normal_texture.Value(hrec.u, hrec.v, hrec.p).ToNormal().Normalized()).Normalized();
+
+            if(Configuration.mode==Mode.NormalMap)hrec.normal = normal;
+
+            var reflected = Reflect(rayIn.direction.Normalized(), normal);
+            var fuzz = reflective?.Value(hrec.u, hrec.v, hrec.p).toGray() ?? 1f;
+            srec.specular_ray = new Ray(hrec.p, reflected + fuzz * GetRandomPointInUnitSphere());
+            srec.attenuation = texture.Value(hrec.u, hrec.v, hrec.p);
+            srec.is_specular = true;
+            srec.pdf = null;
+            return true;
+        }
+    }
     public class Metal : Shader
     {
         private readonly Texture texture;

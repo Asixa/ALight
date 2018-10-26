@@ -1,0 +1,42 @@
+{
+  //Scene
+  "Camera": {
+    //"position": [ 1, 1, 1 ],
+    //"rotation": [ 90, 0, 0 ],
+    "lookFrom": [ -1, 1, -1 ],
+    "lookAt": [ 0, 0, 0 ],
+    "FOV": 60,
+    "radius": 0,
+    "focus": 1,
+    "shutter": 1
+  },
+  "Sky": "Materials/Sky.json",
+  "Materials": {
+    "m1": "Materials/Material1.json",
+    "light": "Materials/Light.json"
+  },
+  "Objects": {
+    "cube": {
+      "type": "cube",
+      "important": false,
+      "file": "/xxx.xxx",
+      "position": [ 0, 0, 0 ],
+      "rotation": [ 90, 0, 0 ],
+      "scale": [ 1, 1, 1 ],
+      "material": [ "m1" ]
+    },
+    "sphere": {
+      "type": "sphere",
+      "important": true,
+      "position": [ 1, 1, 0 ],
+      "rotation": [ 90, 0, 0 ],
+      "scale": [ 1, 1, 1 ],
+      "radius": 0.5,
+      "material": [ "light" ]
+    }
+  }
+
+  
+
+
+}

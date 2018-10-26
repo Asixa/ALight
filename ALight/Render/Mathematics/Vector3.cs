@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using Newtonsoft.Json.Linq;
 using ObjModelLoader;
 
 namespace ALight.Render.Mathematics
@@ -41,6 +42,9 @@ namespace ALight.Render.Mathematics
         }
 
         public float Magnitude() => Mathf.Sqrt(x * x + y * y + z * z);
+
+        public static Vector3 FromList(List<float> t)=>new Vector3(t[0],t[1],t[2]);
+        
 
         public Vector3 Normalized()
         {

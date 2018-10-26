@@ -1,4 +1,5 @@
 ﻿
+using System;
 using ALight.Render.Components;
 using ALight.Render.Materials;
 using ALight.Render.Mathematics;
@@ -10,14 +11,61 @@ namespace ALight.Render.Instances
         public Vertex v0, v1, v2;
         private Vector3 Gnormal;
         public Shader shader;
+        public Vector3 UVY;
         const float EPSILON = 1e-4f;
         public Triangle(Vertex a, Vertex b, Vertex c, Shader shader)
         {
+            var fx = Vector3.Cross(a.tangent, a.normal);
+            var trans = new Matrix3x3(new[,]
+            {
+                {fx.x,a.tangent.x,a.normal.x },
+                {fx.y,a.tangent.y,a.normal.y },
+                {fx.z,a.tangent.z,a.normal.z}
+            });
+
+            Console.WriteLine(trans*new Vector3(0,0,-1)+ " ----- [c_x]"+fx+" [B]"+a.bitangent +" [T]"  +b.tangent+" [Normal]"+a.normal);
             v0 = a;//a
             v1 = b;//b
             v2 =c; //c
             Gnormal =( a.normal+b.normal+c.normal)/3;
             this.shader = shader;
+        }
+
+        void SetUVY()
+        {
+            if (v0.uv.y == v1.uv.y)
+            {
+                if (v0.uv.y < v2.uv.y)
+                {
+                    //todo v2 为顶
+                }
+                else
+                {
+                    //todo v2 为底
+                }
+            }
+            else if (v0.uv.y == v2.uv.y)
+            {
+                if (v0.uv.y < v1.uv.y)
+                {
+                    //todo v1 为顶
+                }
+                else
+                {
+                    //todo v1 为底
+                }
+            }
+            else if (v2.uv.y == v1.uv.y)
+            {
+                if (v2.uv.y < v0.uv.y)
+                {
+                    //todo v0 为顶
+                }
+                else
+                {
+                    //todo v0 为底
+                }
+            }
         }
 
         Vector2 GetUV(Vector3 p,out Vector3 normal)
@@ -37,6 +85,8 @@ namespace ALight.Render.Instances
             return uv;
         }
 
+    
+
         public override bool Hit(Ray r, float t_min, float t_max, ref HitRecord rec)
         {
             if(shader.BackCulling&&Vector3.Dot(Gnormal,r.direction)>=0)return false;
@@ -48,6 +98,8 @@ namespace ALight.Render.Instances
             rec.normal = p;
             rec.u = uvw.x;
             rec.v = uvw.y;
+            rec.bitangent = v0.bitangent;
+            rec.tangent = v0.tangent;
             return true;
         }
 

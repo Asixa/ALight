@@ -30,16 +30,17 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
     <CodeAnalysisRuleSet>ALight.ruleset</CodeAnalysisRuleSet>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -60,6 +61,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>ALight.ruleset</CodeAnalysisRuleSet>
     <Optimize>false</Optimize>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
@@ -83,6 +85,10 @@
     <ApplicationIcon>Images\ACEngine.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -127,6 +133,7 @@
     <Compile Include="Render\Materials\Material.cs" />
     <Compile Include="Render\Materials\Texture.cs" />
     <Compile Include="Render\Materials\CubeMap.cs" />
+    <Compile Include="Render\Mathematics\Matrix3x3.cs" />
     <Compile Include="Render\Mathematics\Onb.cs" />
     <Compile Include="Render\Mathematics\Pdf.cs" />
     <Compile Include="Render\Mathematics\Perlin.cs" />
@@ -145,7 +152,7 @@
     <Compile Include="Render\Instances\Plane.cs" />
     <Compile Include="Render\Instances\Sphere.cs" />
     <Compile Include="Render\Renderer.cs" />
-    <Compile Include="Render\ResourceManager.cs" />
+    <Compile Include="Render\Resource\ResourceManager.cs" />
     <Compile Include="Render\Scanners\Scanner.cs" />
     <Compile Include="Render\Scanners\ScannerConfig.cs" />
     <Compile Include="Render\Scene.cs" />
@@ -175,6 +182,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Render\Material.json" />
+    <None Include="Render\Scene.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

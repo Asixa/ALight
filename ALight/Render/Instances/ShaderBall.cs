@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ALight.Render.Components;
 using ALight.Render.Materials;
+using ALight.Render.Resource;
 
 namespace ALight.Render.Instances
 {

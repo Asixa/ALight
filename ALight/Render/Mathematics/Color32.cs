@@ -48,6 +48,22 @@ namespace ALight.Render.Mathematics
             return Color.FromArgb((int) (a * 255+0.5f), (int) (r * 255 + 0.5f), (int) (g * 255 + 0.5f), (int) (b * 255 +0.5f));
         }
 
+        public Vector3 ToNormal()
+        {
+            var _r = r * 2 - 1;
+            var _g = g * 2 - 1;
+            //var _b = -(b - 0.5f) * 2;
+            var _b = -(b - 0.5f) * 2;
+            if (Mathf.Abs(_r)< 0.01) _r = 0;
+            if (Mathf.Abs(_g) < 0.01) _g = 0;
+            if (Mathf.Abs(_b) < 0.01) _b = 0;
+            return new Vector3(_g,-_r,_b);
+        }
+
+        public float toGray()
+        {
+            return (r + g + b) / 3f;
+        }
         public static Color32 operator +(Color32 a, Color32 b) =>new Color32(a.r + b.r, a.g + b.g, a.b + b.b, a.a + b.a);
 
         public static Color32 operator -(Color32 a, Color32 b) =>new Color32(a.r - b.r, a.g - b.g, a.b - b.b, a.a - b.a);
