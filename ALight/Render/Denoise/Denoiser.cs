@@ -15,7 +15,7 @@ namespace ALight.Render.Denoise
         {
             if (File.Exists(input_image))
             {
-                if (Directory.Exists(output_image.Substring(0, output_image.LastIndexOf('\\'))))
+                if (Directory.Exists(Path.GetDirectoryName(output_image)))
                 {
                     input_files = new IntPtr[1];
                     output_files = new IntPtr[1];

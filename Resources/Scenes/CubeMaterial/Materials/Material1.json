@@ -1,8 +1,9 @@
 {
   "type": "standard",
   "data": [
-    "Material1/11724-diffuse.jpg",
-    "Material1/11724-normal.jpg",
-    "Material1/11724-reflectiveocclusion.jpg"
+    "Textures/default.png",
+    "Textures/Normal2.png",
+    "Textures/white.bmp",
+    "Textures/bricks2_disp.jpg"
   ]
 }

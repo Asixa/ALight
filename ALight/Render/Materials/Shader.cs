@@ -16,7 +16,6 @@ namespace ALight.Render.Materials
     }
     public abstract class Shader
     {
-        public Hitable special;
         public bool BackCulling = true;
         protected static float Schlick(float cosine, float ref_idx)
         {
@@ -55,34 +54,84 @@ namespace ALight.Render.Materials
     }
     public class StardardShader : Shader
     {
-        private readonly Texture texture;
+        private readonly Texture albeo;
         private readonly Texture reflective;
         private readonly Texture normal_texture;
-
-        public StardardShader(Texture diff, Texture normal, Texture reflective)
+        private readonly Texture height_texture;
+        private  readonly float height_scale=-1;
+        public StardardShader(Texture diff, Texture normal, Texture reflective,Texture height_texture=null)
         {
             this.normal_texture = normal;
             this.reflective = reflective;
-            texture = diff;
+            this.height_texture =height_texture;
+            albeo = diff;
         }
+//        Vector2 ParallaxMapping(float u,float v, Vector3 viewDir)
+//        {
+//            var height = height_texture.Value(u,v,new Vector3(0)).r;
+//            var p = new Vector2(viewDir.x,viewDir.y) / viewDir.z * (height * height_scale);
+//            return new Vector2(u,v) - p;
+//        }
 
+        Vector2 ParallaxMapping(float u, float v, Vector3 viewDir)
+        {
+            const float numLayers = 10;
+            // calculate the size of each layer
+            var layerDepth = 1.0f / numLayers;
+            // depth of current layer
+            var currentLayerDepth = 0.0f;
+            // the amount to shift the texture coordinates per layer (from vector P)
+            var P = new Vector2(viewDir.x,viewDir.y) * height_scale;
+            var deltaTexCoords = P / numLayers;
+
+            var currentTexCoords = new Vector2(u,v);
+            var currentDepthMapValue = height_texture.Value(u, v, new Vector3(0)).r;
+
+            while (currentLayerDepth < currentDepthMapValue)
+            {
+                // shift texture coordinates along direction of P
+                currentTexCoords -= deltaTexCoords;
+                // get depthmap value at current texture coordinates
+                currentDepthMapValue = height_texture.Value(currentTexCoords.x, currentTexCoords.y, new Vector3(0)).r;
+                // get depth of next layer
+                currentLayerDepth += layerDepth;
+            }
+
+            var prevTexCoords = currentTexCoords + deltaTexCoords;
+
+            // get depth after and before collision for linear interpolation
+            var afterDepth = currentDepthMapValue - currentLayerDepth;
+            var beforeDepth = height_texture.Value(prevTexCoords.x, prevTexCoords.y, new Vector3(0)).r - currentLayerDepth + layerDepth;
+
+            // interpolation of texture coordinates
+            var weight = afterDepth / (afterDepth - beforeDepth);
+            Vector2 finalTexCoords = prevTexCoords * weight + currentTexCoords * (1.0f - weight);
+
+            return finalTexCoords;
+        }
         public override bool scatter(Ray rayIn, ref HitRecord hrec, ref ScatterRecord srec)
         {
-            var fx = Vector3.Cross(hrec.tangent, hrec.normal);
-            var trans=new Matrix3x3(new[,]
-            {
-                {fx.x,hrec.tangent.x,hrec.normal.x },
-                {fx.y,hrec.tangent.y,hrec.normal.y },
-                {fx.z,hrec.tangent.z,hrec.normal.z}
-            });
-            var normal = (trans * -normal_texture.Value(hrec.u, hrec.v, hrec.p).ToNormal().Normalized()).Normalized();
 
+            var rotate_maritx = new Matrix3x3(-hrec.bitangent, hrec.tangent, hrec.normal);
+            var rotate_maritx2 = new Matrix3x3(hrec.bitangent, hrec.tangent, hrec.normal);
+            var viewin = (Matrix3x3.FromDouble(Matrix3x3.MatrixInverse(rotate_maritx2.toDouble()))
+             * -rayIn.normal_direction).Normalized();
+        
+            var uv=new Vector2(hrec.u, hrec.v);
+
+//            if (height_texture!=null)
+//                uv = ParallaxMapping(hrec.u, hrec.v, viewin);
+            uv.Range0_1();
+           
+            //Vector3.Cross(hrec.tangent, hrec.normal)
+
+            var normal = (rotate_maritx* -normal_texture.Value(uv.x, uv.y, hrec.p).ToNormal().Normalized()).Normalized();
             if(Configuration.mode==Mode.NormalMap)hrec.normal = normal;
 
             var reflected = Reflect(rayIn.direction.Normalized(), normal);
-            var fuzz = reflective?.Value(hrec.u, hrec.v, hrec.p).toGray() ?? 1f;
+            var fuzz = reflective?.Value(uv.x, uv.y, hrec.p).toGray() ?? 1f;
             srec.specular_ray = new Ray(hrec.p, reflected + fuzz * GetRandomPointInUnitSphere());
-            srec.attenuation = texture.Value(hrec.u, hrec.v, hrec.p);
+            srec.attenuation = albeo.Value(uv.x, uv.y, hrec.p);
             srec.is_specular = true;
             srec.pdf = null;
             return true;

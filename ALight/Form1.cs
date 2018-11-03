@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Windows.Forms;
 using ALight.Render;
 using Timer = System.Timers.Timer;
@@ -10,59 +11,40 @@ namespace ALight
         public static Form1 main;
         private readonly Renderer renderer=new Renderer();
         public Timer timer=new Timer();
+        public System.Windows.Forms.Timer splash = new System.Windows.Forms.Timer();
         public DateTime StartTime;
         public int seconds;
         public Form1()
         {
+            //Hide();
             main = this;
             InitializeComponent();
-      
+            splash.Interval = 1000;
+          
+            splash.Tick += delegate (object sender, EventArgs e) {
+                StartTime = DateTime.Now;
+                timer.Start();
+                new PreviewWindow().Show();
+                Hide();
+                //renderer.Init();
+                splash.Stop();
+                splash.Dispose();
+            };
+            splash.Start();
+
             renderer.chunk_end += (chunks) =>
             {
                 main.BeginInvoke(new Action(() =>
                 {
-                    progressBar1.Maximum = Configuration.divide_h * Configuration.divide_w;
-                    seconds = (int) (DateTime.Now - main.StartTime).TotalSeconds;
-                    main.SPP.Text = TimeSpan.FromSeconds(seconds).ToString();
-                    renderer.preview.TimeLabel.Text = main.SPP.Text;
-                    main.progressBar1.Value = chunks;
+                    seconds = (int)(DateTime.Now - main.StartTime).TotalSeconds;
+                    PreviewWindow.main.TimeLabel.Text = (DateTime.Now - main.StartTime).ToString();
                 }));
             };
-
-           // button1_Click(null, null);
-           //this.Hide();
         }
-
-        private void button1_Click(object sender, EventArgs e)
+        private void Form1_Load(object sender, EventArgs e)
         {
-            StartTime=DateTime.Now;
-            timer.Start();
-            button1.Enabled = false;
-            renderer.Init();
+        
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            renderer.Save("Result_"+DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss")+"-T"+seconds+"s"+".png");
-            
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            
-            renderer.InitPreview();
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-            var a =new PreviewWindow();
-            a.Show();
-        }
-
-        private void Form1_Shown(object sender, EventArgs e)
-        {
-            button1_Click(null, null);
-            Hide();
-        }
     }
 }

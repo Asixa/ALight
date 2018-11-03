@@ -1,0 +1,9 @@
+{
+  "type": "standard",
+  "data": [
+    "Textures/Davis/Color1_a.png",
+    "Textures/Davis/NormalMap.png",
+    "Textures/Davis/ref.png",
+    "Textures/bricks2_disp.jpg"
+  ]
+}

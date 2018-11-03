@@ -1,0 +1,9 @@
+{
+  "type": "standard",
+  "data": [
+    "Textures/Davis/TexturesCom_Paint_MachineVintage_512_albedo.tif",
+    "Textures/Davis/TexturesCom_Paint_MachineVintage_512_normal.tif",
+    "Textures/Davis/TexturesCom_Paint_MachineVintage_512_roughness.tif",
+    "Textures/bricks2_disp.jpg"
+  ]
+}

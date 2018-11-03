@@ -1,0 +1,9 @@
+{
+  "type": "standard",
+  "data": [
+    "Textures/Davis/TexturesCom_Tiles_Subway_512_albedo.tif",
+    "Textures/Davis/TexturesCom_Tiles_Subway_512_normal.tif",
+    "Textures/Davis/TexturesCom_Tiles_Subway_512_roughness.tif",
+    "Textures/bricks2_disp.jpg"
+  ]
+}

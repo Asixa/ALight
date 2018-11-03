@@ -3,35 +3,103 @@
   "Camera": {
     //"position": [ 1, 1, 1 ],
     //"rotation": [ 90, 0, 0 ],
-    "lookFrom": [ -1, 1, -1 ],
+    "lookFrom": [ 2.3, 1.28, 3 ],
     "lookAt": [ 0, 0, 0 ],
     "FOV": 60,
     "radius": 0,
     "focus": 1,
     "shutter": 1
   },
-  "Sky": "Materials/Sky.json",
+  "Sky": "Materials/Sky_road.json",
   "Materials": {
     "m1": "Materials/Material1.json",
+    //  "m2": "Materials/Material2.json",
+    "black": "Materials/Black.json",
+    "blue": "Materials/Blue.json",
+    "orange": "Materials/Orange.json",
+    "glass": "Materials/Glass.json",
     "light": "Materials/Light.json"
   },
   "Objects": {
+
+
     "cube": {
-      "type": "cube",
+      "type": "model",
       "important": false,
-      "file": "/xxx.xxx",
+      "file": "Models/sportsCar.acmodel",
       "position": [ 0, 0, 0 ],
       "rotation": [ 90, 0, 0 ],
       "scale": [ 1, 1, 1 ],
-      "material": [ "m1" ]
+      "material": [
+        "glass",
+        "black",
+        "black",
+        "black",
+        "black",
+
+        "black",
+        "black",
+        "black",
+        "blue",
+        "black",
+
+        "black",
+        "black",
+        "black",
+        "glass",
+        "black",
+
+        "black",
+        "black",
+        "black",
+        "black",
+        "black",
+
+        "black",
+        "black",
+        "black",
+        "black",
+        "black",
+
+        "black",
+        "black",
+        "black",
+        "black",
+        "black",
+
+        "black",
+        "orange",
+        "black",
+        "black",
+        "black",
+
+        "black",
+        "black",
+        "black"
+      ]
     },
+
+    //"cube": {
+    //  "type": "model",
+    //  "important": false,
+    //  "file": "Models/cube1.acmodel",
+    //  "position": [ 0, 0, 0 ],
+    //  "rotation": [ 90, 0, 0 ],
+    //  "scale": [ 1, 1, 1 ],
+    //  "material": [
+    //    "glass",
+    //    "m1"
+
+    //  ]
+    //},
+
     "sphere": {
       "type": "sphere",
       "important": true,
-      "position": [ 1, 1, 0 ],
+      "position": [ 10, 6, 2 ],
       "rotation": [ 90, 0, 0 ],
       "scale": [ 1, 1, 1 ],
-      "radius": 0.5,
+      "radius": 1,
       "material": [ "light" ]
     }
   }

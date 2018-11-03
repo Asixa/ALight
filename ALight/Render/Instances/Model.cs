@@ -999,7 +999,7 @@ namespace ALight.Render.Instances
     //            var triangles = new List<Triangle>();
 
     //            int i = 0;
-              
+
     //            foreach (var f in result.Groups[index].Faces)
     //            {
 
@@ -1024,48 +1024,118 @@ namespace ALight.Render.Instances
     //}
 
 
+    //    public class ByteModel
+    //    {
+    //        public static Hitable Load(string path, Shader shader) => Load(path, shader, Vector3.one);
+    //        public static Hitable Load(string path,Shader shader,Vector3 scale)
+    //        {
+    //            var binary_reader = new BinaryReader(new FileStream(path, FileMode.Open));
+    //            var count = binary_reader.ReadInt32();
+    //
+    //            var vertices=new List<Vertex>();
+    //            for (var i = 0; i < count; i++)
+    //            {
+    //                var p=new Vector3(binary_reader.ReadSingle(), binary_reader.ReadSingle(), binary_reader.ReadSingle())*scale;
+    //                var n = new Vector3(binary_reader.ReadSingle(), binary_reader.ReadSingle(), binary_reader.ReadSingle());
+    //                var uv = new Vector2(binary_reader.ReadSingle(), binary_reader.ReadSingle());
+    //                vertices.Add(new Vertex(p,n,uv.x,uv.y));
+    //            }
+    //            binary_reader.Close();
+    //
+    //            for (var i = 0; i < vertices.Count; i += 3)
+    //            {
+    //                // Edges of the triangle : position delta
+    //                var deltaPos1 = vertices[i + 1].point - vertices[i + 0].point;
+    //                var deltaPos2 = vertices[i + 2].point - vertices[i + 0].point;
+    //
+    //                // UV delta
+    //                var deltaUV1 = vertices[i + 1].uv - vertices[i + 0].uv;
+    //                var deltaUV2 = vertices[i + 2].uv - vertices[i + 0].uv;
+    //
+    //                var r = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
+    //                var tangent = (deltaPos1 * deltaUV2.y - deltaPos2 * deltaUV1.y) * r;
+    //                var bitangent = (deltaPos2 * deltaUV1.x - deltaPos1 * deltaUV2.x) * r;
+    //
+    //                vertices[i + 0].tangent = vertices[i + 1].tangent = vertices[i + 2].tangent = tangent;
+    //                vertices[i + 0].bitangent = vertices[i + 1].bitangent = vertices[i + 2].bitangent = bitangent;
+    //
+    //            }
+    //            //
+    //            var a = Mesh.Create(vertices.ToArray(), shader);
+    //            shader.special = a;
+    //            return a;
+    //            //return Mesh.Create(vertices.ToArray(), shader);
+    //        }
+    //    }
+
     public class ByteModel
     {
-   
-        public static Hitable Load(string path, Shader shader) => Load(path, shader, Vector3.one);
-        public static Hitable Load(string path,Shader shader,Vector3 scale)
+        public static Hitable Load(string path, Shader[] shader) => Load(path, shader, Vector3.one);
+        public static Hitable Load(string path, Shader[] shader, Vector3 scale)
+        {
+            var modellist=new List<Hitable>();
+            var binary_reader = new BinaryReader(new FileStream(path, FileMode.Open));
+            var typecode = binary_reader.ReadString();
+            var objectcount = binary_reader.ReadInt32();
+
+            for (int j = 0; j < objectcount; j++)
+            {
+                var materialID = binary_reader.ReadInt32();
+                var count = binary_reader.ReadInt32();
+                var vertices = new List<Vertex>();
+                for (var i = 0; i < count; i++)
+                {
+                    var p = new Vector3(binary_reader.ReadSingle(), binary_reader.ReadSingle(),
+                                binary_reader.ReadSingle()) * scale;
+                    var n = new Vector3(binary_reader.ReadSingle(), binary_reader.ReadSingle(),
+                        binary_reader.ReadSingle());
+                    var uv = new Vector2(binary_reader.ReadSingle(), binary_reader.ReadSingle());
+                    vertices.Add(new Vertex(p, n, uv.x, uv.y));
+                }
+                //binary_reader.Close();
+                for (var i = 0; i < vertices.Count; i += 3)
+                {
+                    // Edges of the triangle : position delta
+                    var deltaPos1 = vertices[i + 1].point - vertices[i + 0].point;
+                    var deltaPos2 = vertices[i + 2].point - vertices[i + 0].point;
+
+                    // UV delta
+                    var deltaUV1 = vertices[i + 1].uv - vertices[i + 0].uv;
+                    var deltaUV2 = vertices[i + 2].uv - vertices[i + 0].uv;
+
+                    var r = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
+                    var tangent = (deltaPos1 * deltaUV2.y - deltaPos2 * deltaUV1.y) * r;
+                    var bitangent = (deltaPos2 * deltaUV1.x - deltaPos1 * deltaUV2.x) * r;
+
+                    vertices[i + 0].tangent = vertices[i + 1].tangent = vertices[i + 2].tangent = tangent;
+                    vertices[i + 0].bitangent = vertices[i + 1].bitangent = vertices[i + 2].bitangent = bitangent;
+
+                }
+
+                //
+                modellist.Add(Mesh.Create(vertices.ToArray(), shader[materialID]));
+            }
+            binary_reader.Close();
+            return new BVHNode(modellist.ToArray(),modellist.Count,0,1);
+            //return Mesh.Create(vertices.ToArray(), shader);
+        }
+
+
+        public static Hitable LoadOld(string path, Shader shader, Vector3 scale)
         {
             var binary_reader = new BinaryReader(new FileStream(path, FileMode.Open));
             var count = binary_reader.ReadInt32();
-
-            var vertices=new List<Vertex>();
+            var vertices = new List<Vertex>();
             for (var i = 0; i < count; i++)
             {
-                var p=new Vector3(binary_reader.ReadSingle(), binary_reader.ReadSingle(), binary_reader.ReadSingle())*scale;
+                var p = new Vector3(binary_reader.ReadSingle(), binary_reader.ReadSingle(), binary_reader.ReadSingle()) * scale;
                 var n = new Vector3(binary_reader.ReadSingle(), binary_reader.ReadSingle(), binary_reader.ReadSingle());
                 var uv = new Vector2(binary_reader.ReadSingle(), binary_reader.ReadSingle());
-                vertices.Add(new Vertex(p,n,uv.x,uv.y));
+                vertices.Add(new Vertex(p, n, uv.x, uv.y));
             }
             binary_reader.Close();
-
-            for (var i = 0; i < vertices.Count; i += 3)
-            {
-                // Edges of the triangle : position delta
-                var deltaPos1 = vertices[i + 1].point - vertices[i + 0].point;
-                var deltaPos2 = vertices[i + 2].point - vertices[i + 0].point;
-
-                // UV delta
-                var deltaUV1 = vertices[i + 1].uv - vertices[i + 0].uv;
-                var deltaUV2 = vertices[i + 2].uv - vertices[i + 0].uv;
-
-                var r = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
-                var tangent = (deltaPos1 * deltaUV2.y - deltaPos2 * deltaUV1.y) * r;
-                var bitangent = (deltaPos2 * deltaUV1.x - deltaPos1 * deltaUV2.x) * r;
-
-                vertices[i + 0].tangent = vertices[i + 1].tangent = vertices[i + 2].tangent = tangent;
-                vertices[i + 0].bitangent = vertices[i + 1].bitangent = vertices[i + 2].bitangent = bitangent;
-
-            }
-            //
-            var a = Mesh.Create(vertices.ToArray(), shader);
-            shader.special = a;
-            return a;
-            //return Mesh.Create(vertices.ToArray(), shader);
+            return Mesh.Create(vertices.ToArray(), shader);
         }
     }
 }
+

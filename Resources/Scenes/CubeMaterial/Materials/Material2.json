@@ -1,0 +1,9 @@
+{
+  "type": "standard",
+  "data": [
+    "Textures/13191-diffuse.jpg",
+    "Textures/13191-normal.jpg",
+    "Textures/13191-reflectiveocclusion.jpg",
+    "Textures/13191-reflectiveocclusion.jpg"
+  ]
+}

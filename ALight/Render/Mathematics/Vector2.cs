@@ -59,6 +59,14 @@ namespace ALight.Render.Mathematics
 
         public static Vector2 operator -(Vector2 a) => new Vector2(-a.x, -a.y);
 
+        public Vector2 Range0_1()
+        {
+            if (x > 1) x -= (int) x; //1.2 - 1
+            if (y > 1) y -= (int) y; 
+            if (x < 1) x -= (int)x-1f;  //-2.2 -(-2)
+            if (y < 1) y -= (int) y - 1;
+            return this;
+        }
         //public static bool operator ==(Vector2 lhs, Vector2 rhs) => Vector2.SqrMagnitude(lhs - rhs) < 9.99999944E-11f;
 
         //public static bool operator !=(Vector2 lhs, Vector2 rhs) => !(lhs == rhs);

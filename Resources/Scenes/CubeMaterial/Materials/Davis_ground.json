@@ -1,0 +1,14 @@
+{
+  //"type": "standard",
+  //"data": [
+  //  "Textures/Davis/TexturesCom_Pavement_Sidewalk_512_albedo.tif",
+  //  "Textures/Davis/TexturesCom_Pavement_Sidewalk_512_normal.tif",
+  //  "Textures/Davis/TexturesCom_Pavement_Sidewalk_512_roughness.tif",
+  //  "Textures/bricks2_disp.jpg"
+  //]
+
+  "type": "metal",
+  "data": [
+    "Textures/default.png",1
+  ]
+}

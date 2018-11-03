@@ -1,0 +1,93 @@
+{
+  //Scene
+  "Camera": {
+    //"position": [ 1, 1, 1 ],
+    //"rotation": [ 90, 0, 0 ],
+    "lookFrom": [ -8, 1,42 ],
+    "lookAt": [ 10, 12, 20 ],
+    "FOV": 60,
+    "radius": 0,
+    "focus": 1,
+    "shutter": 1
+  },
+  "Sky": "Materials/Sky_1.json",
+  "Materials": {
+    "m1": "Materials/Material1.json",
+    "black": "Materials/Black.json",
+    "blue": "Materials/Blue.json",
+    "white": "Materials/White.json",
+    "orange": "Materials/Orange.json",
+    "glass": "Materials/Glass.json",
+    "light": "Materials/Light.json",
+
+
+    "davis_1": "Materials/Davia_1.json",
+    "davis_2": "Materials/Davia_2.json",
+    "davis_3": "Materials/Davia_3.json",
+    "davis_4": "Materials/Davia_4.json",
+    "davis_5": "Materials/Davia_5.json",
+    "davis_6": "Materials/Davia_6.json",
+    "davis_7": "Materials/Davia_7.json",
+    "davis_g": "Materials/Davis_ground.json",
+    "davis_w": "Materials/Davia_window2.json",
+    "mirror": "Materials/mirror.json"
+  },
+  "Objects": {
+
+
+    "back": {
+      "type": "model",
+      "important": false,
+      "file": "Models/AAA2015.acmodel",
+      "position": [ 40, 0, 40 ],
+      "rotation": [ 0, 180, 0 ],
+      "scale": [ 1, 1, 1 ],
+      "material": [
+        "davis_1", //0
+        "davis_6", //1
+        "mirror", //2
+        "davis_w", //3
+        "davis_w", //4
+        "davis_4", //5
+
+
+        "davis_3", //6
+        "davis_5", //7
+        "davis_2", //8
+        "davis_5",
+        "m1",
+        "mirror",
+        "davis_7",
+        "light",
+        "black",
+        "black"
+      ]
+    },
+    "ground": {
+      "type": "model",
+      "important": false,
+      "file": "Models/DavisGround.acmodel",
+      "position": [ 40, 0, 40 ],
+      "rotation": [ 0, 180, 0 ],
+      "scale": [ 1, 1, 1 ],
+      "material": [ "davis_g" ]
+    },
+
+    "light": {
+      "type": "model",
+      "important": true,
+      "file": "Models/Testlight.acmodel",
+      "position": [ 40, 0, 40 ],
+      "rotation": [ 0, 0, 0 ],
+      "scale": [ 5, 6.1, 5 ],
+      "material": [ "light" ]
+    }
+
+
+
+  }
+
+  
+
+
+}

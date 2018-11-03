@@ -1,0 +1,121 @@
+{
+  //Scene
+  "Camera": {
+    //"position": [ 1, 1, 1 ],
+    //"rotation": [ 90, 0, 0 ],
+    "lookFrom": [ 0, 0.5, -1 ],
+    "lookAt": [ 0, 0, 2 ],
+    "FOV": 60,
+    "radius": 0,
+    "focus": 1,
+    "shutter": 1
+  },
+  "Sky": "Materials/Sky_snow.json",
+  "Materials": {
+    "m1": "Materials/Material1.json",
+    "black": "Materials/Black.json",
+    "blue": "Materials/Blue.json",
+    "white": "Materials/White.json",
+    "orange": "Materials/Orange.json",
+    "glass": "Materials/Glass.json",
+    "light": "Materials/Light.json"
+  },
+  "Objects": {
+
+
+    "back": {
+      "type": "model",
+      "important": false,
+      "file": "Models/testbackground.acmodel",
+      "position": [ 0, 0, 0 ],
+      "rotation": [ 0, 0, 0 ],
+      "scale": [ 1, 1, 1 ],
+      "material": [
+        "m1"
+      ]
+    },
+    "light": {
+      "type": "model",
+      "important": true,
+      "file": "Models/Testlight.acmodel",
+      "position": [ 0, 0, 0 ],
+      "rotation": [0, 0, 0 ],
+      "scale": [ 1, 1, 1 ],
+      "material": [ "light" ]
+    },
+
+    "dragon": {
+      "type": "Oldmodel",
+      "important": false,
+      "file": "Models/Dragon.ACM",
+      "position": [ 1.3, -0.5, 1.5 ],
+      "rotation": [0, 165, 0 ],
+      "scale": [ 0.4, 0.4, 0.4 ],
+      "material": [
+        "orange"
+      ]
+    },
+
+    "car": {
+      "type": "model",
+      "important": false,
+      "file": "Models/sportsCar.acmodel",
+      "position": [ -1.6, -0.5,3 ],
+      "rotation": [ 0, 135, 0 ],
+      "scale": [ 1, 1, 1 ],
+      "material": [
+        "glass",
+        "black",
+        "black",
+        "black",
+        "black",
+
+        "black",
+        "black",
+        "black",
+        "blue",
+        "black",
+
+        "black",
+        "black",
+        "black",
+        "glass",
+        "black",
+
+        "black",
+        "black",
+        "black",
+        "black",
+        "black",
+
+        "black",
+        "black",
+        "black",
+        "black",
+        "black",
+
+        "black",
+        "black",
+        "black",
+        "black",
+        "black",
+
+        "black",
+        "orange",
+        "black",
+        "black",
+        "black",
+
+        "black",
+        "black",
+        "black"
+      ]
+    }
+
+
+  }
+
+  
+
+
+}

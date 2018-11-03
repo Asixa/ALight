@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 using ALight.Render.Components;
 using ALight.Render.Mathematics;
 using Newtonsoft.Json;
@@ -22,9 +23,10 @@ namespace ALight
         static void Main()
         {
 
-
+            
+       
             //GCSettings.LatencyMode = GCLatencyMode.NoGCRegion;
-
+            //Console.Title = "ALight by XingYu Chen";
             GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
             // GC.TryStartNoGCRegion(10000000);
             Application.EnableVisualStyles();

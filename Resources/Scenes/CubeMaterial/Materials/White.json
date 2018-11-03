@@ -1,0 +1,6 @@
+{
+  "type": "Lambertian",
+  "data": [
+    "Textures/white.bmp"
+  ]
+}
