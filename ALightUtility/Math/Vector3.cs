@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
-using Newtonsoft.Json.Linq;
-using ObjModelLoader;
-
 namespace ALight.Render.Mathematics
 {
     [StructLayout(LayoutKind.Sequential)]
@@ -98,9 +95,5 @@ namespace ALight.Render.Mathematics
 
         public static Vector3 zero = new Vector3(0, 0, 0);
         public static Vector3 one = new Vector3(1, 1, 1);
-
-        public static Vector3 FromObj(ObjVector3 v) =>  v==null?new Vector3(0): new Vector3(v.x, v.y, v.z);
-
-        public static List<Vector3> FromObj(ObjVector3[] v) => v.Select(FromObj).ToList();
     }
 }

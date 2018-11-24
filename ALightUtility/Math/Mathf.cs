@@ -2,7 +2,7 @@
 
 namespace ALight.Render.Mathematics
 {
-    public class Mathf
+    public static class Mathf
     {
         public const float PI = 3.14159274f;
         public static float Sqrt(float v) => (float) Math.Sqrt(Convert.ToDouble(v));

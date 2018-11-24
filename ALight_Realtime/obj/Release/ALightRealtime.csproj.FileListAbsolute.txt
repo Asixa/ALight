@@ -1,0 +1,6 @@
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALight_Realtime\bin\Release\ALightRealtime.exe.config
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALight_Realtime\bin\Release\ALightRealtime.exe
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALight_Realtime\bin\Release\ALightRealtime.pdb
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALight_Realtime\obj\Release\ALightRealtime.csproj.CoreCompileInputs.cache
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALight_Realtime\obj\Release\ALightRealtime.exe
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALight_Realtime\obj\Release\ALightRealtime.pdb

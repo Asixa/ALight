@@ -67,6 +67,10 @@ namespace ALight.Render.Mathematics
             if (y < 1) y -= (int) y - 1;
             return this;
         }
+
+        public static Vector2 Lerp(Vector2 a, Vector2 b, float t)=>new Vector2(Mathf.Lerp(a.x, b.x, t), Mathf.Lerp(a.y, b.y, t));
+        
+
         //public static bool operator ==(Vector2 lhs, Vector2 rhs) => Vector2.SqrMagnitude(lhs - rhs) < 9.99999944E-11f;
 
         //public static bool operator !=(Vector2 lhs, Vector2 rhs) => !(lhs == rhs);

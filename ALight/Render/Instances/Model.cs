@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using ALight.Render.Components;
 using ALight.Render.Materials;
 using ALight.Render.Mathematics;
-using ObjModelLoader;
 using Random = System.Random;
 
 namespace ALight.Render.Instances
@@ -58,20 +57,20 @@ namespace ALight.Render.Instances
             return new BVHNode(list.ToArray(), list.Count, 0, 1);
         }
 
-        public Mesh(ObjMesh model, Shader s)
-        {
-            shader = s;
-            vertices = new Vertex[model.TriangleArray.Length];
-            for (var i = 0; i < model.TriangleArray.Length; i++)
-            {
-                var index = model.TriangleArray[i];
-                var point = model.VertexArray[index];
-                vertices[i] = new Vertex(Vector3.FromObj(point),
-                    Vector3.FromObj(model.NormalArray[index]),
-                    model.UVArray[index].x,
-                    model.UVArray[index].y);
-            }
-        }
+//        public Mesh(ObjMesh model, Shader s)
+//        {
+//            shader = s;
+//            vertices = new Vertex[model.TriangleArray.Length];
+//            for (var i = 0; i < model.TriangleArray.Length; i++)
+//            {
+//                var index = model.TriangleArray[i];
+//                var point = model.VertexArray[index];
+//                vertices[i] = new Vertex(Vector3.FromObj(point),
+//                    Vector3.FromObj(model.NormalArray[index]),
+//                    model.UVArray[index].x,
+//                    model.UVArray[index].y);
+//            }
+//        }
     }
 
     public class Vertex

@@ -25,3 +25,4 @@ D:\Codes\Projects\Academic\ComputerGraphic\ALight\ObjModelLoader\bin\Release\AcO
 D:\Codes\Projects\Academic\ComputerGraphic\ALight\ObjModelLoader\obj\Release\AcObjLoader.csproj.CoreCompileInputs.cache
 D:\Codes\Projects\Academic\ComputerGraphic\ALight\ObjModelLoader\obj\Release\AcObjLoader.dll
 D:\Codes\Projects\Academic\ComputerGraphic\ALight\ObjModelLoader\obj\Release\AcObjLoader.pdb
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ObjModelLoader\obj\Release\AcObjLoader.csprojAssemblyReference.cache

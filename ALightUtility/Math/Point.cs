@@ -16,6 +16,8 @@ namespace ALight.Render.Mathematics
             y = b;
         }
 
+        public static Point Lerp(Point a, Point b, float t) => new Point(Mathf.Lerp(a.x, b.x, t), Mathf.Lerp(a.y, b.y, t));
+
         public override string ToString()=> "<" + x + "," + y + ">";
         
 

@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>ALight</RootNamespace>
     <AssemblyName>ALight</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <NuGetPackageImportStamp>
@@ -28,6 +28,7 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>x64</PlatformTarget>
@@ -136,21 +137,14 @@
     <Compile Include="Render\Materials\Material.cs" />
     <Compile Include="Render\Materials\Texture.cs" />
     <Compile Include="Render\Materials\CubeMap.cs" />
-    <Compile Include="Render\Mathematics\Matrix3x3.cs" />
     <Compile Include="Render\Mathematics\Onb.cs" />
     <Compile Include="Render\Mathematics\Pdf.cs" />
     <Compile Include="Render\Mathematics\Perlin.cs" />
-    <Compile Include="Render\Mathematics\Point.cs" />
-    <Compile Include="Render\Mathematics\Vector2.cs" />
     <Compile Include="Render\Preview.cs" />
     <Compile Include="Render\Instances\Cube.cs" />
     <Compile Include="Render\Instances\Hitable.cs" />
     <Compile Include="Render\Components\Ray.cs" />
     <Compile Include="Render\Materials\Shader.cs" />
-    <Compile Include="Render\Mathematics\Color32.cs" />
-    <Compile Include="Render\Mathematics\Mathf.cs" />
-    <Compile Include="Render\Mathematics\Random.cs" />
-    <Compile Include="Render\Mathematics\Vector3.cs" />
     <Compile Include="Render\Instances\MovingSphere.cs" />
     <Compile Include="Render\Instances\Plane.cs" />
     <Compile Include="Render\Instances\Sphere.cs" />
@@ -190,12 +184,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ObjModelLoader\AcObjLoader.csproj">
-      <Project>{e2e3fa96-6fd7-457b-9461-2b5ae0555a23}</Project>
-      <Name>AcObjLoader</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Images\ACEngine.ico" />
     <EmbeddedResource Include="Images\Result_2018-05-27-20-29-22.png" />
     <Content Include="Images\cover.png" />
@@ -214,6 +202,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ALightUtility\ALightUtility.csproj">
+      <Project>{5942a44e-d780-43f7-8e57-6eae7d92465c}</Project>
+      <Name>ALightUtility</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

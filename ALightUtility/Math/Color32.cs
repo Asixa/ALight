@@ -1,5 +1,4 @@
 ﻿using System.Drawing;
-
 namespace ALight.Render.Mathematics
 {
 #pragma warning disable CS0660 // “Color32”定义运算符 == 或运算符 !=，但不重写 Object.Equals(object o)

@@ -314,9 +314,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ALight\ALight.csproj">
+    <ProjectReference Include="..\ALight\ALightRay.csproj">
       <Project>{825057ae-2233-42b0-b069-fb7df7a7ebaf}</Project>
-      <Name>ALight</Name>
+      <Name>ALightRay</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,11 @@
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALight_Realtime\obj\Release\ALightRaster.csprojAssemblyReference.cache
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALight_Realtime\obj\Release\ALightRaster.csproj.CoreCompileInputs.cache
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALight_Realtime\bin\Release\ALightRaster.exe.config
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALight_Realtime\bin\Release\ALightRaster.exe
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALight_Realtime\bin\Release\ALightRaster.pdb
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALight_Realtime\bin\Release\AcForm.dll
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALight_Realtime\bin\Release\ALightUtility.dll
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALight_Realtime\bin\Release\ALightUtility.pdb
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALight_Realtime\obj\Release\ALightRaster.csproj.CopyComplete
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALight_Realtime\obj\Release\ALightRaster.exe
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALight_Realtime\obj\Release\ALightRaster.pdb
