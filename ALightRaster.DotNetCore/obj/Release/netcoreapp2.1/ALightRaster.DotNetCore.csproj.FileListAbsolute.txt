@@ -1,0 +1,14 @@
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALightRaster.DotNetCore\obj\Release\netcoreapp2.1\ALightRaster.DotNetCore.csprojAssemblyReference.cache
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALightRaster.DotNetCore\obj\Release\netcoreapp2.1\ALightRaster.DotNetCore.csproj.CoreCompileInputs.cache
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALightRaster.DotNetCore\obj\Release\netcoreapp2.1\ALightRaster.DotNetCore.AssemblyInfoInputs.cache
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALightRaster.DotNetCore\obj\Release\netcoreapp2.1\ALightRaster.DotNetCore.AssemblyInfo.cs
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALightRaster.DotNetCore\bin\Release\netcoreapp2.1\ALightRaster.DotNetCore.deps.json
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALightRaster.DotNetCore\bin\Release\netcoreapp2.1\ALightRaster.DotNetCore.runtimeconfig.json
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALightRaster.DotNetCore\bin\Release\netcoreapp2.1\ALightRaster.DotNetCore.runtimeconfig.dev.json
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALightRaster.DotNetCore\bin\Release\netcoreapp2.1\ALightRaster.DotNetCore.dll
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALightRaster.DotNetCore\bin\Release\netcoreapp2.1\ALightRaster.DotNetCore.pdb
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALightRaster.DotNetCore\bin\Release\netcoreapp2.1\AcFormCore.dll
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALightRaster.DotNetCore\bin\Release\netcoreapp2.1\AcFormCore.pdb
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALightRaster.DotNetCore\obj\Release\netcoreapp2.1\ALightRaster.DotNetCore.csproj.CopyComplete
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALightRaster.DotNetCore\obj\Release\netcoreapp2.1\ALightRaster.DotNetCore.dll
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALightRaster.DotNetCore\obj\Release\netcoreapp2.1\ALightRaster.DotNetCore.pdb

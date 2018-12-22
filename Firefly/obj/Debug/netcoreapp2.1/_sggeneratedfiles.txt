@@ -1,0 +1,10 @@
+bin\Debug\Firefly\netcoreapp2.1\BlitterShader\FramebufferBlitter-vertex.hlsl.bytes
+bin\Debug\Firefly\netcoreapp2.1\BlitterShader\FramebufferBlitter-fragment.hlsl.bytes
+bin\Debug\Firefly\netcoreapp2.1\BlitterShader\FramebufferBlitter-vertex.330.glsl
+bin\Debug\Firefly\netcoreapp2.1\BlitterShader\FramebufferBlitter-fragment.330.glsl
+bin\Debug\Firefly\netcoreapp2.1\BlitterShader\FramebufferBlitter-vertex.300.glsles
+bin\Debug\Firefly\netcoreapp2.1\BlitterShader\FramebufferBlitter-fragment.300.glsles
+bin\Debug\Firefly\netcoreapp2.1\BlitterShader\FramebufferBlitter-vertex.450.glsl
+bin\Debug\Firefly\netcoreapp2.1\BlitterShader\FramebufferBlitter-fragment.450.glsl
+bin\Debug\Firefly\netcoreapp2.1\BlitterShader\FramebufferBlitter-vertex.metal
+bin\Debug\Firefly\netcoreapp2.1\BlitterShader\FramebufferBlitter-fragment.metal

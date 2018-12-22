@@ -1,0 +1,11 @@
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\Firefly\bin\Release\netcoreapp2.1\Firefly.deps.json
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\Firefly\bin\Release\netcoreapp2.1\Firefly.runtimeconfig.json
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\Firefly\bin\Release\netcoreapp2.1\Firefly.runtimeconfig.dev.json
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\Firefly\bin\Release\netcoreapp2.1\Firefly.dll
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\Firefly\bin\Release\netcoreapp2.1\Firefly.pdb
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\Firefly\obj\Release\netcoreapp2.1\Firefly.csprojAssemblyReference.cache
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\Firefly\obj\Release\netcoreapp2.1\Firefly.csproj.CoreCompileInputs.cache
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\Firefly\obj\Release\netcoreapp2.1\Firefly.AssemblyInfoInputs.cache
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\Firefly\obj\Release\netcoreapp2.1\Firefly.AssemblyInfo.cs
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\Firefly\obj\Release\netcoreapp2.1\Firefly.dll
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\Firefly\obj\Release\netcoreapp2.1\Firefly.pdb

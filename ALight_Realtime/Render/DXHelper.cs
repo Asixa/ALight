@@ -1,11 +1,10 @@
-﻿
-using AcForm;
+﻿using AcForm;
 using ALight.Render.Mathematics;
 
-namespace ALightRealtime.Render
+namespace ALightRaster.Render
 {
-    public static  class DXHelper
+    public static class DxHelper
     {
-        public static  DxColor DXColor(Color32 c) => new DxColor(c.r, c.g, c.b);
+        public static  DxColor DxColor(Color32 c) => new DxColor(Mathf.Range(c.r,0,1), Mathf.Range(c.g, 0, 1), Mathf.Range(c.b, 0, 1));
     }
 }

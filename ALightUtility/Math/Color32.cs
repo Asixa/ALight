@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 namespace ALight.Render.Mathematics
 {
 #pragma warning disable CS0660 // “Color32”定义运算符 == 或运算符 !=，但不重写 Object.Equals(object o)
@@ -11,10 +12,11 @@ namespace ALight.Render.Mathematics
 
         public Color32(float r, float g, float b, float a = 1)
         {
+            
             this.r = r;
             this.g = g;
             this.b = b;
-            this.a = a;
+            this.a = a; 
         }
 
         public Color32(System.Drawing.Color c)
@@ -78,8 +80,16 @@ namespace ALight.Render.Mathematics
 
         public static bool operator ==(Color32 a, Color32 b) => (a.r==b.r&&a.g==b.g&&a.b==b.b&&a.a==b.a);
         public static bool operator !=(Color32 a, Color32 b) => !(a.r == b.r && a.g == b.g && a.b == b.b && a.a == b.a);
-        public static Color32 Lerp(Color32 a, Color32 b, float t) => new Color32(a.r + (b.r - a.r) * t,
-            a.g + (b.g - a.g) * t, a.b + (b.b - a.b) * t, a.a + (b.a - a.a) * t);
+
+        public static Color32 Lerp(Color32 a, Color32 b, float t)
+        {
+            //Console.WriteLine("ColorLerp "+a+" "+b+" "+t);
+            return  new Color32(a.r + (b.r - a.r) * t,
+                a.g + (b.g - a.g) * t, a.b + (b.b - a.b) * t, a.a + (b.a - a.a) * t);
+        }
+
+//        public static Color32 Lerp(Color32 a, Color32 b, float t) => new Color32(a.r + (b.r - a.r) * t,
+//            a.g + (b.g - a.g) * t, a.b + (b.b - a.b) * t, a.a + (b.a - a.a) * t);
         public  Color32 Normalized()
         {
             a = 1;

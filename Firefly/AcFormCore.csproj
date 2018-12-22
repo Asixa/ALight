@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <ApplicationIcon />
+    <StartupObject />
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>bin\Debug\Firefly\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Math\**" />
+    <Compile Remove="Shaders\**" />
+    <EmbeddedResource Remove="Math\**" />
+    <EmbeddedResource Remove="Shaders\**" />
+    <None Remove="Math\**" />
+    <None Remove="Shaders\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ShaderGen.Build" Version="1.2.96-beta2-g3177b71221" />
+    <PackageReference Include="ShaderGen.Primitives" Version="1.2.155-beta2-g562791ab55" />
+    <PackageReference Include="System.Drawing.Common" Version="4.5.1" />
+    <PackageReference Include="Veldrid.StartupUtilities" Version="4.4.0" />
+  </ItemGroup>
+
+</Project>
