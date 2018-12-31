@@ -3,4 +3,5 @@ D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALightUtility\bin\Release\ALig
 D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALightUtility\obj\Release\ALightUtility.csproj.CoreCompileInputs.cache
 D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALightUtility\obj\Release\ALightUtility.dll
 D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALightUtility\obj\Release\ALightUtility.pdb
-D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALightUtility\obj\Release\ALightUtility.csprojAssemblyReference.cache
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALightUtility\bin\Release\ALightUtility.dll.CodeAnalysisLog.xml
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALightUtility\bin\Release\ALightUtility.dll.lastcodeanalysissucceeded

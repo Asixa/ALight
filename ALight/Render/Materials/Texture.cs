@@ -98,6 +98,7 @@ namespace ALight.Render.Materials
 
         public override Color32 Value(float u, float v, Vector3 p)
         {
+       
             if (dir == 1)
             {
                 var t = u;

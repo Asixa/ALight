@@ -1,0 +1,12 @@
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ACGLSL\obj\Release\netcoreapp2.1\ACGLSL.csproj.CoreCompileInputs.cache
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ACGLSL\obj\Release\netcoreapp2.1\ACGLSL.AssemblyInfoInputs.cache
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ACGLSL\obj\Release\netcoreapp2.1\ACGLSL.AssemblyInfo.cs
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ACGLSL\bin\Release\netcoreapp2.1\ACGLSL.deps.json
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ACGLSL\bin\Release\netcoreapp2.1\ACGLSL.runtimeconfig.json
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ACGLSL\bin\Release\netcoreapp2.1\ACGLSL.runtimeconfig.dev.json
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ACGLSL\bin\Release\netcoreapp2.1\ACGLSL.dll
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ACGLSL\bin\Release\netcoreapp2.1\ACGLSL.pdb
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ACGLSL\obj\Release\netcoreapp2.1\ACGLSL.dll
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ACGLSL\obj\Release\netcoreapp2.1\ACGLSL.pdb
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ACGLSL\obj\Release\netcoreapp2.1\ACGLSL.csprojAssemblyReference.cache
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ACGLSL\bin\Release\netcoreapp2.1\Tests\Sample1.shader

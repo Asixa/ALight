@@ -11,7 +11,11 @@ namespace ALightRaster.Render.Components
         public string tag;
         public List<Component> components=new List<Component>();
         public GameObject() => Scene.current.gameObjects.Add(this);
-        public void AddComponent(Component component) => component.Link(this);
+        public Component AddComponent(Component component)
+        {
+            component.Link(this);
+            return component;
+        }
 
         public static GameObject Create(Vector3 pos, Vector3 rot,MeshRenderer renderer=null)
         {

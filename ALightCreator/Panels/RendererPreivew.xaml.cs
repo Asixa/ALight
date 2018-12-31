@@ -3,8 +3,6 @@ using System.Timers;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using ALight.Render;
-using ALight.Render.Mathematics;
 
 namespace ALightCreator.Panels
 {
@@ -31,10 +29,10 @@ namespace ALightCreator.Panels
 
                 for (var i = 0; i < main.buff.Length; i += 4)
                 {
-                    buff[i] = (byte)Mathf.Range(Renderer.main.buff[i + 2] * 255 / Renderer.main.Changes[i / 4] + 0.5f, 0, 255f);//b
-                    buff[i + 1] =(byte)Mathf.Range(Renderer.main.buff[i + 1] * 255 / Renderer.main.Changes[i / 4] + 0.5f, 0, 255f);//g
-                    buff[i + 2] = (byte)Mathf.Range(Renderer.main.buff[i] * 255 / Renderer.main.Changes[i / 4] + 0.5f, 0, 255f);//r
-                    buff[i + 3] =(byte)Mathf.Range(Renderer.main.buff[i + 3] * 255 / Renderer.main.Changes[i / 4] + 0.5f, 0, 255f);
+//                    buff[i] = (byte)Mathf.Range(Renderer.main.buff[i + 2] * 255 / Renderer.main.Changes[i / 4] + 0.5f, 0, 255f);//b
+//                    buff[i + 1] =(byte)Mathf.Range(Renderer.main.buff[i + 1] * 255 / Renderer.main.Changes[i / 4] + 0.5f, 0, 255f);//g
+//                    buff[i + 2] = (byte)Mathf.Range(Renderer.main.buff[i] * 255 / Renderer.main.Changes[i / 4] + 0.5f, 0, 255f);//r
+//                    buff[i + 3] =(byte)Mathf.Range(Renderer.main.buff[i + 3] * 255 / Renderer.main.Changes[i / 4] + 0.5f, 0, 255f);
                 }
                 main.Set();
             }));

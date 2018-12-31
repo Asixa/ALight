@@ -1,15 +1,15 @@
 ﻿using System.Numerics;
 
-namespace ALightRaster.Render.Mathematics
+namespace ALightRaster.DotNetCore.Render.Mathematics
 {
     public static class MathRaster
     {
         public static Matrix4x4 GetRotationMatrix(Vector3 v) =>
-            Matrix4x4.CreateRotationY(v.Y) * (Matrix4x4.CreateRotationX(v.X) * Matrix4x4.CreateRotationZ(v.Z));
+            Matrix4x4.CreateRotationX(v.X) * Matrix4x4.CreateRotationY(v.Y) * Matrix4x4.CreateRotationZ(v.Z);
 
-        public static Vector3 V4ToV3(Vector4 v) => new Vector3(v.X, v.Y, v.Z);
-
-        public static string ToString(Matrix4x4 m) => "[" +
+        public static Vector3 V3(this Vector4 v) => new Vector3(v.X, v.Y, v.Z);
+        public static Vector4 V4(this Vector3 v) => new Vector4(v.X, v.Y, v.Z,1);
+        public static string ToString(this Matrix4x4 m) => "[" +
                                                       m.M11 + "," + m.M12 + "," + m.M13 + "," + m.M14 + "," + "\n" +
                                                       //
                                                       m.M21 + "," + m.M22 + "," + m.M23 + "," + m.M24 + "," + "\n" +
@@ -18,7 +18,7 @@ namespace ALightRaster.Render.Mathematics
                                                       //
                                                       m.M41 + "," + m.M42 + "," + m.M43 + "," + m.M44 + "," + "]\n";
 
-        public static Vector4 VxM(Vector4 v, Matrix4x4 m) => new Vector4(
+        public static Vector4 Times(this Vector4 v, Matrix4x4 m) => new Vector4(
             v.X * m.M11 + v.Y * m.M21 + v.Z * m.M31 + v.W * m.M41,
             v.X * m.M12 + v.Y * m.M22 + v.Z * m.M32 + v.W * m.M42,
             v.X * m.M13 + v.Y * m.M23 + v.Z * m.M33 + v.W * m.M43,

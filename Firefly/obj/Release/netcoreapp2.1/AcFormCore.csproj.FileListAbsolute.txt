@@ -1,9 +1,9 @@
 D:\Codes\Projects\Academic\ComputerGraphic\ALight\Firefly\bin\Release\netcoreapp2.1\AcFormCore.deps.json
 D:\Codes\Projects\Academic\ComputerGraphic\ALight\Firefly\bin\Release\netcoreapp2.1\AcFormCore.dll
 D:\Codes\Projects\Academic\ComputerGraphic\ALight\Firefly\bin\Release\netcoreapp2.1\AcFormCore.pdb
-D:\Codes\Projects\Academic\ComputerGraphic\ALight\Firefly\obj\Release\netcoreapp2.1\AcFormCore.csprojAssemblyReference.cache
 D:\Codes\Projects\Academic\ComputerGraphic\ALight\Firefly\obj\Release\netcoreapp2.1\AcFormCore.csproj.CoreCompileInputs.cache
 D:\Codes\Projects\Academic\ComputerGraphic\ALight\Firefly\obj\Release\netcoreapp2.1\AcFormCore.AssemblyInfoInputs.cache
 D:\Codes\Projects\Academic\ComputerGraphic\ALight\Firefly\obj\Release\netcoreapp2.1\AcFormCore.AssemblyInfo.cs
 D:\Codes\Projects\Academic\ComputerGraphic\ALight\Firefly\obj\Release\netcoreapp2.1\AcFormCore.dll
 D:\Codes\Projects\Academic\ComputerGraphic\ALight\Firefly\obj\Release\netcoreapp2.1\AcFormCore.pdb
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\Firefly\obj\Release\netcoreapp2.1\AcFormCore.csprojAssemblyReference.cache

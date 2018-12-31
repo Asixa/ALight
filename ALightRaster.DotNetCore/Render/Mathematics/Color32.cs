@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.Numerics;
-using ALightRaster.Render.Mathematics;
 
 namespace ALightRaster.DotNetCore.Render.Mathematics
 {

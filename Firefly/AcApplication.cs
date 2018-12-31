@@ -15,12 +15,12 @@ namespace AcFormCore
         public const uint ViewScale = 1;
         public string title;
 
-        private Sdl2Window _window;
+        public Sdl2Window _window;
         private GraphicsDevice _graphicsDevice;
         private CommandList _commandList;
         private Texture _transferTex;
         private TextureView _texView;
-        private RgbaFloat[] _buff;
+        public RgbaFloat[] _buff;
         private ResourceSet _graphicsSet;
         private Pipeline _graphicsPipeline;
 
@@ -34,7 +34,7 @@ namespace AcFormCore
 
         public virtual void Update()
         {
-            
+           
         }
         public void Run(uint w, uint h, string title)
         {
@@ -86,7 +86,8 @@ namespace AcFormCore
         private void Timer1_Elapsed(object sender, ElapsedEventArgs e)
         {
             _window.Title  = title + " FPS:" + FramePerSecond;
-            DeltaTime = 1f / FramePerSecond;
+           
+            DeltaTime = FramePerSecond==0?0:1f / FramePerSecond;
             FramePerSecond = 0;
           
         }

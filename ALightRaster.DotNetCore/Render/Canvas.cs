@@ -1,27 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using ALightRaster.DotNetCore;
+using ALightRaster.DotNetCore.Render;
+using ALightRaster.DotNetCore.Render.Materials;
+using ALightRaster.DotNetCore.Render.Materials.Shaders;
+using ALightRaster.DotNetCore.Render.Mathematics;
 using ALightRaster.Render.Components;
-using ALightRaster.Render.Mathematics;
 using ALightRealtime;
 using ALightRealtime.Render;
 using ALightRealtime.Render.Structure;
 using Vector2 = System.Numerics.Vector2;
 using Vector3 =System.Numerics.Vector3;
-using static ALightRaster.Render.Mathematics.MathRaster;
+using static ALightRaster.DotNetCore.Render.Mathematics.MathRaster;
 namespace ALightRaster.Render
 {
     public class Canvas
     {
         public const bool Debug = false;
         public static Canvas instance;
-        public static int Width = 800, Height = 600;
-        public Matrix4x4 V => Camera.V;
-        public Matrix4x4 P => Camera.P;
+        public static int Width =>(int) PreviewWindow.width;
+        public static int Height => (int)PreviewWindow.height;
+        public static Matrix4x4 V => Camera.V;
+        public static Matrix4x4 P => Camera.P;
+        public static Matrix4x4 M;
         private static float[,] zBuff;
+        public Material current_material;
         public static void Init()
         {
             zBuff=new float[Height,Width];
@@ -35,11 +44,12 @@ namespace ALightRaster.Render
             foreach (var obj in Scene.current.gameObjects)
             {
                 if (obj.renderer == null) continue;
-                var m = obj.transform.CaculateMatrix();
+                M = obj.transform.CaculateMatrix();
+                current_material = obj.renderer.material;
                 var vertices = obj.renderer.mesh_filter.mesh.vertices;
                 for (var index = 0; index < vertices.Length; index += 3)
                 {
-                    TrianglePipline(vertices[index], vertices[index + 1], vertices[index + 2], m);
+                    TrianglePipline(vertices[index], vertices[index + 1], vertices[index + 2], M);
                 }
             }
 
@@ -62,21 +72,21 @@ namespace ALightRaster.Render
         {
             //-------------------Geometry--------------------------
             // MV,Model-View, Camera View coordinate
-            SetMvTransform(m, V, ref v1);
-            SetMvTransform(m, V, ref v2);
-            SetMvTransform(m, V, ref v3);
+            MV(m, V, ref v1);
+            MV(m, V, ref v2);
+            MV(m, V, ref v3);
             //Culling
             if (!BackFaceCulling(v1, v2, v3)) return;
             //P, Homogenious coordinate
-            SetProjectionTransform(P, ref v1);
-            SetProjectionTransform(P, ref v2);
-            SetProjectionTransform(P, ref v3);
+            MVP(P, ref v1);
+            MVP(P, ref v2);
+            MVP(P, ref v3);
             //Clipping
-            if (Clip(v1) == false || Clip(v2) == false || Clip(v3) == false) return;
+            //if (Clip(v1) == false || Clip(v2) == false || Clip(v3) == false) return;
             //To screen coordinate
-            TransformToScreen(ref v1);
-            TransformToScreen(ref v2);
-            TransformToScreen(ref v3);
+            ToScreen(ref v1);
+            ToScreen(ref v2);
+            ToScreen(ref v3);
             //-------------------Rasterization--------------------------
             var vertices = new[] {v1, v2, v3}.ToList();
             vertices.Sort((x, y) => x.point.Y < y.point.Y ? -1 : 1);
@@ -85,19 +95,26 @@ namespace ALightRaster.Render
 
         #region Pipeline
 
-        private static void SetMvTransform(Matrix4x4 m, Matrix4x4 v, ref Vertex vertex) =>vertex.point = VxM(VxM(vertex.point, m), v);
-
-        public void SetProjectionTransform(Matrix4x4 p, ref Vertex vertex)
+        public static void MV(Matrix4x4 m, Matrix4x4 v, ref Vertex vertex)
         {
-            vertex.point = VxM(vertex.point, p);
+            vertex.point = vertex.point.Times(m).Times(v);
+            vertex.normal =vertex.normal.V4().Times(m).Times(v).V3();
+            vertex.distance2Cam = vertex.point.Length();
+        }
+
+        public static void MVP(Matrix4x4 p, ref Vertex vertex)
+        {
+            vertex.point = vertex.point.Times(p);
+            vertex.normal = vertex.normal.V4().Times(p).V3();
             vertex.onePerZ = 1 / vertex.point.W;
-            vertex.uv.X *= vertex.onePerZ;
-            vertex.uv.Y *= vertex.onePerZ;
+        
+            //vertex.uv.X *= vertex.onePerZ;
+            //vertex.uv.Y *= vertex.onePerZ;
             // vertex.color *= vertex.onePerZ;
             vertex.light *= vertex.onePerZ;
         }
 
-        private static void TransformToScreen(ref Vertex v)
+        private static void ToScreen(ref Vertex v)
         {
             if (v.point.W == 0) return;
             //to cvv
@@ -114,8 +131,8 @@ namespace ALightRaster.Render
         {
             var v1 = p2.point - p1.point;
             var v2 = p3.point - p2.point;
-            var normal = Vector3.Cross(MathRaster.V4ToV3(v1), MathRaster.V4ToV3(v2));
-            var view_dir = MathRaster.V4ToV3(p1.point) - new Vector3(0, 0, 0);
+            var normal = Vector3.Cross(v1.V3(),v2.V3());
+            var view_dir = p1.point.V3() - new Vector3(0, 0, 0);
             return Vector3.Dot(normal, view_dir) > 0;
         }
 
@@ -125,6 +142,7 @@ namespace ALightRaster.Render
                                        v.point.Y >= -v.point.W && v.point.Y <= v.point.W &&
                                        v.point.Z >= 0f && v.point.Z <= v.point.W;
         #endregion
+
         #region Rasterization
 
         //Please Sort Before Call : vertices.ToList().Sort((x,y)=>x.point.y<y.point.y?1:0);
@@ -204,14 +222,32 @@ namespace ALightRaster.Render
                 var p = Vertex.FastLerp(left, right, factor);
                 if (p.onePerZ < zBuff[y, (int)x])continue;
                 zBuff[y, (int)x] = p.onePerZ;
+              
                 switch (mode)
                 {
                     case 1:
-                        PreviewWindow.main.SetPixel((int) x, y, LowLevelHelper.DxColor(p.color));
+                        PreviewWindow.main.SetPixel((int) x, y, LowLevelHelper.LowLevelColor(current_material.Shade(p)));
                         break;
                     //case 2: Program.main.SetPixel(x, y, (new Color32(ReadTexture(u, v, currentMaterial.texture)) * p.light).ToDX());break;
                 }
             }
+        }
+
+
+        public void Save(string path = "Result" + ".png")
+        {
+            if (!Directory.Exists("Output")) Directory.CreateDirectory("Output");
+            path = "Result_" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".png";
+            var pic = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
+            for (var i = 0; i < PreviewWindow.main._buff.Length; i ++)
+            {
+                var buff = PreviewWindow.main._buff[i];
+                var c = Color.FromArgb((int)(buff.A*255), (int)(buff.R * 255), (int)(buff.G * 255), (int)(buff.B * 255));
+                pic.SetPixel(i % Width, Height-1-i /Width, c);
+            }
+
+            pic.Save("Output/" + path);
+           
         }
 
         #endregion

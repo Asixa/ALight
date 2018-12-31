@@ -1,5 +1,5 @@
 ﻿using System.Numerics;
-using ALightRaster.Render.Mathematics;
+using ALightRaster.DotNetCore.Render.Mathematics;
 
 namespace ALightRaster.Render.Components
 {
@@ -17,7 +17,7 @@ namespace ALightRaster.Render.Components
 
         public Matrix4x4 CaculateMatrix()
         {
-            M =MathRaster.GetRotationMatrix(rotation) *Matrix4x4.CreateTranslation(position);
+            M =MathRaster.GetRotationMatrix(rotation/ 57.3f) *Matrix4x4.CreateTranslation(position);
             return M;
         }
         public Transform()

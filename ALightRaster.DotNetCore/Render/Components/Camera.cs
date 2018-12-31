@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Numerics;
-using ALightRaster.Render.Mathematics;
+using ALightRaster.DotNetCore.Render.Mathematics;
 
 namespace ALightRaster.Render.Components
 {
@@ -12,7 +12,7 @@ namespace ALightRaster.Render.Components
         public static Matrix4x4 V, P;
         public static void Caculate()
         {
-            V = Matrix4x4.Transpose(MathRaster.GetRotationMatrix(main.transform.rotation) * Matrix4x4.CreateTranslation(main.transform.position));
+            V = Matrix4x4.Transpose(MathRaster.GetRotationMatrix(main.transform.rotation/ 57.3f) * Matrix4x4.CreateTranslation(main.transform.position));
             P = GetProjection(main.FOV, main.Aspect, main.Near, main.Far);
         }
 

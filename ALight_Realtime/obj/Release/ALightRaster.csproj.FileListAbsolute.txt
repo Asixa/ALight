@@ -9,3 +9,5 @@ D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALight_Realtime\bin\Release\AL
 D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALight_Realtime\obj\Release\ALightRaster.csproj.CopyComplete
 D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALight_Realtime\obj\Release\ALightRaster.exe
 D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALight_Realtime\obj\Release\ALightRaster.pdb
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALight_Realtime\bin\Release\ALightRaster.exe.CodeAnalysisLog.xml
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ALight_Realtime\bin\Release\ALightRaster.exe.lastcodeanalysissucceeded

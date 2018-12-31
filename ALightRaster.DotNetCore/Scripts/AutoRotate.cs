@@ -11,8 +11,8 @@ namespace ALightRaster.Scripts
         public AutoRotate(float v) => value = v;
         public override void Update()
         {
-  
-            transform.rotation+=new Vector3(value*Time.deltatime,value*Time.deltatime,0);
+
+            transform.rotation+=new Vector3(0, value * Time.deltatime, 0);
         }
     }
 }

@@ -1,12 +1,6 @@
-C:\Users\XingYu Chen\.nuget\packages\microsoft.codeanalysis.csharp\2.10.0\lib\netstandard1.3\Microsoft.CodeAnalysis.CSharp.dll
-C:\Users\XingYu Chen\.nuget\packages\microsoft.codeanalysis.csharp.workspaces\2.10.0\lib\netstandard1.3\Microsoft.CodeAnalysis.CSharp.Workspaces.dll
-C:\Users\XingYu Chen\.nuget\packages\microsoft.codeanalysis.common\2.10.0\lib\netstandard1.3\Microsoft.CodeAnalysis.dll
-C:\Users\XingYu Chen\.nuget\packages\microsoft.codeanalysis.visualbasic\2.10.0\lib\netstandard1.3\Microsoft.CodeAnalysis.VisualBasic.dll
-C:\Users\XingYu Chen\.nuget\packages\microsoft.codeanalysis.visualbasic.workspaces\2.10.0\lib\netstandard1.3\Microsoft.CodeAnalysis.VisualBasic.Workspaces.dll
-C:\Users\XingYu Chen\.nuget\packages\microsoft.codeanalysis.workspaces.common\2.10.0\lib\netstandard1.3\Microsoft.CodeAnalysis.Workspaces.dll
 C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.netcore.app\2.1.0\ref\netcoreapp2.1\Microsoft.CSharp.dll
-C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.dotnet.platformabstractions\2.1.0\lib\netstandard1.3\Microsoft.DotNet.PlatformAbstractions.dll
-C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.extensions.dependencymodel\2.1.0\lib\netstandard1.6\Microsoft.Extensions.DependencyModel.dll
+C:\Users\XingYu Chen\.nuget\packages\microsoft.dotnet.platformabstractions\2.0.3\lib\netstandard1.3\Microsoft.DotNet.PlatformAbstractions.dll
+C:\Users\XingYu Chen\.nuget\packages\microsoft.extensions.dependencymodel\2.0.3\lib\netstandard1.6\Microsoft.Extensions.DependencyModel.dll
 C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.netcore.app\2.1.0\ref\netcoreapp2.1\Microsoft.VisualBasic.dll
 C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.netcore.app\2.1.0\ref\netcoreapp2.1\Microsoft.Win32.Primitives.dll
 C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.netcore.app\2.1.0\ref\netcoreapp2.1\mscorlib.dll
@@ -31,11 +25,6 @@ C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.netcore.app\2.1.0\ref\
 C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.netcore.app\2.1.0\ref\netcoreapp2.1\System.ComponentModel.EventBasedAsync.dll
 C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.netcore.app\2.1.0\ref\netcoreapp2.1\System.ComponentModel.Primitives.dll
 C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.netcore.app\2.1.0\ref\netcoreapp2.1\System.ComponentModel.TypeConverter.dll
-C:\Program Files\dotnet\sdk\NuGetFallbackFolder\system.composition.attributedmodel\1.0.31\lib\netstandard1.0\System.Composition.AttributedModel.dll
-C:\Program Files\dotnet\sdk\NuGetFallbackFolder\system.composition.convention\1.0.31\lib\netstandard1.0\System.Composition.Convention.dll
-C:\Program Files\dotnet\sdk\NuGetFallbackFolder\system.composition.hosting\1.0.31\lib\netstandard1.0\System.Composition.Hosting.dll
-C:\Program Files\dotnet\sdk\NuGetFallbackFolder\system.composition.runtime\1.0.31\lib\netstandard1.0\System.Composition.Runtime.dll
-C:\Program Files\dotnet\sdk\NuGetFallbackFolder\system.composition.typedparts\1.0.31\lib\netstandard1.0\System.Composition.TypedParts.dll
 C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.netcore.app\2.1.0\ref\netcoreapp2.1\System.Configuration.dll
 C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.netcore.app\2.1.0\ref\netcoreapp2.1\System.Console.dll
 C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.netcore.app\2.1.0\ref\netcoreapp2.1\System.Core.dll

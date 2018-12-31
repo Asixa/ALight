@@ -4,8 +4,6 @@ using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using ALight.Render;
-using ALight.Render.Mathematics;
 using ALightCreator.Features.Localization;
 using ALightCreator.Features.ResourceView;
 using ALightCreator.Panels;
@@ -16,7 +14,7 @@ namespace ALightCreator
 {
     public partial class MainWindow : Window
     {
-        public static Renderer renderer=new Renderer();
+        //public static Renderer renderer=new Renderer();
         public static MainWindow main;
 
         public bool start;
@@ -42,7 +40,7 @@ namespace ALightCreator
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
 
-            renderer.Init();
+            //renderer.Init();
             start = true;
         }
 
