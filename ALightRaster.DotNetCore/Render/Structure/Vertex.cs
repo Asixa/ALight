@@ -6,7 +6,7 @@ using Vector4 = System.Numerics.Vector4;
 
 namespace ALightRealtime.Render.Structure
 {
-    public struct Vertex
+    public class Vertex
     {
         public Vector4 point;
         public Vector2 uv;
@@ -15,6 +15,7 @@ namespace ALightRealtime.Render.Structure
         public float distance2Cam;
         public float onePerZ;
         
+        public Vertex() { }
         public Vertex(Vector4 point, Vector2 uv, Vector3 normal, Color32 color)
         {
             this.distance2Cam = -1;

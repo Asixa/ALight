@@ -16,7 +16,7 @@ namespace ALightRaster.DotNetCore
     public class PreviewWindow :AcApplication
     {
         public static PreviewWindow main;
-        public static uint height = 600, width = 800;
+        public static uint height = 512, width = 512;
         public override void Start()
         {
             main = this;

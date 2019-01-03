@@ -1,15 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Numerics;
 using ALightRaster.DotNetCore.Render.Mathematics;
-using ALightRaster.DotNetCore.Render.Shaders;
 using ALightRealtime.Render.Structure;
+using ShaderLib.Base;
 using Shader= ALightRaster.DotNetCore.Render.Shaders.Shader;
-
+// ReSharper disable InconsistentNaming
 namespace ALightRaster.DotNetCore.Render.Materials
 {
     public class Material
     {
+       
+        public VertexShader VS;
+        public FragShader FS;
+
         public Shader shader;
 
 
@@ -18,7 +20,16 @@ namespace ALightRaster.DotNetCore.Render.Materials
             shader = s;
             shader.Init(data);
         }
-
+        public Material(VertexShader vs, FragShader fs)
+        {
+            FS = fs;
+            VS = vs;
+        }
+        public void SetM(Matrix4x4 m,Matrix4x4 tim)
+        {
+            VS.M = m;
+            VS.tiM = tim;
+        }
         public Color32 Shade(Vertex p) => shader.Shade(p);
     }
 }

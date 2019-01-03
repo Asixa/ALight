@@ -12,6 +12,8 @@ namespace ALightRaster.DotNetCore.Render.Shaders
         {
             return Color32.Black;
         }
+
+
         public virtual void Init(object[] data)
         {
         }

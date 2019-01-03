@@ -1,0 +1,11 @@
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ShaderLib\bin\Release\netcoreapp2.1\ShaderLib.deps.json
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ShaderLib\bin\Release\netcoreapp2.1\ShaderLib.runtimeconfig.json
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ShaderLib\bin\Release\netcoreapp2.1\ShaderLib.runtimeconfig.dev.json
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ShaderLib\bin\Release\netcoreapp2.1\ShaderLib.dll
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ShaderLib\bin\Release\netcoreapp2.1\ShaderLib.pdb
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ShaderLib\obj\Release\netcoreapp2.1\ShaderLib.csproj.CoreCompileInputs.cache
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ShaderLib\obj\Release\netcoreapp2.1\ShaderLib.AssemblyInfoInputs.cache
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ShaderLib\obj\Release\netcoreapp2.1\ShaderLib.AssemblyInfo.cs
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ShaderLib\obj\Release\netcoreapp2.1\ShaderLib.dll
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ShaderLib\obj\Release\netcoreapp2.1\ShaderLib.pdb
+D:\Codes\Projects\Academic\ComputerGraphic\ALight\ShaderLib\obj\Release\netcoreapp2.1\ShaderLib.csprojAssemblyReference.cache

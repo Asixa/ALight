@@ -29,6 +29,15 @@ namespace ALightRaster.DotNetCore.Render.Mathematics
             a = MathRaster.Range((float) c.A / 255, 0, 1);
         }
 
+        public Color32(Vector4 v4) {
+            r = v4.X;
+            g = v4.Y;
+            b = v4.Z;
+            a = v4.W;
+        }
+
+        public Vector4 to_vector4()=>new Vector4(r,g,b,a);
+
         public Color32 DeNaN()
         {
             if (float.IsNaN(r)) r = 0;
